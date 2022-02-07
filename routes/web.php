@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Controller\LoginController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,9 +16,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Redirect::route('login');
 });
 
-Auth::routes();
+Auth::routes(['register' => false]);
+
+Route::get('/logout',[LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

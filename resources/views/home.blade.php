@@ -13,7 +13,10 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
+                    <form action="{{route('logout')}}" method="post">
+                        @csrf
+                        <button class="btn" type="submit">Sign Out</button>
+                    </form>
                     {{ __('You are logged in!') }}
                 </div>
             </div>
