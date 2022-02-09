@@ -37,6 +37,12 @@ Route::get('/logout',[LoginController::class, 'logout'])->name('logout')->middle
 
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard')->middleware('auth');
 Route::get('/admin/customers', [CustomersController::class, 'index'])->name('admin.customers')->middleware('auth');
+Route::get('/admin/customers/new', function(){
+    return view('admin.customers-create');
+})->name('admin.customers.create')->middleware('auth');
+Route::get('/admin/customers/view', function(){
+    return view('admin.customers-view');
+})->name('admin.customers.view')->middleware('auth');
 Route::get('/admin/items', [ItemsController::class, 'index'])->name('admin.items')->middleware('auth');
 Route::get('/admin/invoices', [InvoicesController::class, 'index'])->name('admin.invoices')->middleware('auth');
 Route::get('/admin/recurring-invoices', [RecurringInvoicesController::class, 'index'])->name('admin.recurring-invoices')->middleware('auth');

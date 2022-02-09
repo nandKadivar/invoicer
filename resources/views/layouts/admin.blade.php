@@ -41,6 +41,29 @@
 
   <!-- Template Main CSS File -->
   <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
+
+  <style type="text/css">
+    .customer-panel::-webkit-scrollbar {
+        width: 5px;
+        background-color: #FFF;
+    }
+
+    .customer-panel::-webkit-scrollbar-thumb {
+        /*border-radius: 10px;*/
+        /*-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);*/
+        background-color: #aab7cf;
+    }
+
+    div.customer-view{
+      border-top: 1px solid rgba(185, 193, 209, 0.41);
+    }
+
+    div.active-view{
+      border-left: 17px solid #0d6efd;
+      background-color: #f1f4f9;
+    }
+
+  </style>
 </head>
 <body>
 
