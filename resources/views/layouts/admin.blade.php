@@ -41,29 +41,8 @@
 
   <!-- Template Main CSS File -->
   <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
+  {{-- <link href="{{asset('assets/css/custom.css')}}" rel="stylesheet"> --}}
 
-  <style type="text/css">
-    .customer-panel::-webkit-scrollbar {
-        width: 5px;
-        background-color: #FFF;
-    }
-
-    .customer-panel::-webkit-scrollbar-thumb {
-        /*border-radius: 10px;*/
-        /*-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);*/
-        background-color: #aab7cf;
-    }
-
-    div.customer-view{
-      border-top: 1px solid rgba(185, 193, 209, 0.41);
-    }
-
-    div.active-view{
-      border-left: 17px solid #0d6efd;
-      background-color: #f1f4f9;
-    }
-
-  </style>
 </head>
 <body>
 
@@ -635,17 +614,163 @@
         <div class="copyright">
             &copy; Copyright <strong><span>Invoicer</span></strong>. All Rights Reserved
         </div>
-        {{-- <div class="credits">
-            <!-- All the links in the footer should remain intact. -->
-            <!-- You can delete the links only if you purchased the pro version. -->
-            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-        </div> --}}
     </footer>
     <!-- End Footer -->
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js "></script>
+    <script>
+        // var itemBox = document.querySelector(".item-box");
+        // itemBox.style.display = "none";
+
+        const openCustomerBox = () => {
+            var customerBox = document.querySelector(".customer-box");
+            customerBox.classList.add("active-box");
+        }
+
+        const openTaxBox = () => {
+            // alert('Clicked!')
+            var taxBox = document.querySelector(".tax-box");
+            taxBox.classList.add("active-box");
+        }
+
+        const openFiledBox = () => {
+            var filedBox = document.querySelector(".field-box");
+            filedBox.classList.add("active-box");
+        }
+
+        const openItemBox = () => {
+            var itemBox = document.querySelector(".item-box");
+            itemBox.style.display = "flex";
+        }
+
+        window.addEventListener('mouseup', function(event) {
+            var taxBox = document.querySelector(".tax-box");
+            if (event.target != taxBox && event.target.parentNode != taxBox) {
+                taxBox.classList.remove("active-box");
+            }
+        });
+
+        window.addEventListener('mouseup', function(event) {
+            var customerBox = document.querySelector(".customer-box");
+            if (event.target != customerBox && event.target.parentNode != customerBox) {
+                customerBox.classList.remove("active-box");
+            }
+        });
+
+        window.addEventListener('mouseup', function(event) {
+            var fieldBox = document.querySelector(".field-box");
+            if (event.target != fieldBox && event.target.parentNode != fieldBox) {
+                fieldBox.classList.remove("active-box");
+            }
+        });
+
+        window.addEventListener('mouseup', function(event) {
+            var itemBox = document.querySelector(".item-box");
+            if (event.target != itemBox && event.target.parentNode != itemBox) {
+                itemBox.style.display = "none";
+            }
+        });
+
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .catch(error => {
+                console.error(error);
+            });
+
+        const addRow = () => {
+            var table = document.querySelector(".items-table");
+            var row = table.insertRow();
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+
+            cell1.innerHTML = "<td><input type='text' list='items' class='form-control'><datalist id='items'><option value='Stones' style='background-color: #fff;'><option value='Steel'><option value='Cement'></datalist></td>"
+            cell2.innerHTML = "<td><input type='text' class='form-control'></td>"
+            cell3.innerHTML = "<td><input type='text' class='form-control'></td>"
+            cell4.innerHTML = "<td> $ 0.00 </td>"
+            cell5.innerHTML = "<i class='bi bi-trash' style='cursor :pointer;' onclick='deleteRow(" + row.rowIndex + ")'></i>";
+        }
+
+        const deleteRow = (index) => {
+            var table = document.querySelector(".items-table");
+            table.deleteRow(index);
+
+            var tbody = table.getElementsByTagName("tbody")[0];
+            var rows = tbody.getElementsByTagName("tr");
+            // console.log(rows);
+            var i = 1;
+            for (i = 0; i < rows.length; i++) {
+                var deleteTableCell = rows[i + 1].getElementsByTagName("td")[4];
+                // console.log(deleteTableCell);
+                // console.log(i + 2);
+                var newIndex = i + 2;
+                deleteTableCell.innerHTML = "<i class='bi bi-trash' style='cursor :pointer;' onclick='deleteRow(" + newIndex + ")'></i>";
+            }
+        }
+
+        function myFunction1() {
+            var input, filter, ul, li, a, div1, div, i, txtValue;
+            input = document.getElementById("myInput1");
+            filter = input.value.toUpperCase();
+            ul = document.querySelector(".customer-ul");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                div1 = li[i].getElementsByTagName("div")[0];
+                div = div1.getElementsByTagName("div")[1];
+                a = div.getElementsByTagName("span")[0];
+                // a = li[i].getElementsByTagName("a")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+
+        function myFunction2() {
+            var input, filter, ul, li, a, div, i, txtValue;
+            input = document.getElementById("myInput2");
+            filter = input.value.toUpperCase();
+            ul = document.querySelector(".tax-ul");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                div = li[i].getElementsByTagName("div")[0];
+                a = div.getElementsByTagName("span")[0];
+                // a = li[i].getElementsByTagName("a")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+
+        function myFunction3() {
+            var input, filter, ul, li, a, div, i, txtValue;
+            input = document.getElementById("myInput3");
+            filter = input.value.toUpperCase();
+            ul = document.querySelector(".item-ul");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                // div = li[i].getElementsByTagName("div")[0];
+                // a = div.getElementsByTagName("span")[0];
+                a = li[i];
+                // a = li[i].getElementsByTagName("a")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+        }
+    </script>
 
     <!-- Vendor JS Files -->
     <script src="{{asset('assets/vendor/apexcharts/apexcharts.min.js')}}"></script>

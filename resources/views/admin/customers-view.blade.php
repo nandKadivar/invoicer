@@ -6,10 +6,10 @@ Invoicer - View Customer
 
 @section('content')
 <main id="main" class="main" style="padding: 0;">
-    
-    <section class="section profile">
-      <div class="row d-flex justify-content-between">
-        <div class="col-xl-3 customer-panel card p-0" style="overflow-y: auto; height: 92vh; border-radius: 0px;">
+
+    <section class="section profile" style="margin-top: -24px; over-flow: hidden;">
+      <div class="d-flex flex-row justify-content-between">
+        <div class="col-xl-3 mt-0 customer-panel card p-0" style="overflow-y: auto; height: 92vh; border-radius: 0px;">
           <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between active-view customer-view" style="padding-left: 20px !important;">
             <div class="d-flex flex-column">
               <p class="mb-1" style="font-size: 14px; color: #040405">Patel Steels Limited</p>
@@ -145,7 +145,7 @@ Invoicer - View Customer
               New Transcation
             </button>
             <div class="filter d-flex flex-row align-items-center justify-content-end">
-                <button class="btn btn-primary" data-bs-toggle="dropdown"><i class="bi bi-three-dots" style="color: #fff"></i></button>
+                <button class="btn btn-primary" data-bs-toggle="dropdown" style="height: 37px;><i class="bi bi-three-dots" style="color: #fff"></i></button>
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                     
 

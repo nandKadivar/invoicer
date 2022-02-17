@@ -44,7 +44,19 @@ Route::get('/admin/customers/view', function(){
     return view('admin.customers-view');
 })->name('admin.customers.view')->middleware('auth');
 Route::get('/admin/items', [ItemsController::class, 'index'])->name('admin.items')->middleware('auth');
+Route::get('/admin/items/new', function(){
+    return view('admin.items-create');
+})->name('admin.items.create')->middleware('auth');
+Route::get('/admin/items/view', function(){
+    return view('admin.items-view');
+})->name('admin.items.view')->middleware('auth');
 Route::get('/admin/invoices', [InvoicesController::class, 'index'])->name('admin.invoices')->middleware('auth');
+Route::get('/admin/invoices/new', function(){
+    return view('admin.invoices-create');
+})->name('admin.invoices.create')->middleware('auth');
+Route::get('/admin/invoices/view', function(){
+    return view('admin.invoices-view');
+})->name('admin.invoices.view')->middleware('auth');
 Route::get('/admin/recurring-invoices', [RecurringInvoicesController::class, 'index'])->name('admin.recurring-invoices')->middleware('auth');
 Route::get('/admin/payments', [PaymentsController::class, 'index'])->name('admin.payments')->middleware('auth');
 Route::get('/admin/expenses', [ExpensesController::class, 'index'])->name('admin.expenses')->middleware('auth');

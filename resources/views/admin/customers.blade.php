@@ -38,7 +38,7 @@ Invoicer - Customers
                   <tbody>
                       <tr>
                           <th scope="row"><a href="#">#1</a></th>
-                          <td><a href="#" class="text-primary">Patel Steels Limited</a><br/><span style="font-size:  14px;color: #94a3b8;">Meet Kadivar</span></td>
+                          <td><a href="{{route('admin.customers.view')}}" class="text-primary">Patel Steels Limited</a><br/><span style="font-size:  14px;color: #94a3b8;">Meet Kadivar</span></td>
                           <td>9452361425</td>
                           <td>15,074.20</td>
                           <td>06 Feb 2022</td>
