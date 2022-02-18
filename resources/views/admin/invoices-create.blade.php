@@ -108,7 +108,7 @@ Invoicer - New Invoice
                     <i class="bi bi-person-circle" style="font-size: 24px; margin-right: 10px;"></i><span style="font-size: 20px; font-weight: 520;">New Customer</span>
                     <div class="customer-box">
                         <input type="text" class="form-control" id="myInput1" onkeyup="myFunction1()" placeholder="Search" title="Type in a name">
-                        <ul class="customer-ul">
+                        <ul class="customer-ul">                            
                             <li>
                                 <div class="d-flex flex-row justify-content-between align-items-center">
                                     <div class="d-flex justify-content-center align-items-center" style="width: 45px; height: 45px; background-color: #cbd5e1; border-radius: 50%; margin-right: 10px;">
@@ -238,7 +238,6 @@ Invoicer - New Invoice
             <div class="col-lg-5 col-md-6 col-sm-12 col-12 d-flex flex-column">
                 <span style="font-weight: 600;">Notes</span>
                 <div id="editor">
-                    <!-- <p>This is some sample content.</p> -->
                 </div>
                 <div class="d-flex flex-row justify-content-end align-items-center p-2" style="position: relative; background-color: #fff; border: 1px solid #c4c4c4; border-top: 0px; border-radius: 0px 0px 2px 2px;">
                     <button type="button" class="btn btn-outline-primary" onclick="openFiledBox()"><i class="bi bi-plus-lg"></i> Insert Fields</button>
@@ -408,6 +407,13 @@ Invoicer - New Invoice
                     <!-- </form> -->
                 </div>
             </div>
+        </div>
+
+        <div class="text-center">
+            <button type="button" class="btn btn-primary">
+                <i class="bi bi-download"></i>
+                Save Invoice
+            </button>
         </div>
     </form>
 </main>

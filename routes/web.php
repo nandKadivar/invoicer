@@ -59,6 +59,12 @@ Route::get('/admin/invoices/view', function(){
 })->name('admin.invoices.view')->middleware('auth');
 Route::get('/admin/recurring-invoices', [RecurringInvoicesController::class, 'index'])->name('admin.recurring-invoices')->middleware('auth');
 Route::get('/admin/payments', [PaymentsController::class, 'index'])->name('admin.payments')->middleware('auth');
+Route::get('/admin/payments/new', function(){
+    return view('admin.payments-create');
+})->name('admin.payments.create')->middleware('auth');
+Route::get('/admin/payments/view', function(){
+    return view('admin.payments-view');
+})->name('admin.payments.view')->middleware('auth');
 Route::get('/admin/expenses', [ExpensesController::class, 'index'])->name('admin.expenses')->middleware('auth');
 Route::get('/admin/users', [UsersController::class, 'index'])->name('admin.users')->middleware('auth');
 Route::get('/admin/reports', [ReportsController::class, 'index'])->name('admin.reports')->middleware('auth');
