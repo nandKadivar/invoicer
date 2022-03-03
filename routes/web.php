@@ -65,6 +65,11 @@ Route::get('/admin/payments/new', function(){
 Route::get('/admin/payments/view', function(){
     return view('admin.payments-view');
 })->name('admin.payments.view')->middleware('auth');
+
+Route::get('/admin/expenses/new', function(){
+    return view('admin.expenses-create');
+})->name('admin.expenses.create')->middleware('auth');
+
 Route::get('/admin/expenses', [ExpensesController::class, 'index'])->name('admin.expenses')->middleware('auth');
 Route::get('/admin/users', [UsersController::class, 'index'])->name('admin.users')->middleware('auth');
 Route::get('/admin/reports', [ReportsController::class, 'index'])->name('admin.reports')->middleware('auth');

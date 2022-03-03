@@ -89,20 +89,22 @@ Invoicer - Payments
 <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Payments</h1>
+      <h1>New Payment</h1>
       <nav class="d-flex flex-row justify-content-between align-items-center">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
           <li class="breadcrumb-item active">Payments</li>
+          <li class="breadcrumb-item active">New Payment</li>
           <!-- <li class="breadcrumb-item active">Contact</li> -->
         </ol>
-        <a type="button" class="btn btn-primary" href="{{route('admin.payments.create')}}">
+        <!-- <a type="button" class="btn btn-primary" href="pages-customer-create.html">
           <i class="bi bi-plus-lg"></i>
-          New Payment
-        </a>
+          <i class="bi bi-download"></i>
+          Save Payment
+        </a> -->
       </nav>
     </div><!-- End Page Title -->
-    <div class="col-12">
+    <div class="col-12" >
       <div class="card recent-sales overflow-auto">
 
         <!-- <div class="filter">
@@ -118,93 +120,73 @@ Invoicer - Payments
               </ul>
           </div> -->
 
-        <div class="card-body">
-          <!-- <h5 class="card-title">Due Invoices</h5> -->
+          <div class="card" style="margin-bottom: 0px;">
+            <div class="card-body">
+              <h5 class="card-title">New Payment</h5>
 
-          <table class="table table-borderless datatable">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Date</th>
-                <th scope="col">Payment Number</th>
-                <th scope="col">Customer</th>
-                <th scope="col">Payment Mode</th>
-                <th scope="col">Invoice Number</th>
-                <th scope="col">Amount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row"><a href="#">#1</a></th>
-                <td>12 Feb 2022</td>
-                <td><a href="#" class="text-primary">PAY-00001</a></td>
-                <td>Patel Steels Limited</td>
-                <td>Cash</td>
-                <td>INV-00001</td>
-                <td><i class="fa fa-rupee"></i>&nbsp19999</td>
-              </tr>
-              <tr>
-                <th scope="row"><a href="#">#1</a></th>
-                <td>12 Feb 2022</td>
-                <td><a href="#" class="text-primary">PAY-00001</a></td>
-                <td>Patel Steels Limited</td>
-                <td>Cash</td>
-                <td>INV-00001</td>
-                <td><i class="fa fa-rupee"></i>&nbsp19999</td>
-              </tr>
-              <tr>
-                <th scope="row"><a href="#">#1</a></th>
-                <td>16 Feb 2022</td>
-                <td><a href="#" class="text-primary">PAY-00001</a></td>
-                <td>Patel Steels Limited</td>
-                <td>Cash</td>
-                <td>INV-00001</td>
-                <td><i class="fa fa-rupee"></i>&nbsp19999</td>
-              </tr>
-              <tr>
-                <th scope="row"><a href="#">#1</a></th>
-                <td>21 Feb 2022</td>
-                <td><a href="#" class="text-primary">PAY-00001</a></td>
-                <td>Patel Steels Limited</td>
-                <td>Cash</td>
-                <td>INV-00001</td>
-                <td><i class="fa fa-rupee"></i>&nbsp19999</td>
-              </tr>
-              <tr>
-                <th scope="row"><a href="#">#1</a></th>
-                <td>18 Feb 2022</td>
-                <td><a href="#" class="text-primary">PAY-00001</a></td>
-                <td>Patel Steels Limited</td>
-                <td>Cash</td>
-                <td>INV-00001</td>
-                <td><i class="fa fa-rupee"></i>&nbsp19999</td>
-              </tr>
-              <tr>
-                <th scope="row"><a href="#">#1</a></th>
-                <td>17 Feb 2022</td>
-                <td><a href="#" class="text-primary">PAY-00001</a></td>
-                <td>Patel Steels Limited</td>
-                <td>Cash</td>
-                <td>INV-00001</td>
-                <td><i class="fa fa-rupee"></i>&nbsp19999</td>
-              </tr>
-              <tr>
-                <th scope="row"><a href="#">#1</a></th>
-                <td>20 Feb 2022</td>
-                <td><a href="#" class="text-primary">PAY-00001</a></td>
-                <td>Patel Steels Limited</td>
-                <td>Cash</td>
-                <td>INV-00001</td>
-                <td><i class="fa fa-rupee"></i>&nbsp19999</td>
-              </tr>
+              <!-- Multi Columns Form -->
+              <form class="row g-3">
+                <div class="col-md-6">
+                  <label for="inputEmail5" class="form-label">Date</label>
+                  <input type="date" class="form-control" id="inputEmail5">
+                </div>
+                <div class="col-md-6">
+                  <label for="inputPassword5" class="form-label">Payment Number</label>
+                  <input type="password" class="form-control" id="inputPassword5" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="inputState" class="form-label">Customer</label>
+                  <select id="inputState" class="form-select">
+                    <option value="">Click here to select customer</option>
+                    <option>Customer 2</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="inputState" class="form-label">Invoice</label>
+                  <select id="inputState" class="form-select">
+                    <option selected>Select Invoice</option>
+                    <option>...</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="inputEmail5" class="form-label">Amount</label>
+                  <input type="number" class="form-control" id="inputEmail5">
+                </div>
+                <div class="col-md-6">
+                  <label for="inputState" class="form-label">Payment Mode</label>
+                  <select id="inputState" class="form-select">
+                    <option selected>Select Payment mode</option>
+                    <option>...</option>
+                  </select>
+                </div>
 
-            </tbody>
-          </table>
+                <div class="col-md-12">
+                <span style="font-weight: 600;">Notes</span>
+                    <div id="editor" style="background-color: #fff; border-radius: 5px; border: 1px solid #ececec;">
+                        <!-- <p>This is some sample content.</p> -->
+                    </div>
+                  </div>
 
-        </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary" style="float: right;">Submit</button>
+                </div>
+              </form><!-- End Multi Columns Form -->
+
+            </div>
+          </div>
 
       </div>
     </div>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js "></script>
+    <script>
+
+        ClassicEditor
+            .create(document.querySelector('#editor'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 
   </main><!-- End #main -->
 @endsection
