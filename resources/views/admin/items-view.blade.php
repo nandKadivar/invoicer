@@ -119,6 +119,12 @@ Invoicer - New Item
                   </div>
                 </div>
                 <div class="row mb-3">
+                  <label for="inputEmail3" class="col-sm-2 col-form-label">GST (%)</label>
+                  <div class="col-sm-10">
+                    <input type="number" class="form-control" id="inputEmail">
+                  </div>
+                </div>
+                <div class="row mb-3">
                   <label for="inputState" class="col-sm-2 col-form-label">Unit</label>
                   <div class="col-sm-10">
                     <select id="inputState" class="form-select">

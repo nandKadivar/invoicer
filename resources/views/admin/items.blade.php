@@ -128,6 +128,7 @@ Invoicer - Items
                           <th scope="col">Name</th>
                           <th scope="col">Unit</th>
                           <th scope="col">Price</th>
+                          <th scope="col">GST</th>
                           <th scope="col">Added On</th>
                       </tr>
                   </thead>
@@ -137,6 +138,7 @@ Invoicer - Items
                           <td><a href="{{route('admin.items.view')}}" class="text-primary">Stones</a></td>
                           <td>Kg</td>
                           <td>13.00</td>
+                          <td>18%</td>
                           <td>06 Feb 2022</td>
                       </tr>
                   </tbody>

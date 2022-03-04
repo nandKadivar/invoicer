@@ -107,6 +107,10 @@ Invoicer - New Customer
 
               <form class="row g-3">
                 <div class="col-md-6">
+                  <label for="inputName5" class="form-label">GST Number</label>
+                  <input type="text" class="form-control" id="inputName5">
+                </div>
+                <div class="col-md-6">
                   <label for="inputName5" class="form-label">Display Name</label>
                   <input type="text" class="form-control" id="inputName5">
                 </div>
