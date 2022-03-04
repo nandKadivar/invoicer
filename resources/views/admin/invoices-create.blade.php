@@ -137,10 +137,118 @@ Invoicer - New Invoice
                             <span style="font-weight: 600; color: #94a3b8;">No customer found!</span>
                         </div>
                         <!-- Customer not found warning End -->
-                        <div class="d-flex flex-row justify-content-center align-items-center py-2" style="background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;">
+                        <div data-bs-toggle="modal" data-bs-target="#addNewCustomerModel" class="d-flex flex-row justify-content-center align-items-center py-2" style="background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;">
                             <i class="bi bi-plus-circle text-primary" style="padding-right: 5px;"></i>
                             <span class="text-primary">Add New Customer</span>
                         </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="addNewCustomerModel" tabindex="-1">
+                    <div class="modal-dialog modal-xl">
+                        <form action="">
+                            <div class="modal-content">
+                                <div class="modal-header" style="border-top: 6px solid var(--bs-primary);">
+                                    <h5 class="modal-title">Add Customer</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body row p-4  ">
+                                    <div class="card-title">Basic Details</div>
+                                    {{-- <div class="col-12"> --}}
+                                        <div class="col-md-6">
+                                            <label for="inputName5" class="form-label">GST Number</label>
+                                            <input type="text" class="form-control" id="inputName5">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="inputName5" class="form-label">Display Name</label>
+                                            <input type="text" class="form-control" id="inputName5">
+                                        </div>
+                                    {{-- </div> --}}
+                                      <div class="col-md-6">
+                                        <label for="inputEmail5" class="form-label">Primary Contact Name</label>
+                                        <input type="text" class="form-control" id="inputEmail5">
+                                      </div>
+                                      <div class="col-md-6">
+                                        <label for="inputEmail5" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="inputEmail5">
+                                      </div>
+                                      <div class="col-md-6">
+                                        <label for="inputPassword5" class="form-label">Phone</label>
+                                        <input type="text" class="form-control" id="inputPassword5">
+                                      </div>
+                                      
+                                      <div class="col-md-6">
+                                        <label for="inputState" class="form-label">Primary Currency</label>
+                                        <select id="inputState" class="form-select">
+                                          <option selected>Choose...</option>
+                                          <option>...</option>
+                                        </select>
+                                      </div>
+                                      <div class="col-md-6">
+                                        <label for="inputZip" class="form-label">Website</label>
+                                        <input type="text" class="form-control" id="inputZip">
+                                      </div>
+                                      
+                                      <div class="col-md-12">
+                                        <hr/>
+                                      </div>
+                                      
+                                      <div class="card-title">Billing Address</div>
+                      
+                                      <div class="col-md-6">
+                                        <label for="inputName5" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="inputName5">
+                                      </div>
+                      
+                                      <div class="col-md-6">
+                                        <label for="inputState" class="form-label">Country</label>
+                                        <select id="inputState" class="form-select">
+                                          <option selected>Select Country</option>
+                                          <option>...</option>
+                                        </select>
+                                      </div>
+                      
+                                      <div class="col-md-6">
+                                        <label for="inputName5" class="form-label">State</label>
+                                        <input type="text" class="form-control" id="inputName5">
+                                      </div>
+                      
+                                      <div class="col-md-6">
+                                        <label for="inputName5" class="form-label">City</label>
+                                        <input type="text" class="form-control" id="inputName5">
+                                      </div>
+                      
+                                      <div class="col-6">
+                                        <label for="inputAddress5" class="form-label">Address 1</label>
+                                        <input type="text" class="form-control" id="inputAddres5s" placeholder="1234 Main St">
+                                      </div>
+                      
+                                      <div class="col-md-6">
+                                        <label for="inputPassword5" class="form-label">Phone</label>
+                                        <input type="text" class="form-control" id="inputPassword5">
+                                      </div>
+                      
+                                      <div class="col-6">
+                                        <label for="inputAddress2" class="form-label">Address 2</label>
+                                        <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+                                      </div>
+                      
+                                      <div class="col-md-6">
+                                        <label for="inputPassword5" class="form-label">Zip Code</label>
+                                        <input type="number" class="form-control" id="inputPassword5">
+                                      </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-primary">
+                                          <i class="bi bi-download"></i>
+                                          Save Customer
+                                        </button>
+                                    </div>
+                                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
