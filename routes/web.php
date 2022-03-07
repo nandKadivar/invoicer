@@ -47,6 +47,7 @@ Route::get('/admin/items', [ItemsController::class, 'index'])->name('admin.items
 Route::get('/admin/items/new', function(){
     return view('admin.items-create');
 })->name('admin.items.create')->middleware('auth');
+Route::post('/admin/items/new', [ItemsController::class, 'store'])->name('admin.items.store')->middleware('auth');
 Route::get('/admin/items/view', function(){
     return view('admin.items-view');
 })->name('admin.items.view')->middleware('auth');

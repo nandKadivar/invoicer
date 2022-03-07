@@ -90,6 +90,7 @@ Invoicer - Items
 
     <div class="pagetitle">
       <h1>Items</h1>
+      {{-- <p>{{$data}}</p> --}}
       <nav class="d-flex flex-row justify-content-between align-items-center">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
@@ -141,6 +142,16 @@ Invoicer - Items
                           <td>18%</td>
                           <td>06 Feb 2022</td>
                       </tr>
+                      @foreach($data as $i)
+                        <tr>
+                            <th scope="row"><a href="#">#1</a></th>
+                            <td><a href="{{route('admin.items.view')}}" class="text-primary">{{$i->name}}</a></td>
+                            <td>Kg</td>
+                            <td>{{$i->price}}</td>
+                            <td>{{$i->gst}} %</td>
+                            <td>06 Feb 2022</td>
+                        </tr>
+                      @endforeach
                   </tbody>
               </table>
 

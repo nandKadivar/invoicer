@@ -151,7 +151,7 @@ Invoicer - New Invoice
                                     <h5 class="modal-title">Add Customer</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body row p-4  ">
+                                <div class="modal-body row p-4">
                                     <div class="card-title">Basic Details</div>
                                     {{-- <div class="col-12"> --}}
                                         <div class="col-md-6">

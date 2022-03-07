@@ -106,42 +106,43 @@ Invoicer - New Item
             <div class="card-body p-4">
               {{-- <h5 class="card-title">Horizontal Form</h5> --}}
 
-              <form>
+              <form action="{{route('admin.items.store')}}" method="POST">
+                @csrf
                 <div class="row mb-3">
                   <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputText">
+                    <input type="text" class="form-control" name="name" id="inputText">
                   </div>
                 </div>
                 <div class="row mb-3">
                   <label for="inputEmail3" class="col-sm-2 col-form-label">Price</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputEmail">
+                    <input type="text" class="form-control" name="price" id="inputEmail">
                   </div>
                 </div>
                 <div class="row mb-3">
                   <label for="inputEmail3" class="col-sm-2 col-form-label">GST (%)</label>
                   <div class="col-sm-10">
-                    <input type="number" class="form-control" id="inputEmail">
+                    <input type="number" class="form-control" name="gst" id="inputEmail">
                   </div>
                 </div>
                 <div class="row mb-3">
                   <label for="inputState" class="col-sm-2 col-form-label">Unit</label>
                   <div class="col-sm-10">
-                    <select id="inputState" class="form-select">
+                    <select id="inputState" class="form-select" name="unit_id">
                       <option selected>Select unit</option>
-                      <option>kg</option>
+                      <option value="1">kg</option>
                     </select>
                   </div>
                 </div>
                 <div class="row mb-3">
                   <label for="inputPassword3" class="col-sm-2 col-form-label">Description</label>
                   <div class="col-sm-10">
-                    <textarea class="form-control" id="inputPassword"></textarea>
+                    <textarea class="form-control" id="inputPassword" name="description"></textarea>
                   </div>
                 </div>
                 <div class="text-center">
-                  <button type="button" class="btn btn-primary">
+                  <button type="submit" class="btn btn-primary">
                     <i class="bi bi-download"></i>
                     Save Item
                   </button>
@@ -154,4 +155,8 @@ Invoicer - New Item
     </div>
 
   </main>
+
+  {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
+  {{-- <script src="https://code.jquery.com/jquery-3.6.0.slim.js" integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY=" crossorigin="anonymous"></script> --}}
+  
 @endsection

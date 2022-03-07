@@ -43,6 +43,9 @@
   <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
   {{-- <link href="{{asset('assets/css/custom.css')}}" rel="stylesheet"> --}}
 
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  
 </head>
 <body>
 
@@ -465,5 +468,11 @@
 
     <!-- Template Main JS File -->
     <script src="{{asset('assets/js/main.js')}}"></script>
+
+    <!-- Select components with search JS Files -->
+    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script> --}}
+    
 </body>
 </html>
