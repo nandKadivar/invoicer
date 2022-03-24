@@ -212,16 +212,16 @@ Invoicer - New Customer
 
                 <div class="col-md-6">
                   <label for="inputName5" class="form-label">Name</label>
-                  <input type="text" class="form-control" id="inputName5" name='billing_name'>
+                  <input type="text" class="form-control" id="inputName5" name='shipping_name'>
                 </div>
 
-                <div class="col-md-6 country-select">
+                <div class="col-md-6 country-select-2">
                   <label for="inputState" class="form-label">Country</label>
                   {{-- <select id="inputState" class="form-select" name='billing_country_id'>
                     <option value="1" selected>INDIA</option>
                     <option value="2">USA</option>
                   </select> --}}
-                  <select id="inputState" class="form-control" name='billing_country_id'>
+                  <select id="inputState" class="form-control" name='shipping_country_id'>
                     @foreach ($countries as $i)
                       <option value="{{$i['id']}}">{{$i['name']}}</option>
                     @endforeach
@@ -230,32 +230,32 @@ Invoicer - New Customer
 
                 <div class="col-md-6">
                   <label for="inputName5" class="form-label">State</label>
-                  <input type="text" class="form-control" id="inputName5" name='billing_state'>
+                  <input type="text" class="form-control" id="inputName5" name='shipping_state'>
                 </div>
 
                 <div class="col-md-6">
                   <label for="inputName5" class="form-label">City</label>
-                  <input type="text" class="form-control" id="inputName5" name='billing_city'>
+                  <input type="text" class="form-control" id="inputName5" name='shipping_city'>
                 </div>
 
                 <div class="col-6">
                   <label for="inputAddress5" class="form-label">Address 1</label>
-                  <input type="text" class="form-control" id="inputAddres5s" placeholder="1234 Main St" name='billing_address_street_1'>
+                  <input type="text" class="form-control" id="inputAddres5s" placeholder="1234 Main St" name='shipping_address_street_1'>
                 </div>
 
                 <div class="col-md-6">
                   <label for="inputPassword5" class="form-label">Phone</label>
-                  <input type="text" class="form-control" id="inputPassword5" name='billing_phone'>
+                  <input type="text" class="form-control" id="inputPassword5" name='shipping_phone'>
                 </div>
 
                 <div class="col-6">
                   <label for="inputAddress2" class="form-label">Address 2</label>
-                  <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" name='billing_address_street_2'>
+                  <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" name='shipping_address_street_2'>
                 </div>
 
                 <div class="col-md-6">
                   <label for="inputPassword5" class="form-label">Zip Code</label>
-                  <input type="number" class="form-control" id="inputPassword5" name='billing_zip'>
+                  <input type="number" class="form-control" id="inputPassword5" name='shipping_zip'>
                 </div>
 
                 <div class="col-md-12">
@@ -284,20 +284,41 @@ Invoicer - New Customer
         const form = document.querySelector(".customerForm");
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
-            let data = new FormData(form);
-            // console.log(data);
-            // axios({
-            //     method: "post",
-            //     url: "/",
-            //     data: data,
-            // })
-            //     .then((res) => {
-            //         console.log(res);
-            //     })
-            //     .catch((err) => {
-            //         throw err;
-            //     });
+            let form_data = new FormData(form);
             
+            const data = {
+              gst_number: form_data.get('gst_number'),
+              name: form_data.get('name'),
+              contact_name: form_data.get('contact_name'),
+              phone: form_data.get('phone'),
+              currency_id: form_data.get('currency_id'),
+              website: form_data.get('website'),
+              prefix: null,
+              enable_portal: 0,
+              billing: {
+                name: form_data.get('billing_name'),
+                country_id: form_data.get('billing_country_id'),
+                state: form_data.get('billing_state'),
+                city: form_data.get('billing_city'),
+                address_street_1: form_data.get('billing_address_street_1'),
+                address_street_2: form_data.get('billing_address_street_2'),
+                phone: form_data.get('billing_phone'),
+                zip: form_data.get('billing_zip')
+              },
+              shipping: {
+                name: form_data.get('shipping_name'),
+                country_id: form_data.get('shipping_country_id'),
+                state: form_data.get('shipping_state'),
+                city: form_data.get('shipping_city'),
+                address_street_1: form_data.get('shipping_address_street_1'),
+                address_street_2: form_data.get('shipping_address_street_2'),
+                phone: form_data.get('shipping_phone'),
+                zip: form_data.get('shipping_zip')
+              }
+            }
+
+            // console.log(data);
+
             axios.post('http://127.0.0.1:8000/admin/customers/new', data, {
               headers: { 
                 'Content-Type': 'application/json',
@@ -308,7 +329,7 @@ Invoicer - New Customer
                 response => console.log(response.data)
             ).catch(
                 error => console.log(error)
-            )
+            );
         });
     });
 
@@ -330,6 +351,7 @@ Invoicer - New Customer
 
     $('.currency-select .dropdown-select ul').before('<div class="dd-search"><input id="CurrencySearchValue" autocomplete="off" onkeyup="Currencyfilter()" class="dd-searchbox" type="text" autocomplete="false"></div>');
     $('.country-select .dropdown-select ul').before('<div class="dd-search"><input id="CountrySearchValue" autocomplete="off" onkeyup="Countryfilter()" class="dd-searchbox" type="text" autocomplete="false"></div>');
+    $('.country-select-2 .dropdown-select ul').before('<div class="dd-search"><input id="CountrySearchValue2" autocomplete="off" onkeyup="Countryfilter2()" class="dd-searchbox" type="text" autocomplete="false"></div>');
 }
 
 // Event listeners
@@ -369,6 +391,13 @@ function Currencyfilter(){
 
 function Countryfilter(){
     var valThis = $('#CountrySearchValue').val();
+    $('.dropdown-select ul > li').each(function(){
+     var text = $(this).text();
+        (text.toLowerCase().indexOf(valThis.toLowerCase()) > -1) ? $(this).show() : $(this).hide();         
+   });
+};
+function Countryfilter2(){
+    var valThis = $('#CountrySearchValue2').val();
     $('.dropdown-select ul > li').each(function(){
      var text = $(this).text();
         (text.toLowerCase().indexOf(valThis.toLowerCase()) > -1) ? $(this).show() : $(this).hide();         

@@ -56,38 +56,66 @@ class CustomerRequest extends FormRequest
             'currency_id' => [
                 'nullable',
             ],
-            'billing_name' => [
-                'nullable',
-            ],
-            'billing_address_street_1' => [
-                'nullable',
-            ],
-            'billing_address_street_2' => [
-                'nullable',
-            ],
-            'billing_city' => [
-                'nullable',
-            ],
-            'billing_state' => [
-                'nullable',
-            ],
-            'billing_country_id' => [
-                'nullable',
-            ],
-            'billing_zip' => [
-                'nullable',
-            ],
-            'billing_phone' => [
-                'nullable',
-            ],
-            'billing_fax' => [
-                'nullable',
-            ],
             'gst_number' => [
+                'nullable',
+            ],
+            'billing.name' => [
+                'nullable',
+            ],
+            'billing.address_street_1' => [
+                'nullable',
+            ],
+            'billing.address_street_2' => [
+                'nullable',
+            ],
+            'billing.city' => [
+                'nullable',
+            ],
+            'billing.state' => [
+                'nullable',
+            ],
+            'billing.country_id' => [
+                'nullable',
+            ],
+            'billing.zip' => [
+                'nullable',
+            ],
+            'billing.phone' => [
+                'nullable',
+            ],
+            'billing.fax' => [
+                'nullable',
+            ],
+            'shipping.name' => [
+                'nullable',
+            ],
+            'shipping.address_street_1' => [
+                'nullable',
+            ],
+            'shipping.address_street_2' => [
+                'nullable',
+            ],
+            'shipping.city' => [
+                'nullable',
+            ],
+            'shipping.state' => [
+                'nullable',
+            ],
+            'shipping.country_id' => [
+                'nullable',
+            ],
+            'shipping.zip' => [
+                'nullable',
+            ],
+            'shipping.phone' => [
+                'nullable',
+            ],
+            'shipping.fax' => [
                 'nullable',
             ]
         ];
 
+        return $rules;
     }
 
     public function getCustomerPayload(){
