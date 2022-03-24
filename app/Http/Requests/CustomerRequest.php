@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Arr;
+use App\Models\Address;
 
 class CustomerRequest extends FormRequest
 {
@@ -151,5 +152,21 @@ class CustomerRequest extends FormRequest
         });
 
         return $data;
+    }
+
+    public function getShippingAddress(){
+        return collect($this->shipping)
+        ->merge([
+            'type' => Address::SHIPPING_TYPE
+        ])
+        ->toArray();
+    }
+
+    public function getBillingAddress(){
+        return collect($this->billing)
+        ->merge([
+            'type' => Address::BILLING_TYPE
+        ])
+        ->toArray();
     }
 }
