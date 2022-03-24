@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Arr;
 
 class CustomerRequest extends FormRequest
 {
@@ -142,5 +143,13 @@ class CustomerRequest extends FormRequest
                 'company_id' => 1,
             ])
             ->toArray();
+    }
+
+    public function hasAddress(array $address){
+        $data = Arr::where($address, function($value, $key){
+            return isset($value);
+        });
+
+        return $data;
     }
 }
