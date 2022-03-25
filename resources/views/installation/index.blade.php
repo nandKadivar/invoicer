@@ -354,7 +354,7 @@ Installation
 
     const dropArea = document.querySelector(".drag-area");
 
-    let file;
+    let file, isUploaded=false;
 
     dropArea.addEventListener("dragover", (e)=>{
         e.preventDefault();
@@ -397,22 +397,42 @@ Installation
                 // image.height = 100;
                 // image.title = file.name;
                 let src = this.result;
-                let imgTag = `<img src="${src}" alt="" />`;
+                let imgTag = `<img class="profile-pic" src="${src}" alt="" /> <div class="profile-remove p-2 bg-danger" style="display: flex; align-items: center; justify-content: center; width: 100%; position: absolute; bottom: 0px; color: #fff; font-size: 14px; border-radius: 0px 0px 5px 5px;" onclick="removePic()"><i class="bi bi-trash" style="margin-right: 5px;"></i>Remove</div>`;
                 dropArea.innerHTML = imgTag;
+                isUploaded = true;
+                picLoaded();
             }, false);
 
             fileReader.readAsDataURL(file);
 
-            // fileReader.onload = readSuccess;
-
-            // function readSuccess(e){
-            //     alert('Success');
-            // }
         }else{
             showToast('Invalid File Type', 'danger');
             dropArea.classList.remove("active");
         }
     });
+
+    function picLoaded(){
+        console.log('function call');
+        $('.drag-area').mouseenter(function(){
+            console.log('enter');
+            // document.querySelector('.profile-remove').style.display = 'flex';
+            $('.profile-remove').show(200);
+        });
+
+        $('.drag-area').mouseleave(function(){
+            console.log('out');
+            // document.querySelector('.profile-remove').style.display = 'none';
+            $('.profile-remove').hide(200);
+        });
+    }
+
+    function removePic(){
+        file = null;
+        let iTag = '<i class="bi bi-cloud-upload" style="color: #92acd3; font-size: 26px;"></i>';
+        dropArea.innerHTML = iTag;
+        isUploaded = false;
+    }
+
 </script>
 
 @endsection
