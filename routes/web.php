@@ -27,7 +27,7 @@ use App\Http\Controllers\Admin\Setting\SettingsController;
 
 Route::get('/', function () {
     return Redirect::route('login');
-});
+})->middleware('is_installed');
 
 Route::get('/installation', function(){
     return view('installation.index');

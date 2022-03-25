@@ -39,8 +39,9 @@ class Customer extends Model
                 // print_r($request->getBillingAddress());
             }
         }
-
-        $customer = Customer::with('billingAddress', 'shippingAddress')->find($customer->id);
+        
+        $customer = Customer::where('id', $customer->id)->get();
+        // $customer = Customer::with('billingAddress', 'shippingAddress')->find($customer->id);
 
         return $customer;
         // echo $customer->id;

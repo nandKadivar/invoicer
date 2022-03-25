@@ -290,6 +290,7 @@ Invoicer - New Customer
               gst_number: form_data.get('gst_number'),
               name: form_data.get('name'),
               contact_name: form_data.get('contact_name'),
+              email: form_data.get('email'),
               phone: form_data.get('phone'),
               currency_id: form_data.get('currency_id'),
               website: form_data.get('website'),
@@ -319,17 +320,15 @@ Invoicer - New Customer
 
             // console.log(data);
 
-            axios.post('http://127.0.0.1:8000/admin/customers/new', data, {
+            let res = axios.post('http://127.0.0.1:8000/admin/customers/new', data, {
               headers: { 
                 'Content-Type': 'application/json',
                 // 'X-CSRF-TOKEN': token.content,
                 'X-Requested-With': 'XMLHttpRequest',
               }
-            }).then(
-                response => console.log(response.data)
-            ).catch(
-                error => console.log(error)
-            );
+            });
+
+            console.log(res);
         });
     });
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
+use App\Http\Resources\CustomerResource;
 
 class CustomersController extends Controller
 {
@@ -19,7 +20,8 @@ class CustomersController extends Controller
         $customer = Customer::createCustomer($request);
         // echo "Store method";
         // print_r($request->all());
-        
+        // return new CustomerResource($customer);
+        return redirect()->route('admin.customers.view')->with('customer', new CustomerResource($customer));
     }
 
     public function createCustomer(){

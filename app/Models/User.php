@@ -41,4 +41,25 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
+    }
+    
+    public function isOwner()
+    {
+        if (Schema::hasColumn('companies', 'owner_id')) {
+            $company = Company::find(request()->header('company'));
+
+            if ($company && $this->id == $company->owner_id) {
+                return true;
+            }
+        } else {
+            return $this->role == 'super admin' || $this->role == 'admin';
+        }
+
+        return false;
+    }
+
 }
