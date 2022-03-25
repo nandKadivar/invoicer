@@ -6,6 +6,7 @@
     $(function() {
   
       $(document).ready(function() {
+
         function triggerClick(elem) {
           $(elem).click();
         }

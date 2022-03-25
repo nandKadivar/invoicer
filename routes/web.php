@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\Expense\ExpensesController;
 use App\Http\Controllers\Admin\User\UsersController;
 use App\Http\Controllers\Admin\Report\ReportsController;
 use App\Http\Controllers\Admin\Setting\SettingsController;
+use App\Http\Controllers\installation\RequirementsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,9 +30,16 @@ Route::get('/', function () {
     return Redirect::route('login');
 })->middleware('is_installed');
 
-Route::get('/installation', function(){
-    return view('installation.index');
-})->name('installation');
+Route::group(['prefix' => 'installation'], function(){
+    
+    Route::get('/', function(){
+        return view('installation.index');
+    })->name('installation');
+
+    Route::post('/requirements', [RequirementsController::class, 'requirements'])->name('installation.requirements');
+
+});
+
 
 Auth::routes(['register' => false]);
 
