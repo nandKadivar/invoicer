@@ -22,12 +22,12 @@ Installation
 @section('content')
     <main>
         {{-- Toast alert start--}}
-        {{-- <button onclick="showToast()">Press</button>
+        {{-- <button onclick="showToast()">Press</button> --}}
         <div class="wrapper">
-            <div id="toast" class="d-flex flex-row justify-content-center align-items-center p-4 bg-success">
-                <p class="m-0">Your changes are saved successfully.</p>
+            <div id="toast" class="d-flex flex-row justify-content-center align-items-center p-4">
+                <p class="m-0 toast-msg">Your changes are saved successfully.</p>
             </div>
-        </div> --}}
+        </div>
         {{-- Toast alert end --}}
         <div class="container">
             <div class="page-header">
@@ -237,9 +237,10 @@ Installation
                                 <div class="row col-12">
                                     <div class="d-flex flex-column col-6 py-3">
                                         <label for="inputEmail3" class="col-sm-12 col-form-label px-0">Profile Picture</label>
-                                        <div class="col-sm-5 px-0 drag-area">
+                                        <div class="col-sm-5 px-0 drag-area d-flex flex-row align-items-center justify-content-center">
                                             {{-- <input type="text" class="form-control" id="inputText" value="smtp" disabled> --}}
-                                            <i class="bi bi-plus-circle-dotted add-icon"></i>
+                                            <i class="bi bi-cloud-upload" style="color: #92acd3; font-size: 26px;"></i>
+                                            {{-- <i class="bi bi-plus-circle-dotted add-icon"></i> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -332,7 +333,15 @@ Installation
 
     let x;
     let toast = document.getElementById("toast");
-    function showToast(){
+    function showToast(message, status){
+        if(status == 'success'){
+            document.getElementById("toast").classList.add('bg-success');
+        }else if(status == 'warning'){
+            document.getElementById("toast").classList.add('bg-warning');
+        }else if(status == 'danger'){
+            document.getElementById("toast").classList.add('bg-danger');
+        }
+        $('.toast-msg').text(message);
         clearTimeout(x);
         toast.style.transform = "translateX(0)";
         x = setTimeout(()=>{
@@ -342,6 +351,68 @@ Installation
     function closeToast(){
         toast.style.transform = "translateY(400px)";
     }
+
+    const dropArea = document.querySelector(".drag-area");
+
+    let file;
+
+    dropArea.addEventListener("dragover", (e)=>{
+        e.preventDefault();
+        // console.log("File is over drop area!");
+        dropArea.classList.add("active");
+    });
+
+    dropArea.addEventListener("dragleave", ()=>{
+        // console.log("File is out side of drop area!");
+        dropArea.classList.remove("active");
+    });
+
+    dropArea.addEventListener("drop", (e)=>{
+        e.preventDefault();
+        // console.log("File is droped on drop area!");
+        file = e.dataTransfer.files[0];
+        // console.log(file);
+        let fileType = file.type;
+        let validExtensions = ["image/jpeg","image/jpg", "image/png"];
+
+        if(validExtensions.includes(fileType)){
+            var fileReader = new FileReader();
+            console.log(fileReader);
+            // fileReader.onload = function(e) => {
+            //     console.log('Hiii');
+            //     let fileURL =  e.target.result;
+            //     let imgTag = `<img src="${fileURL}" alt="" />`;
+            //     dropArea.innerHtml = imgTag;
+            // }
+            // fileReader.onload = () => {
+            //     let fileURL =  fileReader.result;
+            //     console.log(fileURL);
+            //     let imgTag = `<img src="${fileURL}" alt="" />`;
+            //     dropArea.innerHTML = "<img src='C:/Users/Admin/Pictures/Saved Pictures/1.jpg' alt='profile pic'/>";
+            // };
+
+            // fileReader.readAsText(file);
+            fileReader.addEventListener("load", function () {
+                var image = new Image();
+                // image.height = 100;
+                // image.title = file.name;
+                let src = this.result;
+                let imgTag = `<img src="${src}" alt="" />`;
+                dropArea.innerHTML = imgTag;
+            }, false);
+
+            fileReader.readAsDataURL(file);
+
+            // fileReader.onload = readSuccess;
+
+            // function readSuccess(e){
+            //     alert('Success');
+            // }
+        }else{
+            showToast('Invalid File Type', 'danger');
+            dropArea.classList.remove("active");
+        }
+    });
 </script>
 
 @endsection

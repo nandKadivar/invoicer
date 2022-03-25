@@ -130,6 +130,7 @@
     left: 50%;
     margin-left: -150px;
     overflow: hidden;
+    z-index: 100;
 }
 
 /* .wrapper{
@@ -164,6 +165,13 @@
     border-radius: 5px;
     background-color: #f7f7f7;
     cursor: pointer;
+}
+
+.drag-area img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 5px;
 }
 
 .add-icon {
