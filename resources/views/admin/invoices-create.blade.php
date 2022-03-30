@@ -393,7 +393,7 @@ Invoicer - New Invoice
                             </datalist> --}}
                             <input type="text" class="form-control" id="itemInput1" onkeyup="searchItem(1)" placeholder="" title="Type in a name" onclick="openItemBox(1)">
                             <div id="itemBox1" class="item-box">
-                                <ul class="item-ul scroll-area" style="max-height: 200px; overflow-y: scroll;">
+                                <ul id="item-ul-1" class="item-ul scroll-area" style="max-height: 200px; overflow-y: scroll;">
                                     @foreach($items as $item)
                                         <li>
                                             <div class="d-flex flex-row justify-content-between align-items-center">
@@ -664,6 +664,13 @@ Invoicer - New Invoice
         document.querySelector('.selected_customer_shipping_zip').innerHTML = customers[index].shipping.zip;
     }
 
+    // const selectItem = (itemName, row) => {
+    //     // alert('Hiii');
+    //     console.log(itemName);
+    //     console.log(row);
+    //     document.querySelector('#itemInput'+row).value = itemName;
+    // }
+
     const deselect = () => {
         selectedCustomerIndex = null;
         document.querySelector('.add-customer-box').style.display = 'flex';
@@ -741,7 +748,7 @@ Invoicer - New Invoice
         // cell1.innerHTML = "<td><input type='text' list='items' class='form-control'><datalist id='items'><option value='Stones' style='background-color: #fff;'><option value='Steel'><option value='Cement'></datalist></td>"
         // cell1.innerHTML = "<td style='position: relative;'><input type='text' class='form-control' id='itemInput"+row.rowIndex+"' onkeyup='searchItem("+row.rowIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+row.rowIndex+")'><div id='itemBox"+row.rowIndex+"' class='item-box'><ul class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div></td>";
         cell1.style.position = 'relative';
-        cell1.innerHTML = "<input type='text' class='form-control' id='itemInput"+row.rowIndex+"' onkeyup='searchItem("+row.rowIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+row.rowIndex+")'><div id='itemBox"+row.rowIndex+"' class='item-box'><ul class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div>";
+        cell1.innerHTML = "<input type='text' class='form-control' id='itemInput"+row.rowIndex+"' onkeyup='searchItem("+row.rowIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+row.rowIndex+")'><div id='itemBox"+row.rowIndex+"' class='item-box'><ul id='item-ul-"+row.rowIndex+"' class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div>";
         cell2.innerHTML = "<td><input type='text' class='form-control'></td>"
         cell3.innerHTML = "<td><input type='text' class='form-control'></td>"
         cell4.innerHTML = "<td> $ 0.00 </td>"
@@ -767,7 +774,7 @@ Invoicer - New Invoice
             // console.log(i + 2);
             var newIndex = i + 2;
             deleteTableCell.innerHTML = "<i class='bi bi-trash' style='cursor :pointer;' onclick='deleteRow(" + newIndex + ")'></i>";
-            itemTableCell.innerHTML = "<td style='position: relative;'><input type='text' class='form-control' id='itemInput"+newIndex+"' onkeyup='searchItem("+newIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+newIndex+")'><div id='itemBox"+row.rowIndex+"' class='item-box'><ul class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div></td>";
+            itemTableCell.innerHTML = "<td style='position: relative;'><input type='text' class='form-control' id='itemInput"+newIndex+"' onkeyup='searchItem("+newIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+newIndex+")'><div id='itemBox"+newIndex+"' class='item-box'><ul id='item-ul-"+newIndex+"' class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div></td>";
         }
     }
 
@@ -814,7 +821,7 @@ Invoicer - New Invoice
         var input, filter, ul, li, a, div, i, txtValue;
         input = document.getElementById("itemInput"+row);
         filter = input.value.toUpperCase();
-        ul = document.querySelector(".item-ul");
+        ul = document.getElementById("item-ul-"+row);
         li = ul.getElementsByTagName("li");
         for (i = 0; i < li.length; i++) {
             div = li[i].getElementsByTagName("div")[0];
