@@ -1358,6 +1358,14 @@ div.active-view {
     color: #dc3545;
 }
 
+.delete-row-btn{
+    color:#0d6efd;
+}
+
+.delete-row-btn:hover {
+    color: #dc3545;
+}
+
 .tax-box,
 .customer-box {
     /* z-index: 3; */
