@@ -312,54 +312,54 @@
         // var itemBox = document.querySelector(".item-box");
         // itemBox.style.display = "none";
 
-        const openCustomerBox = () => {
-            var customerBox = document.querySelector(".customer-box");
-            customerBox.classList.add("active-box");
-        }
+        // const openCustomerBox = () => {
+        //     var customerBox = document.querySelector(".customer-box");
+        //     customerBox.classList.add("active-box");
+        // }
 
-        const openTaxBox = () => {
-            // alert('Clicked!')
-            var taxBox = document.querySelector(".tax-box");
-            taxBox.classList.add("active-box");
-        }
+        // const openTaxBox = () => {
+        //     // alert('Clicked!')
+        //     var taxBox = document.querySelector(".tax-box");
+        //     taxBox.classList.add("active-box");
+        // }
 
-        const openFiledBox = () => {
-            var filedBox = document.querySelector(".field-box");
-            filedBox.classList.add("active-box");
-        }
+        // const openFiledBox = () => {
+        //     var filedBox = document.querySelector(".field-box");
+        //     filedBox.classList.add("active-box");
+        // }
 
-        const openItemBox = () => {
-            var itemBox = document.querySelector(".item-box");
-            itemBox.style.display = "flex";
-        }
+        // const openItemBox = () => {
+        //     var itemBox = document.querySelector(".item-box");
+        //     itemBox.style.display = "flex";
+        // }
 
-        window.addEventListener('mouseup', function(event) {
-            var taxBox = document.querySelector(".tax-box");
-            if (event.target != taxBox && event.target.parentNode != taxBox) {
-                taxBox.classList.remove("active-box");
-            }
-        });
+        // window.addEventListener('mouseup', function(event) {
+        //     var taxBox = document.querySelector(".tax-box");
+        //     if (event.target != taxBox && event.target.parentNode != taxBox) {
+        //         taxBox.classList.remove("active-box");
+        //     }
+        // });
 
-        window.addEventListener('mouseup', function(event) {
-            var customerBox = document.querySelector(".customer-box");
-            if (event.target != customerBox && event.target.parentNode != customerBox) {
-                customerBox.classList.remove("active-box");
-            }
-        });
+        // window.addEventListener('mouseup', function(event) {
+        //     var customerBox = document.querySelector(".customer-box");
+        //     if (event.target != customerBox && event.target.parentNode != customerBox) {
+        //         customerBox.classList.remove("active-box");
+        //     }
+        // });
 
-        window.addEventListener('mouseup', function(event) {
-            var fieldBox = document.querySelector(".field-box");
-            if (event.target != fieldBox && event.target.parentNode != fieldBox) {
-                fieldBox.classList.remove("active-box");
-            }
-        });
+        // window.addEventListener('mouseup', function(event) {
+        //     var fieldBox = document.querySelector(".field-box");
+        //     if (event.target != fieldBox && event.target.parentNode != fieldBox) {
+        //         fieldBox.classList.remove("active-box");
+        //     }
+        // });
 
-        window.addEventListener('mouseup', function(event) {
-            var itemBox = document.querySelector(".item-box");
-            if (event.target != itemBox && event.target.parentNode != itemBox) {
-                itemBox.style.display = "none";
-            }
-        });
+        // window.addEventListener('mouseup', function(event) {
+        //     var itemBox = document.querySelector(".item-box");
+        //     if (event.target != itemBox && event.target.parentNode != itemBox) {
+        //         itemBox.style.display = "none";
+        //     }
+        // });
 
         ClassicEditor
             .create(document.querySelector('#editor'))
@@ -367,97 +367,94 @@
                 console.error(error);
             });
 
-        const addRow = () => {
-            var table = document.querySelector(".items-table");
-            var row = table.insertRow();
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
-            var cell4 = row.insertCell(3);
-            var cell5 = row.insertCell(4);
+        // const addRow = () => {
+        //     var table = document.querySelector(".items-table");
+        //     var row = table.insertRow();
+        //     var cell1 = row.insertCell(0);
+        //     var cell2 = row.insertCell(1);
+        //     var cell3 = row.insertCell(2);
+        //     var cell4 = row.insertCell(3);
+        //     var cell5 = row.insertCell(4);
 
-            cell1.innerHTML = "<td><input type='text' list='items' class='form-control'><datalist id='items'><option value='Stones' style='background-color: #fff;'><option value='Steel'><option value='Cement'></datalist></td>"
-            cell2.innerHTML = "<td><input type='text' class='form-control'></td>"
-            cell3.innerHTML = "<td><input type='text' class='form-control'></td>"
-            cell4.innerHTML = "<td> $ 0.00 </td>"
-            cell5.innerHTML = "<i class='bi bi-trash' style='cursor :pointer;' onclick='deleteRow(" + row.rowIndex + ")'></i>";
-        }
+        //     cell1.innerHTML = "<td><input type='text' list='items' class='form-control'><datalist id='items'><option value='Stones' style='background-color: #fff;'><option value='Steel'><option value='Cement'></datalist></td>"
+        //     cell2.innerHTML = "<td><input type='text' class='form-control'></td>"
+        //     cell3.innerHTML = "<td><input type='text' class='form-control'></td>"
+        //     cell4.innerHTML = "<td> $ 0.00 </td>"
+        //     cell5.innerHTML = "<i class='bi bi-trash' style='cursor :pointer;' onclick='deleteRow(" + row.rowIndex + ")'></i>";
+        // }
 
-        const deleteRow = (index) => {
-            var table = document.querySelector(".items-table");
-            table.deleteRow(index);
+        // const deleteRow = (index) => {
+        //     var table = document.querySelector(".items-table");
+        //     table.deleteRow(index);
 
-            var tbody = table.getElementsByTagName("tbody")[0];
-            var rows = tbody.getElementsByTagName("tr");
-            // console.log(rows);
-            var i = 1;
-            for (i = 0; i < rows.length; i++) {
-                var deleteTableCell = rows[i + 1].getElementsByTagName("td")[4];
-                // console.log(deleteTableCell);
-                // console.log(i + 2);
-                var newIndex = i + 2;
-                deleteTableCell.innerHTML = "<i class='bi bi-trash' style='cursor :pointer;' onclick='deleteRow(" + newIndex + ")'></i>";
-            }
-        }
+        //     var tbody = table.getElementsByTagName("tbody")[0];
+        //     var rows = tbody.getElementsByTagName("tr");
+        //     var i = 1;
+        //     for (i = 0; i < rows.length; i++) {
+        //         var deleteTableCell = rows[i + 1].getElementsByTagName("td")[4];
+        //         var newIndex = i + 2;
+        //         deleteTableCell.innerHTML = "<i class='bi bi-trash' style='cursor :pointer;' onclick='deleteRow(" + newIndex + ")'></i>";
+        //     }
+        // }
 
-        function myFunction1() {
-            var input, filter, ul, li, a, div1, div, i, txtValue;
-            input = document.getElementById("myInput1");
-            filter = input.value.toUpperCase();
-            ul = document.querySelector(".customer-ul");
-            li = ul.getElementsByTagName("li");
-            for (i = 0; i < li.length; i++) {
-                div1 = li[i].getElementsByTagName("div")[0];
-                div = div1.getElementsByTagName("div")[1];
-                a = div.getElementsByTagName("span")[0];
-                // a = li[i].getElementsByTagName("a")[0];
-                txtValue = a.textContent || a.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    li[i].style.display = "";
-                } else {
-                    li[i].style.display = "none";
-                }
-            }
-        }
+        // function myFunction1() {
+        //     var input, filter, ul, li, a, div1, div, i, txtValue;
+        //     input = document.getElementById("myInput1");
+        //     filter = input.value.toUpperCase();
+        //     ul = document.querySelector(".customer-ul");
+        //     li = ul.getElementsByTagName("li");
+        //     for (i = 0; i < li.length; i++) {
+        //         div1 = li[i].getElementsByTagName("div")[0];
+        //         div = div1.getElementsByTagName("div")[1];
+        //         a = div.getElementsByTagName("span")[0];
+        //         // a = li[i].getElementsByTagName("a")[0];
+        //         txtValue = a.textContent || a.innerText;
+        //         if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        //             li[i].style.display = "";
+        //         } else {
+        //             li[i].style.display = "none";
+        //         }
+        //     }
+        // }
 
-        function myFunction2() {
-            var input, filter, ul, li, a, div, i, txtValue;
-            input = document.getElementById("myInput2");
-            filter = input.value.toUpperCase();
-            ul = document.querySelector(".tax-ul");
-            li = ul.getElementsByTagName("li");
-            for (i = 0; i < li.length; i++) {
-                div = li[i].getElementsByTagName("div")[0];
-                a = div.getElementsByTagName("span")[0];
-                // a = li[i].getElementsByTagName("a")[0];
-                txtValue = a.textContent || a.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    li[i].style.display = "";
-                } else {
-                    li[i].style.display = "none";
-                }
-            }
-        }
+        // function myFunction2() {
+        //     var input, filter, ul, li, a, div, i, txtValue;
+        //     input = document.getElementById("myInput2");
+        //     filter = input.value.toUpperCase();
+        //     ul = document.querySelector(".tax-ul");
+        //     li = ul.getElementsByTagName("li");
+        //     for (i = 0; i < li.length; i++) {
+        //         div = li[i].getElementsByTagName("div")[0];
+        //         a = div.getElementsByTagName("span")[0];
+        //         // a = li[i].getElementsByTagName("a")[0];
+        //         txtValue = a.textContent || a.innerText;
+        //         if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        //             li[i].style.display = "";
+        //         } else {
+        //             li[i].style.display = "none";
+        //         }
+        //     }
+        // }
 
-        function myFunction3() {
-            var input, filter, ul, li, a, div, i, txtValue;
-            input = document.getElementById("myInput3");
-            filter = input.value.toUpperCase();
-            ul = document.querySelector(".item-ul");
-            li = ul.getElementsByTagName("li");
-            for (i = 0; i < li.length; i++) {
-                // div = li[i].getElementsByTagName("div")[0];
-                // a = div.getElementsByTagName("span")[0];
-                a = li[i];
-                // a = li[i].getElementsByTagName("a")[0];
-                txtValue = a.textContent || a.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    li[i].style.display = "";
-                } else {
-                    li[i].style.display = "none";
-                }
-            }
-        }
+        // function myFunction3() {
+        //     var input, filter, ul, li, a, div, i, txtValue;
+        //     input = document.getElementById("myInput3");
+        //     filter = input.value.toUpperCase();
+        //     ul = document.querySelector(".item-ul");
+        //     li = ul.getElementsByTagName("li");
+        //     for (i = 0; i < li.length; i++) {
+        //         // div = li[i].getElementsByTagName("div")[0];
+        //         // a = div.getElementsByTagName("span")[0];
+        //         a = li[i];
+        //         // a = li[i].getElementsByTagName("a")[0];
+        //         txtValue = a.textContent || a.innerText;
+        //         if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        //             li[i].style.display = "";
+        //         } else {
+        //             li[i].style.display = "none";
+        //         }
+        //     }
+        // }
     </script>
 
     <!-- Vendor JS Files -->

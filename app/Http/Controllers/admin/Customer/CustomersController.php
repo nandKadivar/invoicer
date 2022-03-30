@@ -10,8 +10,36 @@ use App\Http\Resources\CustomerResource;
 
 class CustomersController extends Controller
 {
-    public function index(){
-        return view('admin.customers');
+    public function index(Request $request){
+        // return view('admin.customers');
+
+        // $limit = $request->has('limit') ? $request->limit : 10;
+
+        // $customers = Customer::with('creator')
+        //     ->whereCompany()
+        //     ->applyFilters($request->all())
+        //     ->select(
+        //         'customers.*',
+        //         DB::raw('sum(invoices.base_due_amount) as base_due_amount'),
+        //         DB::raw('sum(invoices.due_amount) as due_amount'),
+        //     )
+        //     ->groupBy('customers.id')
+        //     ->leftJoin('invoices', 'customers.id', '=', 'invoices.customer_id')
+        //     ->paginateData($limit);
+
+        // return (CustomerResource::collection($customers))
+        //     ->additional(['meta' => [
+        //         'customer_total_count' => Customer::whereCompany()->count(),
+        //     ]]);
+        // $customers = Customer::whereCompany()->get();
+        $customers = Customer::whereCompany()->get();
+
+        // $customers = (CustomerResource::collection($customers))
+        //     ->additional(['meta' => [
+        //         'customer_total_count' => Customer::whereCompany()->count(),
+        //     ]]);
+
+        return view('admin.customers',['customers'=>$customers]);
     }
 
     public function store(CustomerRequest $request){

@@ -10,7 +10,7 @@ class CustomerResource extends JsonResource
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @return array
      */
     public function toArray($request)
     {
@@ -42,9 +42,9 @@ class CustomerResource extends JsonResource
             'shipping' => $this->when($this->shippingAddress()->exists(), function () {
                 return new AddressResource($this->shippingAddress);
             }),
-            'fields' => $this->when($this->fields()->exists(), function () {
-                return CustomFieldValueResource::collection($this->fields);
-            }),
+            // 'fields' => $this->when($this->fields()->exists(), function () {
+            //     return CustomFieldValueResource::collection($this->fields);
+            // }),
             'company' => $this->when($this->company()->exists(), function () {
                 return new CompanyResource($this->company);
             }),

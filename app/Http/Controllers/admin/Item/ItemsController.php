@@ -25,7 +25,9 @@ class ItemsController extends Controller
 
         // return new ItemResource($item);
         // View::make('blog')->with('posts', $posts);
-        return view('admin.items')->with('item', $item);
+        // $items = Item::where('company_id','1')->get();
+        // return view('admin.items',['status'=>'success','msg'=>'Item added successfully','items'=>$item, 'data'=> $items]);
+        return redirect()->route('admin.items')->with('status','success');
         // return new ItemResource($item);
         // echo $request->header();
         // print_r($request->header());

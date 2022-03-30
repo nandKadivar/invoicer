@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Unit extends Model
 {
     use HasFactory;
+
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }

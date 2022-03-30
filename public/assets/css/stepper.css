@@ -102,10 +102,10 @@
   color: #f1f1f1;
   border-color: #f1f1f1;
 }
-.stepper .disabled .round-tab:hover {
+/* .stepper .disabled .round-tab:hover { */
   /* color: #0dcaf0; */
   /* border: 2px solid #0dcaf0; */
-}
+/* } */
 .stepper .disabled .round-tab::after {
   display: none;
 }
@@ -157,7 +157,7 @@
     color: #fff;
 }
 
-.drag-area{
+.drag-area, .logo-drag-area{
     position: relative;
     width: 130px;
     height: 130px;
@@ -167,7 +167,7 @@
     cursor: pointer;
 }
 
-.drag-area img {
+.drag-area img, .logo-drag-area img {
     height: 100%;
     width: 100%;
     object-fit: cover;

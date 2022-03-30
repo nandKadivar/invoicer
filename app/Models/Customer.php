@@ -18,6 +18,36 @@ class Customer extends Model
         return $this->hasMany(Address::class);
     }
 
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creator_id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function billingAddress()
+    {
+        return $this->hasOne(Address::class)->where('type', Address::BILLING_TYPE);
+    }
+
+    public function shippingAddress()
+    {
+        return $this->hasOne(Address::class)->where('type', Address::SHIPPING_TYPE);
+    }
+
+    public function scopeWhereCompany($query)
+    {
+        return $query->where('customers.company_id', 1);
+    }
+
     public static function createCustomer($request){
 
         // print_r($request['email']);

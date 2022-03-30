@@ -104,12 +104,25 @@ Invoicer - New Invoice
         <!-- <form> -->
         <div class="col-12 d-flex flex-row justify-content-between flex-wrap">
             <div class="col-lg-4 col-md-5 col-sm-12 col-12 p-2">
-                <div class="col-12 d-flex flex-row justify-content-center align-items-center" style="position: relative; height: 180px;background-color: #fff; border-radius: 5px; border: 1px solid #ececec; cursor: pointer;" onclick="openCustomerBox()">
+                <div class="add-customer-box col-12" onclick="openCustomerBox()">
                     <i class="bi bi-person-circle" style="font-size: 24px; margin-right: 10px;"></i><span style="font-size: 20px; font-weight: 520;">New Customer</span>
                     <div class="customer-box">
                         <input type="text" class="form-control" id="myInput1" onkeyup="myFunction1()" placeholder="Search" title="Type in a name">
-                        <ul class="customer-ul">                            
-                            <li>
+                        <ul class="customer-ul">
+                            @foreach($customers as $customer)
+                                <li>
+                                    <div class="d-flex flex-row justify-content-between align-items-center" onclick="selectCustomer({{$loop->index}})">
+                                        <div class="d-flex justify-content-center align-items-center" style="width: 45px; height: 45px; background-color: #cbd5e1; border-radius: 50%; margin-right: 10px;">
+                                            <span style="font-weight: 700;">{{$customer->name[0]}}</span>
+                                        </div>
+                                        <div class="company-info d-flex flex-column justify-content-between align-items-end">
+                                            <span style="font-weight: 600;">{{$customer->name}}</span>
+                                            <span style="font-weight: 600; color: #94a3b8;">{{$customer->contact_name}}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach                         
+                            {{-- <li>
                                 <div class="d-flex flex-row justify-content-between align-items-center">
                                     <div class="d-flex justify-content-center align-items-center" style="width: 45px; height: 45px; background-color: #cbd5e1; border-radius: 50%; margin-right: 10px;">
                                         <span style="font-weight: 700;">P</span>
@@ -130,7 +143,7 @@ Invoicer - New Invoice
                                         <span style="font-weight: 600; color: #94a3b8;">Nand Kadivar</span>
                                     </div>
                                 </div>
-                            </li>
+                            </li> --}}
                         </ul>
                         <!-- Customer not found warning Start-->
                         <div class="d-none flex-row justify-content-center align-items-center py-3">
@@ -140,6 +153,50 @@ Invoicer - New Invoice
                         <div data-bs-toggle="modal" data-bs-target="#addNewCustomerModel" class="d-flex flex-row justify-content-center align-items-center py-2" style="background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;">
                             <i class="bi bi-plus-circle text-primary" style="padding-right: 5px;"></i>
                             <span class="text-primary">Add New Customer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="selected-customer-box col-12 p-3">
+                    <div class="col-12 d-flex flex-row align-items-center justify-content-between mb-2">
+                        <span class="selected_customer_name" style="font-weight: 600; font-size: 16px;" name="selected_customer_name"></span>
+                        <div class="d-flex flex-row align-items-center" style="cursor: pointer; font-size: 14px;" onclick="deselect()">
+                            <span class="text-primary"><i class="bi bi-x-circle" style="color:#0d6efd"></i> Remove</span>
+                        </div>
+                    </div>
+                    <div class="col-10 d-flex flex-row align-items-center justify-content-between p-0 flex-wrap">
+                        <div class="d-flex flex-column align-items-between" style="font-size: 14px;">
+                            <div class="row mb-1">
+                                <span style="color: #94a3b8; font-weight: 600;">BILL TO</span>
+                            </div>
+                            <div class="row">
+                                <span class="selected_customer_billing_name" name="selected_customer_billing_name"></span>
+                            </div>
+                            <div class="row">
+                                <span class="selected_customer_billing_address_1" name="selected_customer_billing_address_1">,</span>
+                            </div>
+                            <div class="row">
+                                <span class="selected_customer_billing_address_2" name="selected_customer_billing_address_2">.</span>
+                            </div>
+                            <div class="row">
+                                <span class="selected_customer_billing_zip" name="selected_customer_billing_zip"></span>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column align-items-between" style="font-size: 14px;">
+                            <div class="row mb-1">
+                                <span style="color: #94a3b8; font-weight: 600;">SHIP TO</span>
+                            </div>
+                            <div class="row">
+                                <span class="selected_customer_shipping_name" name="selected_customer_shipping_name"></span>
+                            </div>
+                            <div class="row">
+                                <span class="selected_customer_shipping_address_1" name="selected_customer_shipping_address_1">,</span>
+                            </div>
+                            <div class="row">
+                                <span class="selected_customer_shipping_address_2" name="selected_customer_shipping_address_2">.</span>
+                            </div>
+                            <div class="row">
+                                <span class="selected_customer_shipping_zip" name="selected_customer_shipping_zip"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -201,7 +258,7 @@ Invoicer - New Invoice
                       
                                       <div class="col-md-6">
                                         <label for="inputState" class="form-label">Country</label>
-                                        <select id="inputState" class="form-select">
+                                        <select id="inputState" class="form-select select">
                                           <option selected>Select Country</option>
                                           <option>...</option>
                                         </select>
@@ -257,6 +314,9 @@ Invoicer - New Invoice
                 <div class="col-12 d-flex flex-column">
                     <label for="inputEmail" class="col-form-label" style="padding-top: 0px;">Invoice Date</label>
                     <div class="col-12">
+                        {{-- @php
+                            echo '<input type="date" class="form-control">';
+                        @endphp --}}
                         <input type="date" class="form-control">
                     </div>
                 </div>
@@ -264,7 +324,9 @@ Invoicer - New Invoice
                 <div class="col-12 d-flex flex-column">
                     <label for="inputEmail" class="col-form-label" style="padding-top: 0px;">Invoice Number</label>
                     <div class="col-12">
-                        <input type="text" class="form-control" style="width: 100%">
+                        @php
+                            echo '<input type="text" class="form-control" style="width: 100%" disabled value="INV-'.rand(000001,999999).'">';
+                        @endphp
                     </div>
                 </div>
                 <!-- </div> -->
@@ -294,6 +356,25 @@ Invoicer - New Invoice
                     </tr>
                 </thead>
                 <tbody>
+                    {{-- @php
+                        $n = 1;
+                        for ($i=1; $i<=$n ; $i++) { 
+                            echo '<tr>
+                                    <td style="position: relative;">
+                                        <input type="text" name="item1" list="items" class="form-control">
+                                        <datalist id="items">
+                                            <option value="Stones" style="background-color: #fff;">
+                                            <option value="Steel">
+                                            <option value="Cement">
+                                        </datalist>
+                                    </div>
+                                </td>
+                                <td><input type="number" name="price1" class="form-control"></td>
+                                <td><input type="text" name="qty1" class="form-control"></td>
+                                <td>$ 0.00</td>
+                            </tr>';
+                        }
+                    @endphp --}}
                     <tr>
                         <td style="position: relative;">
                             <input type="text" name="item1" list="items" class="form-control">
@@ -525,4 +606,176 @@ Invoicer - New Invoice
         </div>
     </form>
 </main>
+
+<script>
+
+    var selectedCustomerIndex = null;
+    
+    const selectCustomer = (index) => {
+        selectedCustomerIndex = index;
+        document.querySelector('.add-customer-box').style.display = 'none';
+        var selectedCustomerBox = document.querySelector('.selected-customer-box');
+        selectedCustomerBox.style.display = 'flex';
+
+        var customers = <?php echo json_encode($customers); ?>;
+        var items = <?php echo json_encode($items); ?>;
+
+        console.log(customers);
+        console.log(items);
+        document.querySelector('.selected_customer_name').innerHTML = customers[index].name;
+        document.querySelector('.selected_customer_billing_name').innerHTML = customers[index].billing.name;
+        document.querySelector('.selected_customer_billing_address_1').innerHTML = customers[index].billing.address_street_1;
+        document.querySelector('.selected_customer_billing_address_2').innerHTML = customers[index].billing.address_street_2;
+        document.querySelector('.selected_customer_billing_zip').innerHTML = customers[index].billing.zip;
+        document.querySelector('.selected_customer_shipping_name').innerHTML = customers[index].shipping.name;
+        document.querySelector('.selected_customer_shipping_address_1').innerHTML = customers[index].shipping.address_street_1;
+        document.querySelector('.selected_customer_shipping_address_2').innerHTML = customers[index].shipping.address_street_2;
+        document.querySelector('.selected_customer_shipping_zip').innerHTML = customers[index].shipping.zip;
+    }
+
+    const deselect = () => {
+        selectedCustomerIndex = null;
+    }
+
+    const openCustomerBox = () => {
+        var customerBox = document.querySelector(".customer-box");
+        customerBox.classList.add("active-box");
+    }
+
+    const openTaxBox = () => {
+        // alert('Clicked!')
+        var taxBox = document.querySelector(".tax-box");
+        taxBox.classList.add("active-box");
+    }
+
+    const openFiledBox = () => {
+        var filedBox = document.querySelector(".field-box");
+        filedBox.classList.add("active-box");
+    }
+
+    const openItemBox = () => {
+        var itemBox = document.querySelector(".item-box");
+        itemBox.style.display = "flex";
+    }
+
+    window.addEventListener('mouseup', function(event) {
+        var taxBox = document.querySelector(".tax-box");
+        if (event.target != taxBox && event.target.parentNode != taxBox) {
+            taxBox.classList.remove("active-box");
+        }
+    });
+
+    window.addEventListener('mouseup', function(event) {
+        var customerBox = document.querySelector(".customer-box");
+        if (event.target != customerBox && event.target.parentNode != customerBox) {
+            customerBox.classList.remove("active-box");
+        }
+    });
+
+    window.addEventListener('mouseup', function(event) {
+        var fieldBox = document.querySelector(".field-box");
+        if (event.target != fieldBox && event.target.parentNode != fieldBox) {
+            fieldBox.classList.remove("active-box");
+        }
+    });
+
+    window.addEventListener('mouseup', function(event) {
+        var itemBox = document.querySelector(".item-box");
+        if (event.target != itemBox && event.target.parentNode != itemBox) {
+            itemBox.style.display = "none";
+        }
+    });
+
+    const addRow = () => {
+        var table = document.querySelector(".items-table");
+        var row = table.insertRow();
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+
+        cell1.innerHTML = "<td><input type='text' list='items' class='form-control'><datalist id='items'><option value='Stones' style='background-color: #fff;'><option value='Steel'><option value='Cement'></datalist></td>"
+        cell2.innerHTML = "<td><input type='text' class='form-control'></td>"
+        cell3.innerHTML = "<td><input type='text' class='form-control'></td>"
+        cell4.innerHTML = "<td> $ 0.00 </td>"
+        cell5.innerHTML = "<i class='bi bi-trash' style='cursor :pointer;' onclick='deleteRow(" + row.rowIndex + ")'></i>";
+    }
+
+    const deleteRow = (index) => {
+        var table = document.querySelector(".items-table");
+        table.deleteRow(index);
+
+        var tbody = table.getElementsByTagName("tbody")[0];
+        var rows = tbody.getElementsByTagName("tr");
+        // console.log(rows);
+        var i = 1;
+        for (i = 0; i < rows.length; i++) {
+            var deleteTableCell = rows[i + 1].getElementsByTagName("td")[4];
+            // console.log(deleteTableCell);
+            // console.log(i + 2);
+            var newIndex = i + 2;
+            deleteTableCell.innerHTML = "<i class='bi bi-trash' style='cursor :pointer;' onclick='deleteRow(" + newIndex + ")'></i>";
+        }
+    }
+
+    function myFunction1() {
+        var input, filter, ul, li, a, div1, div, i, txtValue;
+        input = document.getElementById("myInput1");
+        filter = input.value.toUpperCase();
+        ul = document.querySelector(".customer-ul");
+        li = ul.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            div1 = li[i].getElementsByTagName("div")[0];
+            div = div1.getElementsByTagName("div")[1];
+            a = div.getElementsByTagName("span")[0];
+            // a = li[i].getElementsByTagName("a")[0];
+            txtValue = a.textContent || a.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+
+    function myFunction2() {
+        var input, filter, ul, li, a, div, i, txtValue;
+        input = document.getElementById("myInput2");
+        filter = input.value.toUpperCase();
+        ul = document.querySelector(".tax-ul");
+        li = ul.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            div = li[i].getElementsByTagName("div")[0];
+            a = div.getElementsByTagName("span")[0];
+            // a = li[i].getElementsByTagName("a")[0];
+            txtValue = a.textContent || a.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+
+    function myFunction3() {
+        var input, filter, ul, li, a, div, i, txtValue;
+        input = document.getElementById("myInput3");
+        filter = input.value.toUpperCase();
+        ul = document.querySelector(".item-ul");
+        li = ul.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            // div = li[i].getElementsByTagName("div")[0];
+            // a = div.getElementsByTagName("span")[0];
+            a = li[i];
+            // a = li[i].getElementsByTagName("a")[0];
+            txtValue = a.textContent || a.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
+</script>
 @endsection

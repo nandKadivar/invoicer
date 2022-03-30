@@ -225,7 +225,7 @@ Invoicer - New Customer
                     @foreach ($countries as $i)
                       <option value="{{$i['id']}}">{{$i['name']}}</option>
                     @endforeach
-                </select>
+                  </select>
                 </div>
 
                 <div class="col-md-6">
@@ -334,24 +334,24 @@ Invoicer - New Customer
 
 
     function create_custom_dropdowns() {
-    $('select').each(function (i, select) {
-        if (!$(this).next().hasClass('dropdown-select')) {
-            $(this).after('<div class="dropdown-select wide ' + ($(this).attr('class') || '') + '" tabindex="0"><span class="current"></span><div class="list"><ul></ul></div></div>');
-            var dropdown = $(this).next();
-            var options = $(select).find('option');
-            var selected = $(this).find('option:selected');
-            dropdown.find('.current').html(selected.data('display-text') || selected.text());
-            options.each(function (j, o) {
-                var display = $(o).data('display-text') || '';
-                dropdown.find('ul').append('<li class="option ' + ($(o).is(':selected') ? 'selected' : '') + '" data-value="' + $(o).val() + '" data-display-text="' + display + '">' + $(o).text() + '</li>');
-            });
-        }
-    });
+      $('select').each(function (i, select) {
+          if (!$(this).next().hasClass('dropdown-select')) {
+              $(this).after('<div class="dropdown-select wide ' + ($(this).attr('class') || '') + '" tabindex="0"><span class="current"></span><div class="list"><ul></ul></div></div>');
+              var dropdown = $(this).next();
+              var options = $(select).find('option');
+              var selected = $(this).find('option:selected');
+              dropdown.find('.current').html(selected.data('display-text') || selected.text());
+              options.each(function (j, o) {
+                  var display = $(o).data('display-text') || '';
+                  dropdown.find('ul').append('<li class="option ' + ($(o).is(':selected') ? 'selected' : '') + '" data-value="' + $(o).val() + '" data-display-text="' + display + '">' + $(o).text() + '</li>');
+              });
+          }
+      });
 
-    $('.currency-select .dropdown-select ul').before('<div class="dd-search"><input id="CurrencySearchValue" autocomplete="off" onkeyup="Currencyfilter()" class="dd-searchbox" type="text" autocomplete="false"></div>');
-    $('.country-select .dropdown-select ul').before('<div class="dd-search"><input id="CountrySearchValue" autocomplete="off" onkeyup="Countryfilter()" class="dd-searchbox" type="text" autocomplete="false"></div>');
-    $('.country-select-2 .dropdown-select ul').before('<div class="dd-search"><input id="CountrySearchValue2" autocomplete="off" onkeyup="Countryfilter2()" class="dd-searchbox" type="text" autocomplete="false"></div>');
-}
+      $('.currency-select .dropdown-select ul').before('<div class="dd-search"><input id="CurrencySearchValue" autocomplete="off" onkeyup="Currencyfilter()" class="dd-searchbox" type="text" autocomplete="false"></div>');
+      $('.country-select .dropdown-select ul').before('<div class="dd-search"><input id="CountrySearchValue" autocomplete="off" onkeyup="Countryfilter()" class="dd-searchbox" type="text" autocomplete="false"></div>');
+      $('.country-select-2 .dropdown-select ul').before('<div class="dd-search"><input id="CountrySearchValue2" autocomplete="off" onkeyup="Countryfilter2()" class="dd-searchbox" type="text" autocomplete="false"></div>');
+    }
 
 // Event listeners
 

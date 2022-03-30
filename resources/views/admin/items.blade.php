@@ -87,7 +87,23 @@ Invoicer - Items
   </aside>
 <!-- End Sidebar-->
 <main id="main" class="main">
-
+    {{-- <button class='toast-alert-btn' onclick="showToast('Item added successfully','success')"></button> --}}
+    <div class="wrapper">
+        <div id="toast" class="d-flex flex-row justify-content-center align-items-center p-4">
+            <p class="m-0 toast-msg">Your changes are saved successfully.</p>
+        </div>
+    </div>
+    {{-- <div onload="showToast('Item added successfully','success')"></div> --}}
+    @if(session()->has('status'))
+        {{-- {{session()->get('status')}} --}}
+        <div onload="showToast('Item added successfully',{{session()->get('status')}})"></div>
+        {{-- <button class='toast-alert-btn d-none' onclick="showToast('Item added successfully',{{session()->get('status')}})"></button> --}}
+        <div class="wrapper">
+            <div id="toast" class="d-flex flex-row justify-content-center align-items-center p-4">
+                <p class="m-0 toast-msg">Your changes are saved successfully.</p>
+            </div>
+        </div>
+    @endif
     <div class="pagetitle">
       <h1>Items</h1>
       {{-- <p>{{$data}}</p> --}}
@@ -161,4 +177,32 @@ Invoicer - Items
     </div>
 
   </main>
+
+  <script>
+    // $('#toast').load(function(){
+    //     alert('toast');
+        // $('.toast-alert-btn').trigger('click');
+    // });
+    let x;
+    let toast = document.getElementById("toast");
+    // showToast()
+    function showToast(message, status){
+        if(status == 'success'){
+            document.getElementById("toast").classList.add('bg-success');
+        }else if(status == 'warning'){
+            document.getElementById("toast").classList.add('bg-warning');
+        }else if(status == 'danger'){
+            document.getElementById("toast").classList.add('bg-danger');
+        }
+        $('.toast-msg').text(message);
+        clearTimeout(x);
+        toast.style.transform = "translateX(0)";
+        x = setTimeout(()=>{
+            toast.style.transform = "translateY(400px)"
+        }, 4000);
+    }
+    function closeToast(){
+        toast.style.transform = "translateY(400px)";
+    }
+  </script>
 @endsection
