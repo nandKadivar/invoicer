@@ -1350,6 +1350,14 @@ div.active-view {
     border: 1px solid #ececec;
 }
 
+.customer-deselect-btn {
+    color:#0d6efd;
+}
+
+.customer-deselect-btn:hover {
+    color: #dc3545;
+}
+
 .tax-box,
 .customer-box {
     /* z-index: 3; */

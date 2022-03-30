@@ -159,8 +159,8 @@ Invoicer - New Invoice
                 <div class="selected-customer-box col-12 p-3">
                     <div class="col-12 d-flex flex-row align-items-center justify-content-between mb-2">
                         <span class="selected_customer_name" style="font-weight: 600; font-size: 16px;" name="selected_customer_name"></span>
-                        <div class="d-flex flex-row align-items-center" style="cursor: pointer; font-size: 14px;" onclick="deselect()">
-                            <span class="text-primary"><i class="bi bi-x-circle" style="color:#0d6efd"></i> Remove</span>
+                        <div class="customer-deselect-btn d-flex flex-row align-items-center" style="cursor: pointer; font-size: 14px;" onclick="deselect()">
+                            <span><i class="bi bi-x-circle"></i> Remove</span>
                         </div>
                     </div>
                     <div class="col-10 d-flex flex-row align-items-center justify-content-between p-0 flex-wrap">
@@ -314,10 +314,11 @@ Invoicer - New Invoice
                 <div class="col-12 d-flex flex-column">
                     <label for="inputEmail" class="col-form-label" style="padding-top: 0px;">Invoice Date</label>
                     <div class="col-12">
-                        {{-- @php
-                            echo '<input type="date" class="form-control">';
-                        @endphp --}}
-                        <input type="date" class="form-control">
+                        @php
+                            // echo date("Y-m-d");
+                            echo '<input type="date" class="form-control" value="'.date("Y-m-d").'">';
+                        @endphp
+                        {{-- <input type="date" class="form-control" value="2020-03-30"> --}}
                     </div>
                 </div>
 
@@ -336,7 +337,10 @@ Invoicer - New Invoice
                 <div class="col-12 d-flex flex-column">
                     <label for="inputEmail" class="col-form-label" style="padding-top: 0px;">Due Date</label>
                     <div class="col-12">
-                        <input type="date" class="form-control" style="width: 100%">
+                        @php
+                            // echo date("Y-m-d");
+                            echo '<input type="date" class="form-control" style="width: 100%" value="'.date('Y-m-d', strtotime(date("Y-m-d"). ' + 10 days')).'" min="'.date("Y-m-d").'">';
+                        @endphp
                     </div>
                 </div>
                 <!-- </div> -->
@@ -351,8 +355,12 @@ Invoicer - New Invoice
                     <tr>
                         <th class="p-3">Items</th>
                         <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Amount</th>
+                        <th>Rate</th>
+                        <th>Taxable Value</th>
+                        <th>SGST</th>
+                        <th>CGST</th>
+                        <th>IGST</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -377,16 +385,23 @@ Invoicer - New Invoice
                     @endphp --}}
                     <tr>
                         <td style="position: relative;">
-                            <input type="text" name="item1" list="items" class="form-control">
-                            <datalist id="items">
+                            {{-- <input type="text" name="item1" list="items" class="form-control"> --}}
+                            {{-- <datalist id="items">
                                 <option value="Stones" style="background-color: #fff;">
                                 <option value="Steel">
                                 <option value="Cement">
-                            </datalist>
-                            <!-- <input type="text" class="form-control" id="myInput3" onkeyup="myFunction3()" placeholder="Search" title="Type in a name" onclick="openItemBox()"> -->
-                            <!-- <div class="item-box">
-                                <ul class="item-ul">
-                                    <li>
+                            </datalist> --}}
+                            <input type="text" class="form-control" id="itemInput1" onkeyup="searchItem(1)" placeholder="" title="Type in a name" onclick="openItemBox(1)">
+                            <div id="itemBox1" class="item-box">
+                                <ul class="item-ul scroll-area" style="max-height: 200px; overflow-y: scroll;">
+                                    @foreach($items as $item)
+                                        <li>
+                                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                                <span style="font-weight: 600;">{{$item->name}}</span>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                    {{-- <li>
                                         <div class="d-flex flex-row justify-content-between align-items-center">
                                             <span style="font-weight: 600;">Stones</span>
                                         </div>
@@ -400,7 +415,7 @@ Invoicer - New Invoice
                                         <div class="d-flex flex-row justify-content-between align-items-center">
                                             <span style="font-weight: 600;">Cement</span>
                                         </div>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                                 <div class="d-none flex-row justify-content-center align-items-center py-3">
                                     <span style="font-weight: 600; color: #94a3b8;">No item found!</span>
@@ -409,10 +424,26 @@ Invoicer - New Invoice
                                     <i class="bi bi-plus-circle text-primary" style="padding-right: 5px;"></i>
                                     <span class="text-primary">Add New Item</span>
                                 </div>
-                            </div> -->
+                            </div>
                         </td>
                         <td><input type="number" name="price1" class="form-control"></td>
                         <td><input type="text" name="qty1" class="form-control"></td>
+                        <td>$ 0.00</td>
+                        <td>
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">(9%)</label>
+                            <span>$ 0.00</span>
+                        </td>
+                        <td>
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">(9%)</label>
+                            <span>$ 0.00</span>
+                        </td>
+                        <td>
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                            <label class="form-check-label" for="exampleCheck1">(9%)</label>
+                            <span>$ 0.00</span>
+                        </td>
                         <td>$ 0.00</td>
                     </tr>
                 </tbody>
@@ -635,6 +666,9 @@ Invoicer - New Invoice
 
     const deselect = () => {
         selectedCustomerIndex = null;
+        document.querySelector('.add-customer-box').style.display = 'flex';
+        var selectedCustomerBox = document.querySelector('.selected-customer-box');
+        selectedCustomerBox.style.display = 'none';
     }
 
     const openCustomerBox = () => {
@@ -653,8 +687,8 @@ Invoicer - New Invoice
         filedBox.classList.add("active-box");
     }
 
-    const openItemBox = () => {
-        var itemBox = document.querySelector(".item-box");
+    const openItemBox = (row) => {
+        var itemBox = document.querySelector("#itemBox"+row);
         itemBox.style.display = "flex";
     }
 
@@ -680,10 +714,15 @@ Invoicer - New Invoice
     });
 
     window.addEventListener('mouseup', function(event) {
-        var itemBox = document.querySelector(".item-box");
-        if (event.target != itemBox && event.target.parentNode != itemBox) {
-            itemBox.style.display = "none";
-        }
+        // var itemBox = document.querySelector(".item-box");
+        var allItemBoxs = $(".item-box").map(function(){
+            if (event.target != this && event.target.parentNode != this) {
+                this.style.display = "none";
+            }
+        }).get();
+        // if (event.target != itemBox && event.target.parentNode != itemBox) {
+        //     itemBox[i].style.display = "none";
+        // }
     });
 
     const addRow = () => {
@@ -694,12 +733,23 @@ Invoicer - New Invoice
         var cell3 = row.insertCell(2);
         var cell4 = row.insertCell(3);
         var cell5 = row.insertCell(4);
-
-        cell1.innerHTML = "<td><input type='text' list='items' class='form-control'><datalist id='items'><option value='Stones' style='background-color: #fff;'><option value='Steel'><option value='Cement'></datalist></td>"
+        var cell6 = row.insertCell(5);
+        var cell7 = row.insertCell(6);
+        var cell8 = row.insertCell(7);
+        var cell9 = row.insertCell(8);
+        
+        // cell1.innerHTML = "<td><input type='text' list='items' class='form-control'><datalist id='items'><option value='Stones' style='background-color: #fff;'><option value='Steel'><option value='Cement'></datalist></td>"
+        // cell1.innerHTML = "<td style='position: relative;'><input type='text' class='form-control' id='itemInput"+row.rowIndex+"' onkeyup='searchItem("+row.rowIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+row.rowIndex+")'><div id='itemBox"+row.rowIndex+"' class='item-box'><ul class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div></td>";
+        cell1.style.position = 'relative';
+        cell1.innerHTML = "<input type='text' class='form-control' id='itemInput"+row.rowIndex+"' onkeyup='searchItem("+row.rowIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+row.rowIndex+")'><div id='itemBox"+row.rowIndex+"' class='item-box'><ul class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div>";
         cell2.innerHTML = "<td><input type='text' class='form-control'></td>"
         cell3.innerHTML = "<td><input type='text' class='form-control'></td>"
         cell4.innerHTML = "<td> $ 0.00 </td>"
-        cell5.innerHTML = "<i class='bi bi-trash' style='cursor :pointer;' onclick='deleteRow(" + row.rowIndex + ")'></i>";
+        cell5.innerHTML = "<td><input type='checkbox' class='form-check-input' id='exampleCheck1'><label class='form-check-label' for='exampleCheck1'>(9%)</label><span>$ 0.00</span></td>"
+        cell6.innerHTML = "<td><input type='checkbox' class='form-check-input' id='exampleCheck1'><label class='form-check-label' for='exampleCheck1'>(9%)</label><span>$ 0.00</span></td>"
+        cell7.innerHTML = "<td><input type='checkbox' class='form-check-input' id='exampleCheck1'><label class='form-check-label' for='exampleCheck1'>(9%)</label><span>$ 0.00</span></td>"
+        cell8.innerHTML = "<td> $ 0.00 </td>"
+        cell9.innerHTML = "<i class='bi bi-trash' style='cursor :pointer;' onclick='deleteRow(" + row.rowIndex + ")'></i>";
     }
 
     const deleteRow = (index) => {
@@ -711,11 +761,13 @@ Invoicer - New Invoice
         // console.log(rows);
         var i = 1;
         for (i = 0; i < rows.length; i++) {
-            var deleteTableCell = rows[i + 1].getElementsByTagName("td")[4];
+            var deleteTableCell = rows[i + 1].getElementsByTagName("td")[8];
+            var itemTableCell = rows[i + 1].getElementsByTagName("td")[0];
             // console.log(deleteTableCell);
             // console.log(i + 2);
             var newIndex = i + 2;
             deleteTableCell.innerHTML = "<i class='bi bi-trash' style='cursor :pointer;' onclick='deleteRow(" + newIndex + ")'></i>";
+            itemTableCell.innerHTML = "<td style='position: relative;'><input type='text' class='form-control' id='itemInput"+newIndex+"' onkeyup='searchItem("+newIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+newIndex+")'><div id='itemBox"+row.rowIndex+"' class='item-box'><ul class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div></td>";
         }
     }
 
@@ -758,16 +810,16 @@ Invoicer - New Invoice
         }
     }
 
-    function myFunction3() {
+    function searchItem(row) {
         var input, filter, ul, li, a, div, i, txtValue;
-        input = document.getElementById("myInput3");
+        input = document.getElementById("itemInput"+row);
         filter = input.value.toUpperCase();
         ul = document.querySelector(".item-ul");
         li = ul.getElementsByTagName("li");
         for (i = 0; i < li.length; i++) {
-            // div = li[i].getElementsByTagName("div")[0];
-            // a = div.getElementsByTagName("span")[0];
-            a = li[i];
+            div = li[i].getElementsByTagName("div")[0];
+            a = div.getElementsByTagName("span")[0];
+            // a = li[i];
             // a = li[i].getElementsByTagName("a")[0];
             txtValue = a.textContent || a.innerText;
             if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -777,5 +829,6 @@ Invoicer - New Invoice
             }
         }
     }
+
 </script>
 @endsection
