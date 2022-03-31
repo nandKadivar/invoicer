@@ -23,6 +23,9 @@ class CompanyResource extends JsonResource
             'owner_id' => $this->owner_id,
             'slug' => $this->slug,
             'roles' => $this->role,
+            'settings' => $this->when($this->settings()->exists(),function(){
+                return new CompanySettingResource($this->settings);
+            })
         ];
     }
 }

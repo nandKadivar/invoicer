@@ -102,6 +102,7 @@ Invoicer - New Invoice
     <form>
         <!-- <div class='col-md-12'> -->
         <!-- <form> -->
+        {{-- {{$customers[0]->company->settings}} --}}
         <div class="col-12 d-flex flex-row justify-content-between flex-wrap">
             <div class="col-lg-4 col-md-5 col-sm-12 col-12 p-2">
                 <div class="add-customer-box col-12" onclick="openCustomerBox()">
@@ -650,7 +651,7 @@ Invoicer - New Invoice
         
         var customers = <?php echo json_encode($customers); ?>;
 
-        console.log(customers);
+        console.log(customers[index]);
         document.querySelector('.selected_customer_name').innerHTML = customers[index].name;
         document.querySelector('.selected_customer_billing_name').innerHTML = customers[index].billing.name;
         document.querySelector('.selected_customer_billing_address_1').innerHTML = customers[index].billing.address_street_1;
@@ -660,6 +661,12 @@ Invoicer - New Invoice
         document.querySelector('.selected_customer_shipping_address_1').innerHTML = customers[index].shipping.address_street_1;
         document.querySelector('.selected_customer_shipping_address_2').innerHTML = customers[index].shipping.address_street_2;
         document.querySelector('.selected_customer_shipping_zip').innerHTML = customers[index].shipping.zip;
+    
+        if(customers[index].currency.id != customers[index].company.settings[0].value){
+            alert('Exchange require');
+        }else{
+            
+        }
     }
 
     const selectItem = (index, row) => {
