@@ -361,12 +361,12 @@ Invoicer - New Invoice
                     <tr>
                         <th class="p-3">Items</th>
                         <th>Quantity</th>
-                        <th>Rate</th>
-                        <th>Taxable Value</th>
+                        <th>Rate <span class="customer-currency" style="color: #94a3b8"></span></th>
+                        <th>Taxable Value <span class="customer-currency" style="color: #94a3b8"></span></th>
                         <th>SGST</th>
                         <th>CGST</th>
                         <th>IGST</th>
-                        <th>Total</th>
+                        <th>Total <span class="customer-currency" style="color: #94a3b8"></span></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -627,12 +627,9 @@ Invoicer - New Invoice
         var igst = document.querySelector('#igst'+row).innerHTML;
         document.querySelector('#taxableValue'+row).innerHTML = qty*rate;
         if(gst_type == 'CGST&SGST'){
-            document.querySelector('#sgst'+row).innerHTML = sgst;
             document.querySelector('#sgstAmt'+row).innerHTML = sgst*qty*rate/100;
-            document.querySelector('#cgst'+row).innerHTML = cgst;
             document.querySelector('#cgstAmt'+row).innerHTML = cgst*qty*rate/100;
         }else{
-            document.querySelector('#igst'+row).innerHTML = igst;
             document.querySelector('#igstAmt'+row).innerHTML = igst*qty*rate/100;
             // document.querySelector('#igst'+row).innerHTML = "("+items[index].gst+"%) "+((items[index].gst)*rate)/100+"";
         }
@@ -672,6 +669,10 @@ Invoicer - New Invoice
         }else{
             gst_type = 'CGST&SGST';
         }
+
+        $('.customer-currency').map(function(){
+            this.innerHTML = "("+customers[index].currency.symbol+")";
+        });
     }
 
     const selectItem = (index, row) => {
@@ -703,11 +704,13 @@ Invoicer - New Invoice
 
     const deselect = () => {
         $('.exchange-rate-input').hide()
+        $('.customer-currency').map(function(){
+            this.innerHTML = "";
+        });
         selectedCustomerIndex = null;
         document.querySelector('.add-customer-box').style.display = 'flex';
         var selectedCustomerBox = document.querySelector('.selected-customer-box');
         selectedCustomerBox.style.display = 'none';
-
         deleteTableRows();
     }
 
