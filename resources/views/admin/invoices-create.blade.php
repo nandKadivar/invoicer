@@ -347,7 +347,7 @@ Invoicer - New Invoice
                 <div class="col-lg-6 col-md-6 col-sm-12 exchange-rate-input">
                     <label for="exchangeRate" class="col-form-label" style="padding-top: 0px;">Exchange rate</label>
                     <div class="col-11 d-flex flex-row align-items-center p-0">
-                        <div class="d-flex align-items-center justify-content-center exchange-currency-indicator"></div><input type="number" class="form-control" style="width: 70%; border-radius: 0px 0.25rem 0.25rem 0px; border-left: 0px;" min="1" required>
+                        <div class="d-flex align-items-center justify-content-center exchange-currency-indicator"></div><input type="number" class="form-control" id="exchangeRate" style="width: 70%; border-radius: 0px 0.25rem 0.25rem 0px; border-left: 0px;" min="1" required>
                     </div>
                 </div>
             </div>
@@ -613,10 +613,18 @@ Invoicer - New Invoice
 
 <script>
     var gst_type='';
+    var customer_currency='';
+    var exchange_rate = 1;
 
     $('.exchange-rate-input').hide();
     var selectedCustomerIndex = null;
     
+
+    $('#exchangeRate').change(function () { 
+        // console.log(this.value);
+        exchange_rate = this.value;
+    });
+
     const qtrOrRateChange = (row) => {
         // var items = {!! json_encode($items) !!};
         var qty = document.querySelector('#qty'+row).value;
@@ -625,15 +633,15 @@ Invoicer - New Invoice
         var sgst = document.querySelector('#sgst'+row).innerHTML;
         var cgst = document.querySelector('#cgst'+row).innerHTML;
         var igst = document.querySelector('#igst'+row).innerHTML;
-        document.querySelector('#taxableValue'+row).innerHTML = qty*rate;
+        document.querySelector('#taxableValue'+row).innerHTML = (qty*rate).toFixed(2);
         if(gst_type == 'CGST&SGST'){
-            document.querySelector('#sgstAmt'+row).innerHTML = sgst*qty*rate/100;
-            document.querySelector('#cgstAmt'+row).innerHTML = cgst*qty*rate/100;
+            document.querySelector('#sgstAmt'+row).innerHTML = (sgst*qty*rate/100).toFixed(2);
+            document.querySelector('#cgstAmt'+row).innerHTML = (cgst*qty*rate/100).toFixed(2);
         }else{
-            document.querySelector('#igstAmt'+row).innerHTML = igst*qty*rate/100;
+            document.querySelector('#igstAmt'+row).innerHTML = (igst*qty*rate/100).toFixed(2);
             // document.querySelector('#igst'+row).innerHTML = "("+items[index].gst+"%) "+((items[index].gst)*rate)/100+"";
         }
-        document.querySelector('#total'+row).innerHTML = (qty*rate) + (qty*rate*18)/100;
+        document.querySelector('#total'+row).innerHTML = ((qty*rate) + (qty*rate*18)/100).toFixed(2);
     }
 
     const selectCustomer = (index) => {
@@ -670,6 +678,8 @@ Invoicer - New Invoice
             gst_type = 'CGST&SGST';
         }
 
+        customer_currency = customers[index].currency.code;
+
         $('.customer-currency').map(function(){
             this.innerHTML = "("+customers[index].currency.symbol+")";
         });
@@ -684,26 +694,27 @@ Invoicer - New Invoice
         document.querySelector('#itemInput'+row).value = items[index].name;
         document.querySelector('#itemUnit'+row).innerHTML = items[index].unit.name;
         document.querySelector('#qty'+row).value = 1;
-        document.querySelector('#rate'+row).value = items[index].price;
-        document.querySelector('#taxableValue'+row).innerHTML = items[index].price;
+        document.querySelector('#rate'+row).value = (items[index].price/exchange_rate).toFixed(2);
+        document.querySelector('#taxableValue'+row).innerHTML = (items[index].price/exchange_rate).toFixed(2);
 
         if(gst_type == 'CGST&SGST'){
             document.querySelector('#sgst'+row).innerHTML = items[index].gst/2;
-            document.querySelector('#sgstAmt'+row).innerHTML = (items[index].gst/2)*items[index].price/100;
+            document.querySelector('#sgstAmt'+row).innerHTML = ((items[index].gst/2)*(items[index].price/exchange_rate)/100).toFixed(2);
             document.querySelector('#cgst'+row).innerHTML = items[index].gst/2;
-            document.querySelector('#cgstAmt'+row).innerHTML = (items[index].gst/2)*items[index].price/100;
+            document.querySelector('#cgstAmt'+row).innerHTML = ((items[index].gst/2)*(items[index].price/exchange_rate)/100).toFixed(2);
             // document.querySelector('#cgst'+row).innerHTML = "("+items[index].gst/2+"%) "+((items[index].gst/2)*items[index].price)/100+"";
         }else{
             document.querySelector('#igst'+row).innerHTML = items[index].gst;
-            document.querySelector('#igstAmt'+row).innerHTML = (items[index].gst)*items[index].price/100;
+            document.querySelector('#igstAmt'+row).innerHTML = ((items[index].gst)*(items[index].price/exchange_rate)/100).toFixed(2);
             // document.querySelector('#igst'+row).innerHTML = "("+items[index].gst+"%) "+((items[index].gst)*items[index].price)/100+"";
         }
 
-        document.querySelector('#total'+row).innerHTML = items[index].price + ((items[index].gst)*items[index].price)/100;
+        document.querySelector('#total'+row).innerHTML = ((items[index].price/exchange_rate) + ((items[index].gst)*(items[index].price/exchange_rate))/100).toFixed(2);
     }
 
     const deselect = () => {
         $('.exchange-rate-input').hide()
+        customer_currency = '';
         $('.customer-currency').map(function(){
             this.innerHTML = "";
         });
