@@ -9,6 +9,8 @@ class Unit extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'company_id'];
+
     public function items()
     {
         return $this->hasMany(Item::class);
@@ -17,5 +19,10 @@ class Unit extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function scopeWhereUnit($query, $unit_id)
+    {
+        $query->orWhere('id', $unit_id);
     }
 }

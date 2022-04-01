@@ -12,7 +12,8 @@ class Item extends Model
 
     protected $guarded = ['id'];
 
-    public function unit(){
+    public function unit()
+    {
         return $this->belongsTo(Unit::class, 'unit_id');
     }
 

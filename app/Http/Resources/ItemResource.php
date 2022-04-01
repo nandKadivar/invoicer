@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Unit;
 
 class ItemResource extends JsonResource
 {
@@ -14,6 +15,8 @@ class ItemResource extends JsonResource
      */
     public function toArray($request)
     {
+        $unit = Unit::findOrFail($this->unit_id);
+        // foreach($units as unit)
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -27,9 +30,10 @@ class ItemResource extends JsonResource
             'updated_at' => $this->updated_at,
             'gst' => $this->gst,
             'formatted_created_at' => $this->formattedCreatedAt,
-            'unit' => $this->when($this->unit()->exists(), function () {
-                return new UnitResource($this->unit);
-            }),
+            // 'unit' => $this->when($this->unit()->exists(), function () {
+            //     return new UnitResource($this->unit);
+            // }),
+            'unit' => $unit,
             'company' => $this->when($this->company()->exists(), function () {
                 return new CompanyResource($this->company);
             }),

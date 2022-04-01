@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\Item;
+use App\Models\Unit;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\ItemResource;
 
@@ -23,7 +24,9 @@ class InvoicesController extends Controller
 
     public function newInvoicePage(){
         // $customers = Customer::where('company_id', 1)->get();
-        $items = Item::where('company_id', 1)->get();
+        $items = Item::with(['unit'])->where('company_id', 1)->get();
+        // $units = Unit::where('company_id', 1)->get();
+        // print_r($items[0]);
         $items = ItemResource::collection($items);
         
         $customers = Customer::with(['billingAddress','shippingAddress','creator'])->where('company_id',1)->get();
