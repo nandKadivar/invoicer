@@ -1518,8 +1518,9 @@ ul.item-ul li:hover {
     border-bottom: 1px solid #eee;
 }
 
-select {
-    display: none !important;
+#inputState {
+    /* display: none !important; */
+    display: none;
 }
 
 .select{

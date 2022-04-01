@@ -99,7 +99,8 @@ Invoicer - New Invoice
         </nav>
     </div>
     <!-- End Page Title -->
-    <form>
+    <form class="invoiceForm">
+        @csrf
         <!-- <div class='col-md-12'> -->
         <!-- <form> -->
         {{-- {{$customers[0]->company->settings}} --}}
@@ -473,15 +474,15 @@ Invoicer - New Invoice
                 <div class="d-flex flex-column p-3" style="background-color: #fff; border-radius: 5px; border: 1px solid #ececec;">
                     <div class="col-lg-12 d-flex justify-content-between align-items-center">
                         <span style="font-weight: 600; color: #94a3b8; text-transform: uppercase;">Sub Total</span>
-                        <span style="color: #040405;">0.00</span>
+                        <span style="color: #040405;" id="subtotal">0.00</span>
                     </div>
                     <div class="col-lg-12 pt-3 d-flex justify-content-between align-items-center">
                         <span style="font-weight: 600; color: #94a3b8; text-transform: uppercase;">Discount</span>
                         <div style="border: 1px solid rgb(226 232 240); border-radius: 2px;">
-                            <input type="text" style="display: inline-block; width: 70px; padding: 6px 12px; border: 0; border-right: 1px solid rgb(226 232 240); " value="0 " />
-                            <select id="inputGroupSelect01" style="display: inline-block; width: 60px; padding: 6px 12px; border: 0; ">
-                                <option value="1" select>$</option>
-                                <option value="2">%</option>
+                            <input type="text" id="discountValue" style="display: inline-block; width: 70px; padding: 6px 12px; border: 0; border-right: 1px solid rgb(226 232 240); " value="0" onkeypress="discountChange()" />
+                            <select id="discountType" style="display: inline-block; width: 70px; padding: 6px 12px; border: 0; " onchange="discountChange()">
+                                <option class="customer-currency" value="fixed" selected>Fix</option>
+                                <option value="precentage">%</option>
                             </select>
                         </div>
                     </div>
@@ -551,7 +552,7 @@ Invoicer - New Invoice
                     </div>
                     <div class="col-lg-12 pt-2 d-flex justify-content-between align-items-center ">
                         <span style="font-weight: 600; color: #94a3b8; text-transform: uppercase; ">Total Amount:</span>
-                        <span class="text-primary" style="font-weight: 600; text-transform: uppercase; ">0.00</span>
+                        <span class="text-primary" style="font-weight: 600; text-transform: uppercase; " id="totalAmount">0.00</span>
                     </div>
                 </div>
             </div>
@@ -612,9 +613,21 @@ Invoicer - New Invoice
 </main>
 
 <script>
+    const form = document.querySelector(".invoiceForm");
+    
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        
+    });
+    
     var gst_type='';
     var customer_currency='';
     var exchange_rate = 1;
+    var subtotal = 0.0;
+    var total = 0.0;
+    var discountType = 'fixed';
+    var discountValue = 0.0;
 
     $('.exchange-rate-input').hide();
     var selectedCustomerIndex = null;
@@ -624,6 +637,38 @@ Invoicer - New Invoice
         // console.log(this.value);
         exchange_rate = this.value;
     });
+
+    const calculateSubTotal = () => {
+        var table = document.querySelector(".items-table");
+        var tbody = table.getElementsByTagName("tbody")[0];
+        var rows = tbody.getElementsByTagName("tr");
+        let temp_total=0.0;
+        // console.log(rows.length);
+        for(var i=1; i<=rows.length;i++){
+            // temp_total = parseFloat(temp_total) + parseFloat(document.querySelector('#total'+i).innerHTML).toFixed(2);
+            var value = parseFloat(document.querySelector('#total'+i).innerHTML);
+            temp_total = temp_total + value;
+        }
+        console.log(temp_total);
+        document.querySelector('#subtotal').innerHTML = parseFloat(temp_total).toFixed(2);
+        subtotal = parseFloat(temp_total);
+        calculateTotal();
+    }
+
+    const discountChange = () => {
+        discountValue = document.querySelector('#discountValue').value;
+        discountType = document.querySelector('#discountType').value;
+        calculateTotal();
+    }
+
+    const calculateTotal = () => {
+        if(discountType == 'fixed'){
+            total = (subtotal - parseFloat(discountValue)).toFixed(2);
+        }else{
+            total = (subtotal - (parseFloat(discountValue)*subtotal)/100).toFixed(2);
+        }
+        document.querySelector('#totalAmount').innerHTML = parseFloat(total).toFixed(2);
+    } 
 
     const qtrOrRateChange = (row) => {
         // var items = {!! json_encode($items) !!};
@@ -642,6 +687,7 @@ Invoicer - New Invoice
             // document.querySelector('#igst'+row).innerHTML = "("+items[index].gst+"%) "+((items[index].gst)*rate)/100+"";
         }
         document.querySelector('#total'+row).innerHTML = ((qty*rate) + (qty*rate*18)/100).toFixed(2);
+        calculateSubTotal();
     }
 
     const selectCustomer = (index) => {
@@ -710,6 +756,7 @@ Invoicer - New Invoice
         }
 
         document.querySelector('#total'+row).innerHTML = ((items[index].price/exchange_rate) + ((items[index].gst)*(items[index].price/exchange_rate))/100).toFixed(2);
+        calculateSubTotal();
     }
 
     const deselect = () => {
@@ -722,6 +769,10 @@ Invoicer - New Invoice
         document.querySelector('.add-customer-box').style.display = 'flex';
         var selectedCustomerBox = document.querySelector('.selected-customer-box');
         selectedCustomerBox.style.display = 'none';
+        document.querySelector('#subtotal').innerHTML = '0.00';
+        subtotal = 0;
+        document.querySelector('#totalAmount').innerHTML = '0.00';
+        total = 0;
         deleteTableRows();
     }
 
@@ -800,8 +851,8 @@ Invoicer - New Invoice
         // cell1.innerHTML = "<td style='position: relative;'><input type='text' class='form-control' id='itemInput"+row.rowIndex+"' onkeyup='searchItem("+row.rowIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+row.rowIndex+")'><div id='itemBox"+row.rowIndex+"' class='item-box'><ul class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div></td>";
         cell1.style.position = 'relative';
         cell1.innerHTML = "<input type='text' class='form-control' id='itemInput"+row.rowIndex+"' onkeyup='searchItem("+row.rowIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+row.rowIndex+")'><div id='itemBox"+row.rowIndex+"' class='item-box'><ul id='item-ul-"+row.rowIndex+"' class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li onclick='selectItem({{$loop->index}},"+row.rowIndex+")'><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div>";
-        cell2.innerHTML = "<td><div class='d-flex flex-row align-items-center p-0'><div class='d-flex align-items-center justify-content-center item-unit-indicator' id='itemUnit"+row.rowIndex+"'></div><input type='number' class='form-control' style='border-radius: 0px 0.25rem 0.25rem 0px; border-left: 0px;' min='1' id='qty"+row.rowIndex+"' required></div></td>"
-        cell3.innerHTML = "<td><input type='text' class='form-control' id='rate"+row.rowIndex+"'></td>"
+        cell2.innerHTML = "<td><div class='d-flex flex-row align-items-center p-0'><div class='d-flex align-items-center justify-content-center item-unit-indicator' id='itemUnit"+row.rowIndex+"'></div><input type='number' class='form-control' style='border-radius: 0px 0.25rem 0.25rem 0px; border-left: 0px;' min='1' id='qty"+row.rowIndex+"' onkeypress='qtrOrRateChange("+row.rowIndex+")' required></div></td>"
+        cell3.innerHTML = "<td><input type='text' class='form-control' id='rate"+row.rowIndex+"' onkeypress='qtrOrRateChange("+row.rowIndex+")'></td>"
         cell4.innerHTML = "<td><span id='taxableValue"+row.rowIndex+"'>0.00</span></td>"
         cell5.innerHTML = "<td><span style='color: #94a3b8'><span id='sgst"+row.rowIndex+"'>0</span>%</span><span id='sgstAmt"+row.rowIndex+"'>0.00</span></td>"
         cell6.innerHTML = "<td><span style='color: #94a3b8'><span id='cgst"+row.rowIndex+"'>0</span>%</span><span id='cgstAmt"+row.rowIndex+"'>0.00</span></td>"
@@ -821,11 +872,11 @@ Invoicer - New Invoice
         document.querySelector('#rate1').value = '';
         document.querySelector('#taxableValue1').innerHTML = '0.00';
         document.querySelector('#sgst1').innerHTML = '0';
-        document.querySelector('#sgstAmt1').innerHTML = '0';
+        document.querySelector('#sgstAmt1').innerHTML = '0.00';
         document.querySelector('#cgst1').innerHTML = '0';
-        document.querySelector('#cgstAmt1').innerHTML = '0';
+        document.querySelector('#cgstAmt1').innerHTML = '0.00';
         document.querySelector('#igst1').innerHTML = '0';
-        document.querySelector('#igstAmt1').innerHTML = '0';
+        document.querySelector('#igstAmt1').innerHTML = '0.00';
         document.querySelector('#total1').innerHTML = '0.00';
 
         for(var i=2; i<= rows.length+1;i++){
@@ -863,6 +914,8 @@ Invoicer - New Invoice
             document.querySelector('#delete'+i).setAttribute('onclick','deleteRow('+newRowNumber+')');
             document.querySelector('#delete'+i).id = 'delete'+newRowNumber;
         }
+
+        calculateSubTotal();
     }
 
     function myFunction1() {
