@@ -351,16 +351,6 @@ Invoicer - New Invoice
                     </div>
                 </div>
             </div>
-            {{-- <div class="col-lg-4 col-md-3 col-sm-12 col-12 p-2 d-flex flex-column align-items-center justify-content-between" style="height: 180px;">
-                <div class="col-12 d-flex flex-column">
-                    <label for="inputEmail" class="col-form-label" style="padding-top: 0px;">Due Date</label>
-                    <div class="col-12">
-                        @php
-                            echo '<input type="date" class="form-control" style="width: 100%" value="'.date('Y-m-d', strtotime(date("Y-m-d"). ' + 10 days')).'" min="'.date("Y-m-d").'">';
-                        @endphp
-                    </div>
-                </div>
-            </div> --}}
         </div>
         <!-- </form> -->
         <!-- </div> -->
@@ -380,33 +370,8 @@ Invoicer - New Invoice
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @php
-                        $n = 1;
-                        for ($i=1; $i<=$n ; $i++) { 
-                            echo '<tr>
-                                    <td style="position: relative;">
-                                        <input type="text" name="item1" list="items" class="form-control">
-                                        <datalist id="items">
-                                            <option value="Stones" style="background-color: #fff;">
-                                            <option value="Steel">
-                                            <option value="Cement">
-                                        </datalist>
-                                    </div>
-                                </td>
-                                <td><input type="number" name="price1" class="form-control"></td>
-                                <td><input type="text" name="qty1" class="form-control"></td>
-                                <td>$ 0.00</td>
-                            </tr>';
-                        }
-                    @endphp --}}
                     <tr>
                         <td style="position: relative;">
-                            {{-- <input type="text" name="item1" list="items" class="form-control"> --}}
-                            {{-- <datalist id="items">
-                                <option value="Stones" style="background-color: #fff;">
-                                <option value="Steel">
-                                <option value="Cement">
-                            </datalist> --}}
                             <input type="text" class="form-control" id="itemInput1" onkeyup="searchItem(1)" placeholder="" title="Type in a name" onclick="openItemBox(1)">
                             <div id="itemBox1" class="item-box">
                                 <ul id="item-ul-1" class="item-ul scroll-area" style="max-height: 200px; overflow-y: scroll;">
@@ -417,21 +382,6 @@ Invoicer - New Invoice
                                             </div>
                                         </li>
                                     @endforeach
-                                    {{-- <li>
-                                        <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <span style="font-weight: 600;">Stones</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <span style="font-weight: 600;">Steel</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <span style="font-weight: 600;">Cement</span>
-                                        </div>
-                                    </li> --}}
                                 </ul>
                                 <div class="d-none flex-row justify-content-center align-items-center py-3">
                                     <span style="font-weight: 600; color: #94a3b8;">No item found!</span>
@@ -445,23 +395,29 @@ Invoicer - New Invoice
                         <td>
                             {{-- <input type="number" name="price1" class="form-control"> --}}
                             <div class="d-flex flex-row align-items-center p-0">
-                                <div class="d-flex align-items-center justify-content-center item-unit-indicator" id="itemUnit1"></div><input type="number" class="form-control" id="qty1" style="border-radius: 0px 0.25rem 0.25rem 0px; border-left: 0px;" min="1" required>
+                                <div class="d-flex align-items-center justify-content-center item-unit-indicator" id="itemUnit1"></div>
+                                <input type="number" class="form-control" id="qty1" style="border-radius: 0px 0.25rem 0.25rem 0px; border-left: 0px;" min="1" onkeypress="qtrOrRateChange(1)" required>
                             </div>
                         </td>
                         <td>
-                            <input type="text" id="rate1" class="form-control">
-                        </td>
-                        <td><span id="taxableValue1">$ 0.00</span></td>
-                        <td>
-                            <span id="sgst1">(0%) $ 0.00</span>
+                            <input type="text" id="rate1" class="form-control" onkeypress="qtrOrRateChange(1)">
                         </td>
                         <td>
-                            <span id="cgst1">(0%) $ 0.00</span>
+                            <span id="taxableValue1">0.00</span>
                         </td>
                         <td>
-                            <span id="igst1">(0%) $ 0.00</span>
+                            <span style="color: #94a3b8"><span id="sgst1">0</span>%</span>
+                            <span id="sgstAmt1">0.00</span>
                         </td>
-                        <td><span id="total1">$ 0.00</span></td>
+                        <td>
+                            <span style="color: #94a3b8"><span id="cgst1">0</span>%</span>
+                            <span id="cgstAmt1">0.00</span>
+                        </td>
+                        <td>
+                            <span style="color: #94a3b8"><span id="igst1">0</span>%</span>
+                            <span id="igstAmt1">0.00</span>
+                        </td>
+                        <td><span id="total1">0.00</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -537,13 +493,13 @@ Invoicer - New Invoice
                                 <li>
                                     <div class="d-flex flex-row justify-content-between align-items-center">
                                         <span style="font-weight: 600;">SST</span>
-                                        <span style="font-weight: 600;">8%</span>
+                                        <span style="font-weight: 600;">9%</span>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="d-flex flex-row justify-content-between align-items-center">
                                         <span style="font-weight: 600;">CST</span>
-                                        <span style="font-weight: 600;">8%</span>
+                                        <span style="font-weight: 600;">9%</span>
                                     </div>
                                 </li>
                             </ul>
@@ -661,6 +617,28 @@ Invoicer - New Invoice
     $('.exchange-rate-input').hide();
     var selectedCustomerIndex = null;
     
+    const qtrOrRateChange = (row) => {
+        // var items = {!! json_encode($items) !!};
+        var qty = document.querySelector('#qty'+row).value;
+        // console.log(qty);
+        var rate = document.querySelector('#rate'+row).value;
+        var sgst = document.querySelector('#sgst'+row).innerHTML;
+        var cgst = document.querySelector('#cgst'+row).innerHTML;
+        var igst = document.querySelector('#igst'+row).innerHTML;
+        document.querySelector('#taxableValue'+row).innerHTML = qty*rate;
+        if(gst_type == 'CGST&SGST'){
+            document.querySelector('#sgst'+row).innerHTML = sgst;
+            document.querySelector('#sgstAmt'+row).innerHTML = sgst*qty*rate/100;
+            document.querySelector('#cgst'+row).innerHTML = cgst;
+            document.querySelector('#cgstAmt'+row).innerHTML = cgst*qty*rate/100;
+        }else{
+            document.querySelector('#igst'+row).innerHTML = igst;
+            document.querySelector('#igstAmt'+row).innerHTML = igst*qty*rate/100;
+            // document.querySelector('#igst'+row).innerHTML = "("+items[index].gst+"%) "+((items[index].gst)*rate)/100+"";
+        }
+        document.querySelector('#total'+row).innerHTML = (qty*rate) + (qty*rate*18)/100;
+    }
+
     const selectCustomer = (index) => {
         selectedCustomerIndex = index;
         document.querySelector('.add-customer-box').style.display = 'none';
@@ -709,10 +687,15 @@ Invoicer - New Invoice
         document.querySelector('#taxableValue'+row).innerHTML = items[index].price;
 
         if(gst_type == 'CGST&SGST'){
-            document.querySelector('#sgst'+row).innerHTML = "("+items[index].gst/2+"%) "+((items[index].gst/2)*items[index].price)/100+"";
-            document.querySelector('#cgst'+row).innerHTML = "("+items[index].gst/2+"%) "+((items[index].gst/2)*items[index].price)/100+"";
+            document.querySelector('#sgst'+row).innerHTML = items[index].gst/2;
+            document.querySelector('#sgstAmt'+row).innerHTML = (items[index].gst/2)*items[index].price/100;
+            document.querySelector('#cgst'+row).innerHTML = items[index].gst/2;
+            document.querySelector('#cgstAmt'+row).innerHTML = (items[index].gst/2)*items[index].price/100;
+            // document.querySelector('#cgst'+row).innerHTML = "("+items[index].gst/2+"%) "+((items[index].gst/2)*items[index].price)/100+"";
         }else{
-            document.querySelector('#igst'+row).innerHTML = "("+items[index].gst+"%) "+((items[index].gst)*items[index].price)/100+"";
+            document.querySelector('#igst'+row).innerHTML = items[index].gst;
+            document.querySelector('#igstAmt'+row).innerHTML = (items[index].gst)*items[index].price/100;
+            // document.querySelector('#igst'+row).innerHTML = "("+items[index].gst+"%) "+((items[index].gst)*items[index].price)/100+"";
         }
 
         document.querySelector('#total'+row).innerHTML = items[index].price + ((items[index].gst)*items[index].price)/100;
@@ -805,11 +788,11 @@ Invoicer - New Invoice
         cell1.innerHTML = "<input type='text' class='form-control' id='itemInput"+row.rowIndex+"' onkeyup='searchItem("+row.rowIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+row.rowIndex+")'><div id='itemBox"+row.rowIndex+"' class='item-box'><ul id='item-ul-"+row.rowIndex+"' class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li onclick='selectItem({{$loop->index}},"+row.rowIndex+")'><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div>";
         cell2.innerHTML = "<td><div class='d-flex flex-row align-items-center p-0'><div class='d-flex align-items-center justify-content-center item-unit-indicator' id='itemUnit"+row.rowIndex+"'></div><input type='number' class='form-control' style='border-radius: 0px 0.25rem 0.25rem 0px; border-left: 0px;' min='1' id='qty"+row.rowIndex+"' required></div></td>"
         cell3.innerHTML = "<td><input type='text' class='form-control' id='rate"+row.rowIndex+"'></td>"
-        cell4.innerHTML = "<td><span id='taxableValue"+row.rowIndex+"'>$ 0.00</span></td>"
-        cell5.innerHTML = "<td><span id='sgst"+row.rowIndex+"'>(0%) $ 0.00</span></td>"
-        cell6.innerHTML = "<td><span id='cgst"+row.rowIndex+"'>(0%) $ 0.00</span></td>"
-        cell7.innerHTML = "<td><span id='igst"+row.rowIndex+"'>(0%) $ 0.00</span></td>"
-        cell8.innerHTML = "<td><span id='total"+row.rowIndex+"'>$ 0.00</span></td>"
+        cell4.innerHTML = "<td><span id='taxableValue"+row.rowIndex+"'>0.00</span></td>"
+        cell5.innerHTML = "<td><span style='color: #94a3b8'><span id='sgst"+row.rowIndex+"'>0</span>%</span><span id='sgstAmt"+row.rowIndex+"'>0.00</span></td>"
+        cell6.innerHTML = "<td><span style='color: #94a3b8'><span id='cgst"+row.rowIndex+"'>0</span>%</span><span id='cgstAmt"+row.rowIndex+"'>0.00</span></td>"
+        cell7.innerHTML = "<td><span style='color: #94a3b8'><span id='igst"+row.rowIndex+"'>0</span>%</span><span id='igstAmt"+row.rowIndex+"'>0.00</span></td>"
+        cell8.innerHTML = "<td><span id='total"+row.rowIndex+"'>0.00</span></td>"
         cell9.innerHTML = "<i class='bi bi-trash delete-row-btn' id='delete"+row.rowIndex+"' style='cursor :pointer;' onclick='deleteRow(" + row.rowIndex + ")'></i>";
     }
 
@@ -823,9 +806,12 @@ Invoicer - New Invoice
         document.querySelector('#qty1').value = '';
         document.querySelector('#rate1').value = '';
         document.querySelector('#taxableValue1').innerHTML = '0.00';
-        document.querySelector('#sgst1').innerHTML = '(0%) 0.00';
-        document.querySelector('#cgst1').innerHTML = '(0%) 0.00';
-        document.querySelector('#igst1').innerHTML = '(0%) 0.00';
+        document.querySelector('#sgst1').innerHTML = '0';
+        document.querySelector('#sgstAmt1').innerHTML = '0';
+        document.querySelector('#cgst1').innerHTML = '0';
+        document.querySelector('#cgstAmt1').innerHTML = '0';
+        document.querySelector('#igst1').innerHTML = '0';
+        document.querySelector('#igstAmt1').innerHTML = '0';
         document.querySelector('#total1').innerHTML = '0.00';
 
         for(var i=2; i<= rows.length+1;i++){
@@ -849,56 +835,21 @@ Invoicer - New Invoice
             var inputData = inputItemCell.getElementsByTagName("input")[0].value;
             inputItemCell.innerHTML = "<td style='position: relative;'><input type='text' class='form-control' id='itemInput"+newRowNumber+"' onkeyup='searchItem("+newRowNumber+")' placeholder='' title='Type in a name' onclick='openItemBox("+newRowNumber+")' name='item"+newRowNumber+"'><div id='itemBox"+newRowNumber+"' class='item-box'><ul id='item-ul-"+newRowNumber+"' class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li onclick='selectItem({{$loop->index}},"+newRowNumber+")'><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div></td>";
             inputItemCell.getElementsByTagName("input")[0].value = inputData;
-            // document.querySelector('#itemInput'+i).setAttribute('onkeyup', 'searchItem('+newRowNumber+')');
-            // document.querySelector('#itemInput'+i).setAttribute('onclick', 'openItemBox('+newRowNumber+')');
-            // document.querySelector('#itemInput'+i).id = 'itemInput'+newRowNumber;
-            // document.getElementByName('taxableValue'+i).setAttribute('name','taxableValue'+newRowNumber);
-            // document.getElementByName('sgst'+i).setAttribute('name','sgst'+newRowNumber);
-            // document.getElementByName('cgst'+i).setAttribute('name','cgst'+newRowNumber);
-            // document.getElementByName('igst'+i).setAttribute('name','igst'+newRowNumber);
             document.querySelector('#itemUnit'+i).id = 'itemUnit'+newRowNumber;
             document.querySelector('#qty'+i).id = 'qty'+newRowNumber;
             document.querySelector('#rate'+i).id = 'rate'+newRowNumber;
             document.querySelector('#taxableValue'+i).id = 'taxableValue'+newRowNumber;
             document.querySelector('#sgst'+i).id = 'sgst'+newRowNumber;
+            document.querySelector('#sgstAmt'+i).id = 'sgstAmt'+newRowNumber;
             document.querySelector('#cgst'+i).id = 'cgst'+newRowNumber;
+            document.querySelector('#cgstAmt'+i).id = 'cgstAmt'+newRowNumber;
             document.querySelector('#igst'+i).id = 'igst'+newRowNumber;
+            document.querySelector('#igstAmt'+i).id = 'igstAmt'+newRowNumber;
             document.querySelector('#total'+i).id = 'total'+newRowNumber;
             document.querySelector('#delete'+i).setAttribute('onclick','deleteRow('+newRowNumber+')');
             document.querySelector('#delete'+i).id = 'delete'+newRowNumber;
         }
     }
-
-    // const deleteRow = (index) => {
-    //     var table = document.querySelector(".items-table");
-    //     table.deleteRow(index);
-
-    //     var tbody = table.getElementsByTagName("tbody")[0];
-    //     var rows = tbody.getElementsByTagName("tr");
-    //     // console.log(rows);
-    //     var i = 1;
-    //     for (i = 0; i < rows.length; i++) {
-    //         var rowNumber = i+1;
-    //         var deleteTableCell = rows[i + 1].getElementsByTagName("td")[8];
-    //         var itemTableCell = rows[i + 1].getElementsByTagName("td")[0];
-    //         // var inputData = itemTableCell.getElementsByTagName("input")[0].value;
-    //         var inputData = document.getElementsName("item"+rowNumber).value;
-    //         var qtyTableCell = rows[i+1].getElementsByTagName("td")[1];
-    //         var qtyUnit = document.querySelector("#itemUnit"+rowNumber).innerHTML;
-    //         var qtyData = document.getElementsName("qiy"+rowNumber).value;
-    //         // console.log(i + 2);
-    //         var newIndex = i + 2;
-    //         deleteTableCell.innerHTML = "<i class='bi bi-trash delete-row-btn' style='cursor :pointer;' onclick='deleteRow(" + newIndex + ")'></i>";
-    //         itemTableCell.innerHTML = "<td style='position: relative;'><input type='text' class='form-control' id='itemInput"+newIndex+"' onkeyup='searchItem("+newIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+newIndex+")' name='item"+newIndex+"'><div id='itemBox"+newIndex+"' class='item-box'><ul id='item-ul-"+newIndex+"' class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li onclick='selectItem({{$loop->index}},"+newIndex+")'><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div></td>";
-    //         qtyTableCell.innerHTML = "<div class='d-flex flex-row align-items-center p-0'><div class='d-flex align-items-center justify-content-center item-unit-indicator' id='itemUnit"+newIndex+"'></div><input type='number' class='form-control' style='border-radius: 0px 0.25rem 0.25rem 0px; border-left: 0px;' min='1' name='qty"+newIndex+"' required></div>";
-    //         // console.log(itemTableCell.getElementsByTagName("input")[0]);
-    //         // console.log(cell2Div.getElementsByTagName("div")[0]);
-    //         // itemTableCell.getElementsByTagName("input")[0].value = inputData;
-    //         document.getElementsName("item"+newIndex).value = inputData;
-    //         document.querySelector("#itemUnit"+newIndex).innerHTML = qtyUnit;
-    //         ocument.getElementsName("qiy"+newIndex).value = qtyData;
-    //     }
-    // }
 
     function myFunction1() {
         var input, filter, ul, li, a, div1, div, i, txtValue;
