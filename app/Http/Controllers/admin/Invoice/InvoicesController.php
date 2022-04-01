@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\Item;
 use App\Models\Unit;
+use App\Models\Invoice;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\ItemResource;
 
@@ -20,6 +21,22 @@ class InvoicesController extends Controller
         // print_r($customers[0]->shippingAddress->name);
 
         return view('admin.invoices');
+    }
+
+    public function store(Request $request){
+        // $request->creator_id = user()->id;
+        // print_r($request->input('creator_id'));
+        // echo $request->input('customer_id');
+        // $request->merge([
+        //     'creator_id' => $this->user()->id,
+        // ]);
+        // print_r($request->all());
+        $invoice = Invoice::createInvoice($request);
+        // return $request;
+        // return response()->json([
+        //     'user' => 'Nand',
+        //     'message' => 'Success'
+        //   ], 200);
     }
 
     public function newInvoicePage(){

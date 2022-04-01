@@ -388,6 +388,7 @@ Invoicer - New Invoice
                                     <span class="text-primary">Add New Item</span>
                                 </div>
                             </div>
+                            <p id='itemId1' class="d-none"></p>
                         </td>
                         <td>
                             {{-- <input type="number" name="price1" class="form-control"> --}}
@@ -609,7 +610,6 @@ Invoicer - New Invoice
 </main>
 
 <script>
-
     var gst_type='';
     var customer_currency='';
     var exchange_rate = 1;
@@ -619,13 +619,42 @@ Invoicer - New Invoice
     var discountType = 'fixed';
     var discountValue = 0.0;
     var customers = {!! json_encode($customers) !!};
-
     // window.addEventListener("load", () => {
         const form = document.querySelector(".invoiceForm");
         // console.log(document.getElementsByName('invoice_date').value);
-
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
+            items = [];
+            
+            var table = document.querySelector(".items-table");
+            var tbody = table.getElementsByTagName("tbody")[0];
+            var rows = tbody.getElementsByTagName("tr");
+
+            for(var i=1; i<=rows.length;i++){
+                var itemId = document.getElementById('itemId'+i).innerHTML;
+                var itemName = document.querySelector('#itemInput'+i).value;
+                var itemUnit = document.querySelector('#itemUnit'+i).innerHTML;
+                var itemQty = document.querySelector('#qty'+i).value;
+                var itemRate = document.querySelector('#rate'+i).value;
+
+                if(gst_type == 'CGST&SGST'){
+                    var gst_type = 'CGST&SGST';
+                }else{
+                    var gst_type = 'IGST';
+                }
+
+                items.push({
+                    id: itemId,
+                    name: itemName,
+                    unit: itemUnit,
+                    price: itemRate,
+                    gst_type: gst_type
+                });
+            }
+
+            console.log(items);
+
+            // console.log(items);
             const data = {
                 invoice_date: document.querySelector('#invoice_date').value,
                 due_date: document.querySelector('#due_date').value,
@@ -634,6 +663,7 @@ Invoicer - New Invoice
                 paid_status: 'UNPAID',
                 tax_per_item: 'NO',
                 discount_per_item: 'NO',
+                items: items,
                 notes: document.querySelector('.ck-content').innerHTML,
                 discount_type: discountType,
                 discount_val: discountValue,
@@ -654,22 +684,28 @@ Invoicer - New Invoice
                 base_due_amount: total,
                 currency_id: customers[selectedCustomerIndex].currency_id,
             };
-    
-            console.log(data);
+
+            // console.log(data);
+
+            let res = axios.post('http://127.0.0.1:8000/admin/invoices/new', data, {
+                headers: { 
+                'Content-Type': 'application/json',
+                // 'X-CSRF-TOKEN': token.content,
+                'X-Requested-With': 'XMLHttpRequest',
+                }
+            }).then(function(res){
+                console.log(res);
+            });
         });
     // });
-
     $('.exchange-rate-input').hide();
     // $('#exchangeRate').attr('required',false);
-
     var selectedCustomerIndex = null;
     
-
     $('#exchangeRate').change(function () { 
         // console.log(this.value);
         exchange_rate = this.value;
     });
-
     const calculateSubTotal = () => {
         var table = document.querySelector(".items-table");
         var tbody = table.getElementsByTagName("tbody")[0];
@@ -686,13 +722,11 @@ Invoicer - New Invoice
         subtotal = parseFloat(temp_total);
         calculateTotal();
     }
-
     const discountChange = () => {
         discountValue = document.querySelector('#discountValue').value;
         discountType = document.querySelector('#discountType').value;
         calculateTotal();
     }
-
     const calculateTotal = () => {
         if(discountType == 'fixed'){
             total = (subtotal - parseFloat(discountValue)).toFixed(2);
@@ -702,7 +736,6 @@ Invoicer - New Invoice
         document.querySelector('#totalAmount').innerHTML = parseFloat(total).toFixed(2);
         calculateTotalTax();
     }
-
     const calculateTotalTax = () => {
         var table = document.querySelector(".items-table");
         var tbody = table.getElementsByTagName("tbody")[0];
@@ -719,7 +752,6 @@ Invoicer - New Invoice
         // console.log(temp_total);
         totalTax = parseFloat(temp_total).toFixed(2);
     } 
-
     const qtrOrRateChange = (row) => {
         // var items = {!! json_encode($items) !!};
         var qty = document.querySelector('#qty'+row).value;
@@ -739,7 +771,6 @@ Invoicer - New Invoice
         document.querySelector('#total'+row).innerHTML = ((qty*rate) + (qty*rate*18)/100).toFixed(2);
         calculateSubTotal();
     }
-
     const selectCustomer = (index) => {
         selectedCustomerIndex = index;
         document.querySelector('.add-customer-box').style.display = 'none';
@@ -748,7 +779,6 @@ Invoicer - New Invoice
         
         // var customers = <?php echo json_encode($customers); ?>;
         var customers = {!! json_encode($customers) !!};
-
         // console.log(customers[index]);
         document.querySelector('.selected_customer_name').innerHTML = customers[index].name;
         document.querySelector('.selected_customer_billing_name').innerHTML = customers[index].billing.name;
@@ -768,33 +798,29 @@ Invoicer - New Invoice
             $('.exchange-rate-input').hide()
             // $('#exchangeRate').attr('required',false);
         }
-
         if(customers[index].billing.state != customers[index].company.address.state){
             // alert('IGST Require');
             gst_type = 'IGST';
         }else{
             gst_type = 'CGST&SGST';
         }
-
         customer_currency = customers[index].currency.code;
-
         $('.customer-currency').map(function(){
             this.innerHTML = "("+customers[index].currency.symbol+")";
         });
     }
-
     const selectItem = (index, row) => {
         // alert('Hiii');
         // console.log(row);
         // var items = <?php echo json_encode($items); ?>;
         var items = {!! json_encode($items) !!};
         // console.log(items[index]);
+        document.querySelector('#itemId'+row).innerHTML = items[index].id;
         document.querySelector('#itemInput'+row).value = items[index].name;
         document.querySelector('#itemUnit'+row).innerHTML = items[index].unit.name;
         document.querySelector('#qty'+row).value = 1;
         document.querySelector('#rate'+row).value = (items[index].price/exchange_rate).toFixed(2);
         document.querySelector('#taxableValue'+row).innerHTML = (items[index].price/exchange_rate).toFixed(2);
-
         if(gst_type == 'CGST&SGST'){
             document.querySelector('#sgst'+row).innerHTML = items[index].gst/2;
             document.querySelector('#sgstAmt'+row).innerHTML = ((items[index].gst/2)*(items[index].price/exchange_rate)/100).toFixed(2);
@@ -806,11 +832,9 @@ Invoicer - New Invoice
             document.querySelector('#igstAmt'+row).innerHTML = ((items[index].gst)*(items[index].price/exchange_rate)/100).toFixed(2);
             // document.querySelector('#igst'+row).innerHTML = "("+items[index].gst+"%) "+((items[index].gst)*items[index].price)/100+"";
         }
-
         document.querySelector('#total'+row).innerHTML = ((items[index].price/exchange_rate) + ((items[index].gst)*(items[index].price/exchange_rate))/100).toFixed(2);
         calculateSubTotal();
     }
-
     const deselect = () => {
         $('.exchange-rate-input').hide()
         // $('#exchangeRate').attr('required',false);
@@ -828,49 +852,41 @@ Invoicer - New Invoice
         total = 0;
         deleteTableRows();
     }
-
     const openCustomerBox = () => {
         var customerBox = document.querySelector(".customer-box");
         customerBox.classList.add("active-box");
     }
-
     const openTaxBox = () => {
         // alert('Clicked!')
         var taxBox = document.querySelector(".tax-box");
         taxBox.classList.add("active-box");
     }
-
     const openFiledBox = () => {
         var filedBox = document.querySelector(".field-box");
         filedBox.classList.add("active-box");
     }
-
     const openItemBox = (row) => {
         var itemBox = document.querySelector("#itemBox"+row);
         itemBox.style.display = "flex";
     }
-
     window.addEventListener('mouseup', function(event) {
         var taxBox = document.querySelector(".tax-box");
         if (event.target != taxBox && event.target.parentNode != taxBox) {
             taxBox.classList.remove("active-box");
         }
     });
-
     window.addEventListener('mouseup', function(event) {
         var customerBox = document.querySelector(".customer-box");
         if (event.target != customerBox && event.target.parentNode != customerBox) {
             customerBox.classList.remove("active-box");
         }
     });
-
     window.addEventListener('mouseup', function(event) {
         var fieldBox = document.querySelector(".field-box");
         if (event.target != fieldBox && event.target.parentNode != fieldBox) {
             fieldBox.classList.remove("active-box");
         }
     });
-
     window.addEventListener('mouseup', function(event) {
         // var itemBox = document.querySelector(".item-box");
         var allItemBoxs = $(".item-box").map(function(){
@@ -882,7 +898,6 @@ Invoicer - New Invoice
         //     itemBox[i].style.display = "none";
         // }
     });
-
     const addRow = () => {
         var table = document.querySelector(".items-table");
         var row = table.insertRow();
@@ -896,14 +911,13 @@ Invoicer - New Invoice
         var cell8 = row.insertCell(7);
         var cell9 = row.insertCell(8);
         // var cgst=0,sgst=0,igst=0;
-
         // if(gst_type == 'CGST&SGST'){
             
         // }
         // cell1.innerHTML = "<td><input type='text' list='items' class='form-control'><datalist id='items'><option value='Stones' style='background-color: #fff;'><option value='Steel'><option value='Cement'></datalist></td>"
         // cell1.innerHTML = "<td style='position: relative;'><input type='text' class='form-control' id='itemInput"+row.rowIndex+"' onkeyup='searchItem("+row.rowIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+row.rowIndex+")'><div id='itemBox"+row.rowIndex+"' class='item-box'><ul class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div></td>";
         cell1.style.position = 'relative';
-        cell1.innerHTML = "<input type='text' class='form-control' id='itemInput"+row.rowIndex+"' onkeyup='searchItem("+row.rowIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+row.rowIndex+")'><div id='itemBox"+row.rowIndex+"' class='item-box'><ul id='item-ul-"+row.rowIndex+"' class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li onclick='selectItem({{$loop->index}},"+row.rowIndex+")'><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div>";
+        cell1.innerHTML = "<input type='text' class='form-control' id='itemInput"+row.rowIndex+"' onkeyup='searchItem("+row.rowIndex+")' placeholder='' title='Type in a name' onclick='openItemBox("+row.rowIndex+")'><div id='itemBox"+row.rowIndex+"' class='item-box'><ul id='item-ul-"+row.rowIndex+"' class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li onclick='selectItem({{$loop->index}},"+row.rowIndex+")'><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div><p id='itemId"+row.rowIndex+"' class='d-none'></p>";
         cell2.innerHTML = "<td><div class='d-flex flex-row align-items-center p-0'><div class='d-flex align-items-center justify-content-center item-unit-indicator' id='itemUnit"+row.rowIndex+"'></div><input type='number' class='form-control' style='border-radius: 0px 0.25rem 0.25rem 0px; border-left: 0px;' min='1' id='qty"+row.rowIndex+"' onkeypress='qtrOrRateChange("+row.rowIndex+")' required></div></td>"
         cell3.innerHTML = "<td><input type='text' class='form-control' id='rate"+row.rowIndex+"' onkeypress='qtrOrRateChange("+row.rowIndex+")'></td>"
         cell4.innerHTML = "<td><span id='taxableValue"+row.rowIndex+"'>0.00</span></td>"
@@ -913,13 +927,13 @@ Invoicer - New Invoice
         cell8.innerHTML = "<td><span id='total"+row.rowIndex+"'>0.00</span></td>"
         cell9.innerHTML = "<i class='bi bi-trash delete-row-btn' id='delete"+row.rowIndex+"' style='cursor :pointer;' onclick='deleteRow(" + row.rowIndex + ")'></i>";
     }
-
     const deleteTableRows = () => {
         var table = document.querySelector(".items-table");
         var tbody = table.getElementsByTagName("tbody")[0];
         var rows = tbody.getElementsByTagName("tr");
         
         document.querySelector('#itemInput1').value = '';
+        document.querySelector('#itemId1').innerHTML = '';
         document.querySelector('#itemUnit1').innerHTML = '';
         document.querySelector('#qty1').value = '';
         document.querySelector('#rate1').value = '';
@@ -931,27 +945,26 @@ Invoicer - New Invoice
         document.querySelector('#igst1').innerHTML = '0';
         document.querySelector('#igstAmt1').innerHTML = '0.00';
         document.querySelector('#total1').innerHTML = '0.00';
-
         for(var i=2; i<= rows.length+1;i++){
             table.deleteRow(i);
         }
     }
-
     const deleteRow = (index) => {
         // console.log(index);
         var table = document.querySelector(".items-table");
         var tbody = table.getElementsByTagName("tbody")[0];
         var rows = tbody.getElementsByTagName("tr");
-
         table.deleteRow(index);
-
         for(var i=index+1; i<= rows.length + 1; i++){
             // console.log(i);
             var newRowNumber = i-1;
             var inputItemCell = rows[i-2].getElementsByTagName("td")[0];
             // console.log(inputItemCell);
             var inputData = inputItemCell.getElementsByTagName("input")[0].value;
-            inputItemCell.innerHTML = "<td style='position: relative;'><input type='text' class='form-control' id='itemInput"+newRowNumber+"' onkeyup='searchItem("+newRowNumber+")' placeholder='' title='Type in a name' onclick='openItemBox("+newRowNumber+")' name='item"+newRowNumber+"'><div id='itemBox"+newRowNumber+"' class='item-box'><ul id='item-ul-"+newRowNumber+"' class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li onclick='selectItem({{$loop->index}},"+newRowNumber+")'><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div></td>";
+            var inputItemId = document.querySelector('#itemId'+i).innerHTML;
+            console.log(inputItemId);
+            inputItemCell.innerHTML = "<td style='position: relative;'><input type='text' class='form-control' id='itemInput"+newRowNumber+"' onkeyup='searchItem("+newRowNumber+")' placeholder='' title='Type in a name' onclick='openItemBox("+newRowNumber+")' name='item"+newRowNumber+"'><div id='itemBox"+newRowNumber+"' class='item-box'><ul id='item-ul-"+newRowNumber+"' class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li onclick='selectItem({{$loop->index}},"+newRowNumber+")'><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div><p id='itemId"+newRowNumber+"' class='d-none'></p></td>";
+            document.querySelector('#itemId'+newRowNumber).innerHTML = inputItemId;
             inputItemCell.getElementsByTagName("input")[0].value = inputData;
             document.querySelector('#itemUnit'+i).id = 'itemUnit'+newRowNumber;
             document.querySelector('#qty'+i).id = 'qty'+newRowNumber;
@@ -967,10 +980,8 @@ Invoicer - New Invoice
             document.querySelector('#delete'+i).setAttribute('onclick','deleteRow('+newRowNumber+')');
             document.querySelector('#delete'+i).id = 'delete'+newRowNumber;
         }
-
         calculateSubTotal();
     }
-
     function myFunction1() {
         var input, filter, ul, li, a, div1, div, i, txtValue;
         input = document.getElementById("myInput1");
@@ -990,7 +1001,6 @@ Invoicer - New Invoice
             }
         }
     }
-
     function myFunction2() {
         var input, filter, ul, li, a, div, i, txtValue;
         input = document.getElementById("myInput2");
@@ -1009,7 +1019,6 @@ Invoicer - New Invoice
             }
         }
     }
-
     function searchItem(row) {
         var input, filter, ul, li, a, div, i, txtValue;
         input = document.getElementById("itemInput"+row);
@@ -1029,6 +1038,5 @@ Invoicer - New Invoice
             }
         }
     }
-
 </script>
 @endsection

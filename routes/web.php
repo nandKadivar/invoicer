@@ -1716,6 +1716,7 @@ Route::get('/admin/invoices', [InvoicesController::class, 'index'])->name('admin
 //     return view('admin.invoices-create');
 // })->name('admin.invoices.create')->middleware('auth');
 Route::get('/admin/invoices/new', [InvoicesController::class, 'newInvoicePage'])->name('admin.invoices.create')->middleware('auth');
+Route::post('/admin/invoices/new', [InvoicesController::class, 'store'])->name('admin.invoices.store')->middleware('auth');
 Route::get('/admin/invoices/view', function(){
     return view('admin.invoices-view');
 })->name('admin.invoices.view')->middleware('auth');
