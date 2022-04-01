@@ -101,10 +101,6 @@ Invoicer - New Invoice
     <!-- End Page Title -->
     <form class="invoiceForm">
         @csrf
-        <!-- <div class='col-md-12'> -->
-        <!-- <form> -->
-        {{-- {{$customers[0]->company->settings}} --}}
-        {{-- {{$items[0]->name}} --}}
         <div class="col-12 d-flex flex-row justify-content-between flex-wrap">
             <div class="col-lg-5 col-md-5 col-sm-12 col-12 p-2">
                 <div class="add-customer-box col-12" onclick="openCustomerBox()">
@@ -205,7 +201,7 @@ Invoicer - New Invoice
                 </div>
                 <div class="modal fade" id="addNewCustomerModel" tabindex="-1">
                     <div class="modal-dialog modal-xl">
-                        <form action="">
+                        {{-- <form action=""> --}}
                             <div class="modal-content">
                                 <div class="modal-header" style="border-top: 6px solid var(--bs-primary);">
                                     <h5 class="modal-title">Add Customer</h5>
@@ -308,7 +304,7 @@ Invoicer - New Invoice
                                     <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
                                 </div>
                             </div>
-                        </form>
+                        {{-- </form> --}}
                     </div>
                 </div>
             </div>
@@ -319,7 +315,7 @@ Invoicer - New Invoice
                     <div class="col-11">
                         @php
                             // echo date("Y-m-d");
-                            echo '<input type="date" class="form-control" value="'.date("Y-m-d").'">';
+                            echo '<input type="date" class="form-control" id="invoice_date" name="invoice_date" value="'.date("Y-m-d").'">';
                         @endphp
                         {{-- <input type="date" class="form-control" value="2020-03-30"> --}}
                     </div>
@@ -330,7 +326,7 @@ Invoicer - New Invoice
                     <div class="col-11">
                         @php
                             // echo date("Y-m-d");
-                            echo '<input type="date" class="form-control" style="width: 100%" value="'.date('Y-m-d', strtotime(date("Y-m-d"). ' + 10 days')).'" min="'.date("Y-m-d").'">';
+                            echo '<input type="date" id="due_date" class="form-control" style="width: 100%" name="due_date" value="'.date('Y-m-d', strtotime(date("Y-m-d"). ' + 10 days')).'" min="'.date("Y-m-d").'">';
                         @endphp
                     </div>
                 </div>
@@ -339,7 +335,7 @@ Invoicer - New Invoice
                     <label for="inputEmail" class="col-form-label" style="padding-top: 0px;">Invoice Number</label>
                     <div class="col-11">
                         @php
-                            echo '<input type="text" class="form-control" style="width: 100%" disabled value="INV-'.rand(000001,999999).'">';
+                            echo '<input type="text" id="invoice_number" class="form-control" style="width: 100%" disabled name="invoice_number" value="INV-'.rand(000001,999999).'">';
                         @endphp
                     </div>
                 </div>
@@ -348,7 +344,7 @@ Invoicer - New Invoice
                 <div class="col-lg-6 col-md-6 col-sm-12 exchange-rate-input">
                     <label for="exchangeRate" class="col-form-label" style="padding-top: 0px;">Exchange rate</label>
                     <div class="col-11 d-flex flex-row align-items-center p-0">
-                        <div class="d-flex align-items-center justify-content-center exchange-currency-indicator"></div><input type="number" class="form-control" id="exchangeRate" style="width: 70%; border-radius: 0px 0.25rem 0.25rem 0px; border-left: 0px;" min="1" required>
+                        <div class="d-flex align-items-center justify-content-center exchange-currency-indicator"></div><input type="number" class="form-control" name="exchange_rate" id="exchangeRate" style="width: 70%; border-radius: 0px 0.25rem 0.25rem 0px; border-left: 0px;" min="1">
                     </div>
                 </div>
             </div>
@@ -517,7 +513,7 @@ Invoicer - New Invoice
                     </div>
                     <div class="modal fade" id="verticalycentered" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
-                            <form action="">
+                            {{-- <form action=""> --}}
                                 <div class="modal-content">
                                     <div class="modal-header" style="border-top: 6px solid var(--bs-primary);">
                                         <h5 class="modal-title">Add Tax</h5>
@@ -544,7 +540,7 @@ Invoicer - New Invoice
                                         <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
                                     </div>
                                 </div>
-                            </form>
+                            {{-- </form> --}}
                         </div>
                     </div>
                     <div class="col-lg-12 pt-2 ">
@@ -604,7 +600,7 @@ Invoicer - New Invoice
         </div>
 
         <div class="text-center">
-            <button type="button" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary">
                 <i class="bi bi-download"></i>
                 Save Invoice
             </button>
@@ -613,23 +609,59 @@ Invoicer - New Invoice
 </main>
 
 <script>
-    const form = document.querySelector(".invoiceForm");
-    
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
 
-        
-    });
-    
     var gst_type='';
     var customer_currency='';
     var exchange_rate = 1;
     var subtotal = 0.0;
+    var totalTax = 0.0;
     var total = 0.0;
     var discountType = 'fixed';
     var discountValue = 0.0;
+    var customers = {!! json_encode($customers) !!};
+
+    // window.addEventListener("load", () => {
+        const form = document.querySelector(".invoiceForm");
+        // console.log(document.getElementsByName('invoice_date').value);
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const data = {
+                invoice_date: document.querySelector('#invoice_date').value,
+                due_date: document.querySelector('#due_date').value,
+                invoice_number: document.querySelector('#invoice_number').value,
+                status: 'DRAFT',
+                paid_status: 'UNPAID',
+                tax_per_item: 'NO',
+                discount_per_item: 'NO',
+                notes: document.querySelector('.ck-content').innerHTML,
+                discount_type: discountType,
+                discount_val: discountValue,
+                sub_total: subtotal,
+                total: total,
+                tax: totalTax,
+                due_amount: total,
+                sent: 0,
+                viewed: 0,
+                customer_id: customers[selectedCustomerIndex].id,
+                company_id: customers[selectedCustomerIndex].company_id,
+                creator_id: '',
+                exchange_rate: exchange_rate,
+                base_discount_val: subtotal - totalTax,
+                base_sub_total: subtotal,
+                base_total: total,
+                base_tax: totalTax,
+                base_due_amount: total,
+                currency_id: customers[selectedCustomerIndex].currency_id,
+            };
+    
+            console.log(data);
+        });
+    // });
 
     $('.exchange-rate-input').hide();
+    // $('#exchangeRate').attr('required',false);
+
     var selectedCustomerIndex = null;
     
 
@@ -649,7 +681,7 @@ Invoicer - New Invoice
             var value = parseFloat(document.querySelector('#total'+i).innerHTML);
             temp_total = temp_total + value;
         }
-        console.log(temp_total);
+        // console.log(temp_total);
         document.querySelector('#subtotal').innerHTML = parseFloat(temp_total).toFixed(2);
         subtotal = parseFloat(temp_total);
         calculateTotal();
@@ -668,6 +700,24 @@ Invoicer - New Invoice
             total = (subtotal - (parseFloat(discountValue)*subtotal)/100).toFixed(2);
         }
         document.querySelector('#totalAmount').innerHTML = parseFloat(total).toFixed(2);
+        calculateTotalTax();
+    }
+
+    const calculateTotalTax = () => {
+        var table = document.querySelector(".items-table");
+        var tbody = table.getElementsByTagName("tbody")[0];
+        var rows = tbody.getElementsByTagName("tr");
+        let temp_total=0.0;
+        // console.log(rows.length);
+        for(var i=1; i<=rows.length;i++){
+            // temp_total = parseFloat(temp_total) + parseFloat(document.querySelector('#total'+i).innerHTML).toFixed(2);
+            var sgstvalue = parseFloat(document.querySelector('#sgstAmt'+i).innerHTML);
+            var cgstvalue = parseFloat(document.querySelector('#cgstAmt'+i).innerHTML);
+            var igstvalue = parseFloat(document.querySelector('#igstAmt'+i).innerHTML);
+            temp_total = temp_total + sgstvalue + cgstvalue + igstvalue;
+        }
+        // console.log(temp_total);
+        totalTax = parseFloat(temp_total).toFixed(2);
     } 
 
     const qtrOrRateChange = (row) => {
@@ -699,7 +749,7 @@ Invoicer - New Invoice
         // var customers = <?php echo json_encode($customers); ?>;
         var customers = {!! json_encode($customers) !!};
 
-        console.log(customers[index]);
+        // console.log(customers[index]);
         document.querySelector('.selected_customer_name').innerHTML = customers[index].name;
         document.querySelector('.selected_customer_billing_name').innerHTML = customers[index].billing.name;
         document.querySelector('.selected_customer_billing_address_1').innerHTML = customers[index].billing.address_street_1;
@@ -712,9 +762,11 @@ Invoicer - New Invoice
     
         if(customers[index].currency.id != customers[index].company.settings[0].value){
             $('.exchange-rate-input').show()
+            // $('#exchangeRate').attr('required',true);
             document.querySelector('.exchange-currency-indicator').innerHTML = '1 '+customers[index].currency.code+' =';
         }else{
             $('.exchange-rate-input').hide()
+            // $('#exchangeRate').attr('required',false);
         }
 
         if(customers[index].billing.state != customers[index].company.address.state){
@@ -736,7 +788,7 @@ Invoicer - New Invoice
         // console.log(row);
         // var items = <?php echo json_encode($items); ?>;
         var items = {!! json_encode($items) !!};
-        console.log(items[index]);
+        // console.log(items[index]);
         document.querySelector('#itemInput'+row).value = items[index].name;
         document.querySelector('#itemUnit'+row).innerHTML = items[index].unit.name;
         document.querySelector('#qty'+row).value = 1;
@@ -761,6 +813,7 @@ Invoicer - New Invoice
 
     const deselect = () => {
         $('.exchange-rate-input').hide()
+        // $('#exchangeRate').attr('required',false);
         customer_currency = '';
         $('.customer-currency').map(function(){
             this.innerHTML = "";
@@ -896,7 +949,7 @@ Invoicer - New Invoice
             // console.log(i);
             var newRowNumber = i-1;
             var inputItemCell = rows[i-2].getElementsByTagName("td")[0];
-            console.log(inputItemCell);
+            // console.log(inputItemCell);
             var inputData = inputItemCell.getElementsByTagName("input")[0].value;
             inputItemCell.innerHTML = "<td style='position: relative;'><input type='text' class='form-control' id='itemInput"+newRowNumber+"' onkeyup='searchItem("+newRowNumber+")' placeholder='' title='Type in a name' onclick='openItemBox("+newRowNumber+")' name='item"+newRowNumber+"'><div id='itemBox"+newRowNumber+"' class='item-box'><ul id='item-ul-"+newRowNumber+"' class='item-ul scroll-area' style='max-height: 200px; overflow-y: scroll;'>@foreach($items as $item)<li onclick='selectItem({{$loop->index}},"+newRowNumber+")'><div class='d-flex flex-row justify-content-between align-items-center'><span style='font-weight: 600;'>{{$item->name}}</span></div></li>@endforeach</ul><div class='d-none flex-row justify-content-center align-items-center py-3'><span style='font-weight: 600; color: #94a3b8;'>No item found!</span></div><div data-bs-toggle='modal' data-bs-target='#verticalycentered' class='d-flex flex-row justify-content-center align-items-center py-2' style='background-color: #e2e8f0; width: 100%; border-radius: 0px 0px 5px 5px; cursor: pointer;'><i class='bi bi-plus-circle text-primary' style='padding-right: 5px;'></i><span class='text-primary'>Add New Item</span></div></div></td>";
             inputItemCell.getElementsByTagName("input")[0].value = inputData;
