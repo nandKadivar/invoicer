@@ -449,7 +449,7 @@ Invoicer - New Invoice
                             </div>
                         </td>
                         <td>
-                            <input type="text" name="qty1" class="form-control">
+                            <input type="text" id="rate1" class="form-control">
                         </td>
                         <td><span id="taxableValue1">$ 0.00</span></td>
                         <td>
@@ -667,7 +667,8 @@ Invoicer - New Invoice
         var selectedCustomerBox = document.querySelector('.selected-customer-box');
         selectedCustomerBox.style.display = 'flex';
         
-        var customers = <?php echo json_encode($customers); ?>;
+        // var customers = <?php echo json_encode($customers); ?>;
+        var customers = {!! json_encode($customers) !!};
 
         console.log(customers[index]);
         document.querySelector('.selected_customer_name').innerHTML = customers[index].name;
@@ -698,10 +699,23 @@ Invoicer - New Invoice
     const selectItem = (index, row) => {
         // alert('Hiii');
         // console.log(row);
-        var items = <?php echo json_encode($items); ?>;
+        // var items = <?php echo json_encode($items); ?>;
+        var items = {!! json_encode($items) !!};
         console.log(items[index]);
         document.querySelector('#itemInput'+row).value = items[index].name;
         document.querySelector('#itemUnit'+row).innerHTML = items[index].unit.name;
+        document.querySelector('#qty'+row).value = 1;
+        document.querySelector('#rate'+row).value = items[index].price;
+        document.querySelector('#taxableValue'+row).innerHTML = items[index].price;
+
+        if(gst_type == 'CGST&SGST'){
+            document.querySelector('#sgst'+row).innerHTML = "("+items[index].gst/2+"%) "+((items[index].gst/2)*items[index].price)/100+"";
+            document.querySelector('#cgst'+row).innerHTML = "("+items[index].gst/2+"%) "+((items[index].gst/2)*items[index].price)/100+"";
+        }else{
+            document.querySelector('#igst'+row).innerHTML = "("+items[index].gst+"%) "+((items[index].gst)*items[index].price)/100+"";
+        }
+
+        document.querySelector('#total'+row).innerHTML = items[index].price + ((items[index].gst)*items[index].price)/100;
     }
 
     const deselect = () => {
@@ -710,6 +724,8 @@ Invoicer - New Invoice
         document.querySelector('.add-customer-box').style.display = 'flex';
         var selectedCustomerBox = document.querySelector('.selected-customer-box');
         selectedCustomerBox.style.display = 'none';
+
+        deleteTableRows();
     }
 
     const openCustomerBox = () => {
@@ -795,6 +811,26 @@ Invoicer - New Invoice
         cell7.innerHTML = "<td><span id='igst"+row.rowIndex+"'>(0%) $ 0.00</span></td>"
         cell8.innerHTML = "<td><span id='total"+row.rowIndex+"'>$ 0.00</span></td>"
         cell9.innerHTML = "<i class='bi bi-trash delete-row-btn' id='delete"+row.rowIndex+"' style='cursor :pointer;' onclick='deleteRow(" + row.rowIndex + ")'></i>";
+    }
+
+    const deleteTableRows = () => {
+        var table = document.querySelector(".items-table");
+        var tbody = table.getElementsByTagName("tbody")[0];
+        var rows = tbody.getElementsByTagName("tr");
+        
+        document.querySelector('#itemInput1').value = '';
+        document.querySelector('#itemUnit1').innerHTML = '';
+        document.querySelector('#qty1').value = '';
+        document.querySelector('#rate1').value = '';
+        document.querySelector('#taxableValue1').innerHTML = '0.00';
+        document.querySelector('#sgst1').innerHTML = '(0%) 0.00';
+        document.querySelector('#cgst1').innerHTML = '(0%) 0.00';
+        document.querySelector('#igst1').innerHTML = '(0%) 0.00';
+        document.querySelector('#total1').innerHTML = '0.00';
+
+        for(var i=2; i<= rows.length+1;i++){
+            table.deleteRow(i);
+        }
     }
 
     const deleteRow = (index) => {
