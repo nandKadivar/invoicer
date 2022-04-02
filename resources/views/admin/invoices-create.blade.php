@@ -636,11 +636,14 @@ Invoicer - New Invoice
                 var itemUnit = document.querySelector('#itemUnit'+i).innerHTML;
                 var itemQty = document.querySelector('#qty'+i).value;
                 var itemRate = document.querySelector('#rate'+i).value;
-
+                var itemTax = 0;
+                var itemTotal = parseFloat(document.querySelector('#total'+i).innerHTML);
                 if(gst_type == 'CGST&SGST'){
                     var gst_type = 'CGST&SGST';
+                    itemTax = parseFloat(document.querySelector('#sgstAmt'+i).innerHTML) + parseFloat(document.querySelector('#cgstAmt'+i).innerHTML);
                 }else{
                     var gst_type = 'IGST';
+                    itemTax = parseFloat(document.querySelector('#igstAmt'+i).innerHTML);
                 }
 
                 items.push({
@@ -648,7 +651,9 @@ Invoicer - New Invoice
                     name: itemName,
                     unit: itemUnit,
                     price: itemRate,
-                    gst_type: gst_type
+                    gst_type: gst_type,
+                    tax: itemTax,
+                    total: itemTotal
                 });
             }
 
