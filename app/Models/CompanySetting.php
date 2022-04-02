@@ -8,4 +8,39 @@ use Illuminate\Database\Eloquent\Model;
 class CompanySetting extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'company_id',
+        'option',
+        'value'
+    ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function scopeWhereCompany($query, $company_id)
+    {
+        $query->where('company_id', $company_id);
+    }
+
+    public static function getSetting($key, $company_id)
+    {
+        $setting = static::whereOption($key)->whereCompany($company_id)->first();
+
+        if ($setting) {
+            return $setting->value;
+        } else {
+            return null;
+        }
+    }
+
+    public static function getSettings($settings, $company_id)
+    {
+        return static::whereIn('option', $settings)->whereCompany($company_id)
+            ->get()->mapWithKeys(function ($item) {
+                return [$item['option'] => $item['value']];
+            });
+    }
 }

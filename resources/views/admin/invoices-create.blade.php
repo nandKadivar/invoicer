@@ -647,10 +647,11 @@ Invoicer - New Invoice
                 }
 
                 items.push({
-                    id: itemId,
+                    item_id: itemId,
                     name: itemName,
-                    unit: itemUnit,
+                    unit_name: itemUnit,
                     price: itemRate,
+                    quantity: itemQty,
                     gst_type: gst_type,
                     tax: itemTax,
                     total: itemTotal

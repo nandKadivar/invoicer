@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\CompanySetting;
+use App\Models\Customer;
+use App\Models\Invoice;
 
 class InvoicesRequest extends FormRequest
 {
@@ -41,10 +44,10 @@ class InvoicesRequest extends FormRequest
                 'nullable'
             ],
             'discount' => [
-                'required',
+                'nullable',
             ],
             'discount_val' => [
-                'required',
+                'nullable',
             ],
             'sub_total' => [
                 'required',
@@ -53,7 +56,7 @@ class InvoicesRequest extends FormRequest
                 'required',
             ],
             'tax' => [
-                'required',
+                'nullable',
             ],
             'template_name' => [
                 'nullable'
@@ -102,5 +105,33 @@ class InvoicesRequest extends FormRequest
         // }
 
         return $rules;
+    }
+
+    public function getInvoicePayload(){
+        $company_currency = CompanySetting::getSetting('currency', $this->company_id);
+        $current_currency = $this->currency_id;
+        $exchange_rate = $company_currency != $current_currency ? $this->exchange_rate : 1;
+        $currency = Customer::find($this->customer_id)->currency_id;
+
+        return collect($this->except('items', 'taxes'))
+            ->merge([
+                'creator_id' => $this->user()->id ?? null,
+                'status' => $this->has('invoiceSend') ? Invoice::STATUS_SENT : Invoice::STATUS_DRAFT,
+                'paid_status' => Invoice::STATUS_UNPAID,
+                'company_id' => $this->company_id,
+                // 'tax_per_item' => CompanySetting::getSetting('tax_per_item', $this->header('company')) ?? 'NO ',
+                'tax_per_item' => 'NO ',
+                // 'discount_per_item' => CompanySetting::getSetting('discount_per_item', $this->header('company')) ?? 'NO',
+                'discount_per_item' => 'NO',
+                'due_amount' => $this->total,
+                'exchange_rate' => $exchange_rate,
+                'base_total' => $this->total * $exchange_rate,
+                'base_discount_val' => $this->discount_val * $exchange_rate,
+                'base_sub_total' => $this->sub_total * $exchange_rate,
+                'base_tax' => $this->tax * $exchange_rate,
+                'base_due_amount' => $this->total * $exchange_rate,
+                'currency_id' => $currency,
+            ])
+            ->toArray();
     }
 }

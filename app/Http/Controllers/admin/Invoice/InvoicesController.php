@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Item;
 use App\Models\Unit;
 use App\Models\Invoice;
+use App\Http\Requests\InvoicesRequest;
 use App\Http\Resources\CustomerResource;
 use App\Http\Resources\ItemResource;
 
@@ -23,7 +24,7 @@ class InvoicesController extends Controller
         return view('admin.invoices');
     }
 
-    public function store(Request $request){
+    public function store(InvoicesRequest $request){
         // $request->creator_id = user()->id;
         // print_r($request->input('creator_id'));
         // echo $request->input('customer_id');
