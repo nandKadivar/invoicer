@@ -139,13 +139,39 @@ Invoicer - Invoices
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            @foreach($invoices as $invoice)
+                                <tr>
+                                    <th scope="row"><a href="/admin/invoices/view/{{$invoice->id}}" class="text-primary">#{{$invoice->invoice_number}}</a></th>
+                                    <td>{{$invoice->formatted_invoice_date}}</td>
+                                    <td>{{$invoice->customer->name}}</td>
+                                    <td>
+                                        @if($invoice->status == 'DRAFT')
+                                            <span class="badge bg-warning">DRAFT</span> 
+                                        @endif
+                                        @if($invoice->status == 'SENT')
+                                            <span class="badge bg-success">SENT</span> 
+                                        @endif
+                                        @if($invoice->paid_status == 'UNPAID')
+                                            <span class="badge bg-warning">UNPAID</span> 
+                                        @endif
+                                        @if($invoice->paid_status == 'PARTIALLY_PAID')
+                                            <span class="badge bg-primary">UNPAID</span> 
+                                        @endif
+                                        @if($invoice->paid_status == 'PAID')
+                                            <span class="badge bg-success">PAID</span> 
+                                        @endif
+                                    <td>{{$invoice->customer->currency->symbol}} {{$invoice->due_amount}}</td>
+                                    {{-- <td><span class="badge bg-warning">Unpaid</span></td> --}}
+                                    <td>{{$invoice->customer->currency->symbol}} {{$invoice->total}}</td>
+                                    <td>-</td>
+                                </tr>
+                            @endforeach
+                            {{-- <tr>
                                 <th scope="row"><a href="{{route('admin.invoices.view')}}" class="text-primary">#INV-000002</a></th>
                                 <td>13 Feb 2022</td>
                                 <td>At praesentium minu</td>
                                 <td><span class="badge bg-success">Sent</span> <span class="badge bg-warning">Unpaid</span></td>
                                 <td>$64</td>
-                                {{-- <td><span class="badge bg-warning">Unpaid</span></td> --}}
                                 <td>$150</td>
                                 <td>-</td>
                             </tr>
@@ -184,7 +210,7 @@ Invoicer - Invoices
                                 <td>$0</td>
                                 <td>$675</td>
                                 <td>-</td>
-                            </tr>
+                            </tr> --}}
                         </tbody>
                     </table>
                 </div>
@@ -206,7 +232,7 @@ Invoicer - Invoices
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row"><a href="{{route('admin.invoices.view')}}" class="text-primary">#INV-000008</a></th>
+                                <th scope="row"><a href="" class="text-primary">#INV-000013</a></th>
                                 <td>14 Feb 2022</td>
                                 <td>Blanditiis dolor omnis similique</a></td>
                                 <td><span class="badge bg-warning">Draft</span> <span class="badge bg-warning">Unpaid</span></td>
@@ -215,7 +241,7 @@ Invoicer - Invoices
                                 <td>-</td>
                             </tr>
                             <tr>
-                                <th scope="row"><a href="{{route('admin.invoices.view')}}" class="text-primary">#INV-000015</a></th>
+                                <th scope="row"><a href="" class="text-primary">#INV-000015</a></th>
                                 <td>04 Mar 2022</td>
                                 <td>Ut voluptatem id earum et</a></td>
                                 <td><span class="badge bg-warning">Draft</span> <span class="badge bg-warning">Unpaid</span></td>
@@ -244,7 +270,7 @@ Invoicer - Invoices
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row"><a href="{{route('admin.invoices.view')}}" class="text-primary">#INV-000002</a></th>
+                                <th scope="row"><a href="" class="text-primary">#INV-000002</a></th>
                                 <td>13 Feb 2022</td>
                                 <td>At praesentium minu</td>
                                 <td><span class="badge bg-success">Sent</span> <span class="badge bg-warning">Unpaid</span></td>
@@ -253,7 +279,7 @@ Invoicer - Invoices
                                 <td>-</td>
                             </tr>
                             <tr>
-                                <th scope="row"><a href="{{route('admin.invoices.view')}}" class="text-primary">#INV-000011</a></th>
+                                <th scope="row"><a href="" class="text-primary">#INV-000011</a></th>
                                 <td>14 Feb 2022</td>
                                 <td>At recusandae consectetur</a></td>
                                 <td><span class="badge bg-success">Sent</span> <span class="badge bg-primary">Partially paid</span></td>
@@ -282,7 +308,7 @@ Invoicer - Invoices
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row"><a href="{{route('admin.invoices.view')}}" class="text-primary">#INV-000002</a></th>
+                                <th scope="row"><a href="" class="text-primary">#INV-000002</a></th>
                                 <td>13 Feb 2022</td>
                                 <td>At praesentium minu</td>
                                 <td><span class="badge bg-success">Sent</span> <span class="badge bg-warning">Unpaid</span></td>
@@ -291,7 +317,7 @@ Invoicer - Invoices
                                 <td>-</td>
                             </tr>
                             <tr>
-                                <th scope="row"><a href="{{route('admin.invoices.view')}}" class="text-primary">#INV-000011</a></th>
+                                <th scope="row"><a href="" class="text-primary">#INV-000011</a></th>
                                 <td>14 Feb 2022</td>
                                 <td>At recusandae consectetur</a></td>
                                 <td><span class="badge bg-success">Sent</span> <span class="badge bg-primary">Partially paid</span></td>
@@ -300,7 +326,7 @@ Invoicer - Invoices
                                 <td>-</td>
                             </tr>
                             <tr>
-                                <th scope="row"><a href="{{route('admin.invoices.view')}}" class="text-primary">#INV-000021</a></th>
+                                <th scope="row"><a href="" class="text-primary">#INV-000021</a></th>
                                 <td>10 Apr 2022</td>
                                 <td>Sunt similique distinctio</a></td>
                                 <td><span class="badge bg-success">Sent</span> <span class="badge bg-success">Paid</span></td>

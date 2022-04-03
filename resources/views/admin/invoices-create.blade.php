@@ -479,7 +479,7 @@ Invoicer - New Invoice
                             <input type="text" id="discountValue" style="display: inline-block; width: 70px; padding: 6px 12px; border: 0; border-right: 1px solid rgb(226 232 240); " value="0" onkeypress="discountChange()" />
                             <select id="discountType" style="display: inline-block; width: 70px; padding: 6px 12px; border: 0; " onchange="discountChange()">
                                 <option class="customer-currency" value="fixed" selected>Fix</option>
-                                <option value="precentage">%</option>
+                                <option value="percentage">%</option>
                             </select>
                         </div>
                     </div>
@@ -639,10 +639,10 @@ Invoicer - New Invoice
                 var itemTax = 0;
                 var itemTotal = parseFloat(document.querySelector('#total'+i).innerHTML);
                 if(gst_type == 'CGST&SGST'){
-                    var gst_type = 'CGST&SGST';
+                    // var gst_type = 'CGST&SGST';
                     itemTax = parseFloat(document.querySelector('#sgstAmt'+i).innerHTML) + parseFloat(document.querySelector('#cgstAmt'+i).innerHTML);
                 }else{
-                    var gst_type = 'IGST';
+                    // var gst_type = 'IGST';
                     itemTax = parseFloat(document.querySelector('#igstAmt'+i).innerHTML);
                 }
 
@@ -658,7 +658,7 @@ Invoicer - New Invoice
                 });
             }
 
-            console.log(items);
+            // console.log(items);
 
             // console.log(items);
             const data = {
@@ -693,14 +693,16 @@ Invoicer - New Invoice
 
             // console.log(data);
 
-            let res = axios.post('http://127.0.0.1:8000/admin/invoices/new', data, {
+            axios.post('http://127.0.0.1:8000/admin/invoices/new', data, {
                 headers: { 
                 'Content-Type': 'application/json',
                 // 'X-CSRF-TOKEN': token.content,
                 'X-Requested-With': 'XMLHttpRequest',
                 }
             }).then(function(res){
-                console.log(res);
+                const { invoice, id } = res.data;
+                // console.log(invoice);
+                window.location.href = "http://127.0.0.1:8000/admin/invoices/view/"+id;
             });
         });
     // });

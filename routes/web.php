@@ -16,6 +16,10 @@ use App\Http\Controllers\Admin\Report\ReportsController;
 use App\Http\Controllers\Admin\Setting\SettingsController;
 use App\Http\Controllers\installation\RequirementsController;
 use App\Models\Unit;
+use App\Models\Invoice;
+use App\Models\Company;
+use App\Http\Resources\InvoiceResource;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1717,9 +1721,18 @@ Route::get('/admin/invoices', [InvoicesController::class, 'index'])->name('admin
 // })->name('admin.invoices.create')->middleware('auth');
 Route::get('/admin/invoices/new', [InvoicesController::class, 'newInvoicePage'])->name('admin.invoices.create')->middleware('auth');
 Route::post('/admin/invoices/new', [InvoicesController::class, 'store'])->name('admin.invoices.store')->middleware('auth');
-Route::get('/admin/invoices/view', function(){
-    return view('admin.invoices-view');
+Route::get('/admin/invoices/view/{id}', function($id){
+    $invoices = Invoice::with(['items','customer','creator','company'])->where('company_id',1)->orderBy('id','desc')->get();
+    // $invoices = InvoiceResource::collection($invoices);
+    $Selectedinvoice = Invoice::with(['items','customer','creator','company'])->findOrFail($id);
+    // $temp = json_encode($invoices);
+    return view('admin.invoices-view', ['invoices'=>$invoices, 'id' => $id, 'selectedInvoice' => $Selectedinvoice]);
 })->name('admin.invoices.view')->middleware('auth');
+Route::post('/admin/invoices/send', [InvoicesController::class, 'sendInvoice'])->name('admin.invoices.send')->middleware('auth');
+Route::post('/admin/invoices/markSend', [InvoicesController::class, 'markSend'])->name('admin.invoices.markSend')->middleware('auth');
+Route::post('/admin/invoices/delete', [InvoicesController::class, 'delete'])->name('admin.invoices.delete')->middleware('auth');
+// Route::get('/admin/invoices/view',[InvoicesController::class, 'viewInvoicePage'])->name('admin.invoices.view')->middleware('auth');
+// Route::get('/admin/invoices/{id}', [InvoicesController::class, 'viewInvoicePage'])->name('admin.invoices.view')->middleware('auth');
 Route::get('/admin/recurring-invoices', [RecurringInvoicesController::class, 'index'])->name('admin.recurring-invoices')->middleware('auth');
 Route::get('/admin/payments', [PaymentsController::class, 'index'])->name('admin.payments')->middleware('auth');
 Route::get('/admin/payments/new', function(){
@@ -1737,3 +1750,12 @@ Route::get('/admin/expenses', [ExpensesController::class, 'index'])->name('admin
 Route::get('/admin/users', [UsersController::class, 'index'])->name('admin.users')->middleware('auth');
 Route::get('/admin/reports', [ReportsController::class, 'index'])->name('admin.reports')->middleware('auth');
 Route::get('/admin/settings', [SettingsController::class, 'index'])->name('admin.settings')->middleware('auth');
+
+Route::get('/invoices/pdf/{id}', function($id){
+    $path = public_path('invoice/'.$id.'/temp.pdf');
+    if(file_exists($path)){
+        return response()->file($path);
+    }else{
+        abort(404);
+    }
+})->middleware('auth');

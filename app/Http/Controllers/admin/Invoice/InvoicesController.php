@@ -10,18 +10,27 @@ use App\Models\Unit;
 use App\Models\Invoice;
 use App\Http\Requests\InvoicesRequest;
 use App\Http\Resources\CustomerResource;
+use App\Http\Resources\InvoiceResource;
 use App\Http\Resources\ItemResource;
+use App\Jobs\GenerateInvoicePdfJob;
 
 class InvoicesController extends Controller
 {
     public function index(){
         // $customers = Customer::where('company_id', 1)->get();
-
+        $invoices = Invoice::with(['items','customer','creator','company'])->where('company_id',1)->get();
         // $customers = new CustomerResource($customers);
+        $invoices = InvoiceResource::collection($invoices);
+        // print_r($invoices[0]->items[0]->gst_type);
 
-        // print_r($customers[0]->shippingAddress->name);
+        return view('admin.invoices',['invoices'=>$invoices]);
+    }
 
-        return view('admin.invoices');
+    public function viewInvoicePage(){
+        $invoices = Invoice::with(['items','customer','creator','company'])->where('company_id',1)->get();
+        $invoices = InvoiceResource::collection($invoices);
+        
+        return view('admin.invoices-view', ['invoices'=>$invoices]);
     }
 
     public function store(InvoicesRequest $request){
@@ -38,6 +47,12 @@ class InvoicesController extends Controller
         //     'user' => 'Nand',
         //     'message' => 'Success'
         //   ], 200);
+        GenerateInvoicePdfJob::dispatch($invoice);
+        // print_r($invoice);
+        return response()->json([
+            'invoice' => $invoice,
+            'id' => $invoice->id 
+        ], 200); 
     }
 
     public function newInvoicePage(){
@@ -53,5 +68,40 @@ class InvoicesController extends Controller
         $customers = CustomerResource::collection($customers);
         
         return view('admin.invoices-create',['customers' => $customers, 'items' => $items]);
+    }
+
+    public function sendInvoice(Request $request){
+        $invoice = Invoice::findOrFail($request->invoice_id);
+
+        // print_r($request->all());
+        $invoice->send($request->all());
+
+    }
+
+    public function markSend(Request $request){
+        // print_r($request->all());
+        $invoice = Invoice::findOrFail($request->id);
+        
+        $invoice->sent = 1;
+        $invoice->status = 'SENT';
+
+        $invoice->save();
+
+        return response()->json([
+            'success' => true
+        ], 200);
+
+    }
+
+    public function delete(Request $request)
+    {
+        // $this->authorize('delete multiple invoices');
+        // print_r($request->all());
+        Invoice::deleteInvoice($request->id);
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Invoice deleted successfully'
+        ]);
     }
 }
