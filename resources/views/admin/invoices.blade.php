@@ -231,7 +231,33 @@ Invoicer - Invoices
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            @foreach($invoices as $invoice)
+                                @if($invoice->status == 'DRAFT')
+                                    <tr>
+                                        <th scope="row"><a href="/admin/invoices/view/{{$invoice->id}}" class="text-primary">#{{$invoice->invoice_number}}</a></th>
+                                        <td>{{$invoice->formatted_invoice_date}}</td>
+                                        <td>{{$invoice->customer->name}}</td>
+                                        <td>
+                                            
+                                            <span class="badge bg-warning">DRAFT</span> 
+                                            
+                                            @if($invoice->paid_status == 'UNPAID')
+                                                <span class="badge bg-warning">UNPAID</span> 
+                                            @endif
+                                            @if($invoice->paid_status == 'PARTIALLY_PAID')
+                                                <span class="badge bg-primary">UNPAID</span> 
+                                            @endif
+                                            @if($invoice->paid_status == 'PAID')
+                                                <span class="badge bg-success">PAID</span> 
+                                            @endif
+                                        <td>{{$invoice->customer->currency->symbol}} {{$invoice->due_amount}}</td>
+                                        {{-- <td><span class="badge bg-warning">Unpaid</span></td> --}}
+                                        <td>{{$invoice->customer->currency->symbol}} {{$invoice->total}}</td>
+                                        <td>-</td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                            {{-- <tr>
                                 <th scope="row"><a href="" class="text-primary">#INV-000013</a></th>
                                 <td>14 Feb 2022</td>
                                 <td>Blanditiis dolor omnis similique</a></td>
@@ -248,7 +274,7 @@ Invoicer - Invoices
                                 <td>$67</td>
                                 <td>$514</td>
                                 <td>-</td>
-                            </tr>
+                            </tr> --}}
                         </tbody>
                     </table>
                 </div>
@@ -269,7 +295,36 @@ Invoicer - Invoices
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            @foreach($invoices as $invoice) 
+                                @if(strtotime($invoice->due_date) < strtotime(date('Y-m-d')))
+                                    <tr>
+                                        <th scope="row"><a href="/admin/invoices/view/{{$invoice->id}}" class="text-primary">#{{$invoice->invoice_number}}</a></th>
+                                        <td>{{$invoice->formatted_invoice_date}}</td>
+                                        <td>{{$invoice->customer->name}}</td>
+                                        <td>
+                                            @if($invoice->status == 'DRAFT')
+                                                <span class="badge bg-warning">DRAFT</span> 
+                                            @endif
+                                            @if($invoice->status == 'SENT')
+                                                <span class="badge bg-success">SENT</span> 
+                                            @endif
+                                            @if($invoice->paid_status == 'UNPAID')
+                                                <span class="badge bg-warning">UNPAID</span> 
+                                            @endif
+                                            @if($invoice->paid_status == 'PARTIALLY_PAID')
+                                                <span class="badge bg-primary">UNPAID</span> 
+                                            @endif
+                                            @if($invoice->paid_status == 'PAID')
+                                                <span class="badge bg-success">PAID</span> 
+                                            @endif
+                                        <td>{{$invoice->customer->currency->symbol}} {{$invoice->due_amount}}</td>
+                                        {{-- <td><span class="badge bg-warning">Unpaid</span></td> --}}
+                                        <td>{{$invoice->customer->currency->symbol}} {{$invoice->total}}</td>
+                                        <td>-</td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                            {{-- <tr>
                                 <th scope="row"><a href="" class="text-primary">#INV-000002</a></th>
                                 <td>13 Feb 2022</td>
                                 <td>At praesentium minu</td>
@@ -286,7 +341,7 @@ Invoicer - Invoices
                                 <td>$25</td>
                                 <td>$125</td>
                                 <td>-</td>
-                            </tr>
+                            </tr> --}}
                         </tbody>
                     </table>
                 </div>
