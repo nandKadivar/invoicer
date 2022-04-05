@@ -155,7 +155,7 @@ Invoicer - Invoices
                                             <span class="badge bg-warning">UNPAID</span> 
                                         @endif
                                         @if($invoice->paid_status == 'PARTIALLY_PAID')
-                                            <span class="badge bg-primary">UNPAID</span> 
+                                            <span class="badge bg-primary">PARTIALLY PAID</span> 
                                         @endif
                                         @if($invoice->paid_status == 'PAID')
                                             <span class="badge bg-success">PAID</span> 

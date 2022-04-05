@@ -92,7 +92,7 @@ Invoicer - Payments
       <h1>Payments</h1>
       <nav class="d-flex flex-row justify-content-between align-items-center">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
           <li class="breadcrumb-item active">Payments</li>
           <!-- <li class="breadcrumb-item active">Contact</li> -->
         </ol>

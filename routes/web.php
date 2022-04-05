@@ -1744,12 +1744,25 @@ Route::post('/admin/invoices/delete', [InvoicesController::class, 'delete'])->na
 Route::get('/admin/recurring-invoices', [RecurringInvoicesController::class, 'index'])->name('admin.recurring-invoices')->middleware('auth');
 Route::get('/admin/payments', [PaymentsController::class, 'index'])->name('admin.payments')->middleware('auth');
 Route::get('/admin/payments/new', function(){
-    return view('admin.payments-create');
+    $customers = Customer::with(['invoices','currency','creator','company'])->where('company_id',1)->get();
+    $invoices = Invoice::with(['items','customer','creator','company'])->where('company_id',1)->get();
+    $paymentModes = [
+        ['id' => 1,'name' => 'Cash'],
+        ['id' => 2,'name' => 'Check'],
+        ['id' => 3,'name' => 'Bank Transfer']
+    ];
+    return view('admin.payments-create',['customers' => $customers, 'invoices' => $invoices, 'paymentModes' => $paymentModes]);
 })->name('admin.payments.create')->middleware('auth');
-Route::get('/admin/payments/view', function(){
+Route::post('/admin/payments/new', [PaymentsController::class, 'store'])->name('admin.payments.store')->middleware('auth');
+// Route::get('/admin/payments/view', function(){
+//     return view('admin.payments-view');
+// })->name('admin.payments.view')->middleware('auth');
+Route::get('/admin/payments/view/{id}', function($id){
+    // $invoices = Invoice::with(['items','customer','creator','company'])->where('company_id',1)->orderBy('id','desc')->get();
+    // $Selectedinvoice = Invoice::with(['items','customer','creator','company'])->findOrFail($id);
+    // return view('admin.payments-view', ['invoices'=>$invoices, 'id' => $id, 'selectedInvoice' => $Selectedinvoice]);
     return view('admin.payments-view');
-})->name('admin.payments.view')->middleware('auth');
-
+})->name('admin.invoices.view')->middleware('auth');
 Route::get('/admin/expenses/new', function(){
     return view('admin.expenses-create');
 })->name('admin.expenses.create')->middleware('auth');

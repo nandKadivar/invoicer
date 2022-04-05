@@ -4,10 +4,52 @@ namespace App\Http\Controllers\Admin\Payment;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Invoice;
+use App\Models\Payment;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class PaymentsController extends Controller
 {
     public function index(){
         return view('admin.payments');
+    }
+
+    public function store(Request $request){
+        $invoice = Invoice::findOrFail($request->invoice_id);
+        
+        $amount = $request->amount;
+        $exchangeRate = $invoice->exchange_rate;
+        $currencyId = $invoice->currency_id;
+        
+        $request->merge([
+            'creator_id' => Auth::user()->id,
+            'exchange_rate' => $exchangeRate,
+            'base_amount' => $amount*$exchangeRate,
+            'currency_id' => $currencyId
+        ]);
+
+        $payment = Payment::create($request->all());
+
+        $payment->unique_hash = Hash::make($payment->id);
+        $payment->save();
+
+        if($invoice->due_amount == $amount){
+            $invoice->paid_status = 'PAID';
+        }elseif(($amount > 0) && ($invoice->due_amount < $amount)){
+            $invoice->paid_status = 'PARTIALLY_PAID';
+        }else{
+            $invoice->paid_status = 'UNPAID';
+        }
+
+        $invoice->due_amount = $invoice->due_amount - $amount;
+        $invoice->base_due_amount = $invoice->base_due_amount - $amount*$exchangeRate;
+
+        $invoice->save();
+        // print_r($request->all());
+        return response()->json([
+            'payment' => $payment,
+            'id' => $payment->id 
+        ], 200);
     }
 }
