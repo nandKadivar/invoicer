@@ -129,6 +129,7 @@ Invoicer - Invoices
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
+                                <th scope="col">Invoice Number</th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Customer</th>
                                 <th scope="col">Status</th>
@@ -141,7 +142,8 @@ Invoicer - Invoices
                         <tbody>
                             @foreach($invoices as $invoice)
                                 <tr>
-                                    <th scope="row"><a href="/admin/invoices/view/{{$invoice->id}}" class="text-primary">#{{$invoice->invoice_number}}</a></th>
+                                    <th scope="row">#{{$loop->iteration}}</th>
+                                    <td><a href="/admin/invoices/view/{{$invoice->id}}" class="text-primary">{{$invoice->invoice_number}}</a></td>
                                     <td>{{$invoice->formatted_invoice_date}}</td>
                                     <td>{{$invoice->customer->name}}</td>
                                     <td>
@@ -222,6 +224,7 @@ Invoicer - Invoices
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
+                                <th scope="col">Invoice Number</th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Customer</th>
                                 <th scope="col">Status</th>
@@ -231,10 +234,14 @@ Invoicer - Invoices
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $i = 1;    
+                            @endphp
                             @foreach($invoices as $invoice)
                                 @if($invoice->status == 'DRAFT')
                                     <tr>
-                                        <th scope="row"><a href="/admin/invoices/view/{{$invoice->id}}" class="text-primary">#{{$invoice->invoice_number}}</a></th>
+                                        <th scope="row">#{{$i++}}</th>
+                                        <td><a href="/admin/invoices/view/{{$invoice->id}}" class="text-primary">{{$invoice->invoice_number}}</a></td>
                                         <td>{{$invoice->formatted_invoice_date}}</td>
                                         <td>{{$invoice->customer->name}}</td>
                                         <td>
@@ -286,6 +293,7 @@ Invoicer - Invoices
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
+                                <th scope="col">Invoice Number</th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Customer</th>
                                 <th scope="col">Status</th>
@@ -295,10 +303,14 @@ Invoicer - Invoices
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $i = 1;    
+                            @endphp
                             @foreach($invoices as $invoice) 
                                 @if(strtotime($invoice->due_date) < strtotime(date('Y-m-d')))
                                     <tr>
-                                        <th scope="row"><a href="/admin/invoices/view/{{$invoice->id}}" class="text-primary">#{{$invoice->invoice_number}}</a></th>
+                                        <th scope="row">#{{$i++}}</th>
+                                        <td><a href="/admin/invoices/view/{{$invoice->id}}" class="text-primary">{{$invoice->invoice_number}}</a></td>
                                         <td>{{$invoice->formatted_invoice_date}}</td>
                                         <td>{{$invoice->customer->name}}</td>
                                         <td>
@@ -353,6 +365,7 @@ Invoicer - Invoices
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
+                                <th scope="col">Invoice Number</th>
                                 <th scope="col">Date</th>
                                 <th scope="col">Customer</th>
                                 <th scope="col">Status</th>
@@ -362,7 +375,35 @@ Invoicer - Invoices
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            @php
+                                $i = 1;    
+                            @endphp
+                            @foreach($invoices as $invoice)
+                                @if($invoice->sent == 1 && $invoice->status == 'SENT')
+                                    <tr>
+                                        <th scope="row">#{{$i++}}</th>
+                                        <td><a href="/admin/invoices/view/{{$invoice->id}}" class="text-primary">{{$invoice->invoice_number}}</a></td>
+                                        <td>{{$invoice->formatted_invoice_date}}</td>
+                                        <td>{{$invoice->customer->name}}</td>
+                                        <td>
+                                            <span class="badge bg-success">SENT</span> 
+                                            @if($invoice->paid_status == 'UNPAID')
+                                                <span class="badge bg-warning">UNPAID</span> 
+                                            @endif
+                                            @if($invoice->paid_status == 'PARTIALLY_PAID')
+                                                <span class="badge bg-primary">PARTIALLY PAID</span> 
+                                            @endif
+                                            @if($invoice->paid_status == 'PAID')
+                                                <span class="badge bg-success">PAID</span> 
+                                            @endif
+                                        <td>{{$invoice->customer->currency->symbol}} {{$invoice->due_amount}}</td>
+                                        {{-- <td><span class="badge bg-warning">Unpaid</span></td> --}}
+                                        <td>{{$invoice->customer->currency->symbol}} {{$invoice->total}}</td>
+                                        <td>-</td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                            {{-- <tr>
                                 <th scope="row"><a href="" class="text-primary">#INV-000002</a></th>
                                 <td>13 Feb 2022</td>
                                 <td>At praesentium minu</td>
@@ -370,8 +411,8 @@ Invoicer - Invoices
                                 <td>$64</td>
                                 <td>$150</td>
                                 <td>-</td>
-                            </tr>
-                            <tr>
+                            </tr> --}}
+                            {{-- <tr>
                                 <th scope="row"><a href="" class="text-primary">#INV-000011</a></th>
                                 <td>14 Feb 2022</td>
                                 <td>At recusandae consectetur</a></td>
@@ -379,8 +420,8 @@ Invoicer - Invoices
                                 <td>$25</td>
                                 <td>$125</td>
                                 <td>-</td>
-                            </tr>
-                            <tr>
+                            </tr> --}}
+                            {{-- <tr>
                                 <th scope="row"><a href="" class="text-primary">#INV-000021</a></th>
                                 <td>10 Apr 2022</td>
                                 <td>Sunt similique distinctio</a></td>
@@ -388,7 +429,7 @@ Invoicer - Invoices
                                 <td>$0</td>
                                 <td>$675</td>
                                 <td>-</td>
-                            </tr>
+                            </tr> --}}
                         </tbody>
                     </table>
                 </div>

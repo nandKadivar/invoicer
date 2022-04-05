@@ -115,7 +115,7 @@ Invoicer - View Invoice
               <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                   <li style='cursor: pointer;'><a class="dropdown-item"><i class="bi bi-pencil"></i> Edit</a></li>
                   <li style='cursor: pointer;' onclick="copyPdfUrl()"><a class="dropdown-item"><i class="bi bi-link-45deg"></i> Copy PDF Url</a></li>
-                  <li style='cursor: pointer;' onclick="deleteInvoice()"><a class="dropdown-item"><i class="bi bi-trash"></i> Delete</a></li>
+                  <li style='cursor: pointer;' onclick="deletePayment()"><a class="dropdown-item"><i class="bi bi-trash"></i> Delete</a></li>
               </ul>
           </div>
           {{-- <div class="btn-group">
@@ -244,7 +244,7 @@ Invoicer - View Invoice
     }
   
   // });
-    const deleteInvoice = () => {
+    const deletePayment = () => {
       const data = {id: id};
       axios.post('http://127.0.0.1:8000/admin/payments/delete', data,{
         headers: { 

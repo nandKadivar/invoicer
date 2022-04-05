@@ -124,9 +124,9 @@ Invoicer - Payments
           <table class="table table-borderless datatable">
             <thead>
               <tr>
-                <th scope="col">#</th>
+                <th scope="col"># </th>
+                <th scope="col">Payment Number</th>
                 <th scope="col">Date</th>
-                {{-- <th scope="col">Payment Number</th> --}}
                 <th scope="col">Customer</th>
                 <th scope="col">Payment Mode</th>
                 <th scope="col">Invoice Number</th>
@@ -136,11 +136,12 @@ Invoicer - Payments
             <tbody>
               @foreach($payments as $payment)
                 <tr>
-                  <th scope="row"><a href="/admin/payments/view/{{$payment->id}}" class="text-primary">#{{$payment->payment_number}}</a></th>
+                  <th scope="row">#{{$loop->iteration}}</th>
+                  <td><a href="/admin/payments/view/{{$payment->id}}" class="text-primary">{{$payment->payment_number}}</a></td>
                   <td>{{$payment->formattedPaymentDate}}</td>
                   <td>{{$payment->customer->name}}</td>
                   <td>{{$payment->paymentMethod->name}}</td>
-                  <td>{{$payment->invoice->invoice_number}}</td>
+                  <td><a href="/admin/invoices/view/{{$payment->invoice->id}}" class="text-primary">{{$payment->invoice->invoice_number}}</a></td>
                   <td>{{$payment->currency->symbol}} {{$payment->amount}}</td>
                 </tr>
               @endforeach
