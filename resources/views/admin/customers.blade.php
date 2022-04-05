@@ -129,8 +129,16 @@ Invoicer - Customers
                             <th scope="row"><a href="#">#{{$loop->iteration}}</a></th>
                             <td><a href="/admin/customers/{{$customer->id}}" class="text-primary">{{$customer->name}}</a><br/><span style="font-size:  14px;color: #94a3b8;">{{$customer->contact_name}}</span></td>
                             <td>{{$customer->phone}}</td>
-                            <td>15,074.20</td>
-                            <td>{{$customer->updated_at}}</td>
+                            <td>
+                                @php
+                                    $total = 0.0;
+                                    foreach($customer->invoices as $invoice){
+                                        $total =  $total + (float)($invoice->due_amount);
+                                    }
+                                    echo $customer->currency->symbol." ".$total;
+                                @endphp
+                            </td>
+                            <td>{{$customer->formattedCreatedAt}}</td>
                         </tr>
                       @endforeach
                       {{-- @php

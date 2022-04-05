@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Customer extends Model
 {
@@ -12,6 +13,17 @@ class Customer extends Model
     protected $guarded = [
         'id'
     ];
+
+    protected $appends = [
+        'formattedCreatedAt',
+    ];
+
+    public function getFormattedCreatedAtAttribute($value)
+    {
+        $dateFormat = CompanySetting::getSetting('carbon_date_format', $this->company_id);
+
+        return Carbon::parse($this->created_at)->format($dateFormat);
+    }
 
     public function addresses(){
 
@@ -31,6 +43,11 @@ class Customer extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
     }
 
     public function billingAddress()

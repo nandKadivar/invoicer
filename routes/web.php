@@ -18,6 +18,7 @@ use App\Http\Controllers\installation\RequirementsController;
 use App\Models\Unit;
 use App\Models\Invoice;
 use App\Models\Company;
+use App\Models\Customer;
 use App\Http\Resources\InvoiceResource;
 
 /*
@@ -1703,8 +1704,15 @@ Route::get('/admin/customers/new', function(){
     return view('admin.customers-create',['currencies'=> $currencies, 'countries' => $countries]);
 })->name('admin.customers.create')->middleware('auth');
 Route::post('/admin/customers/new', [CustomersController::class, 'store'])->name('admin.customers.store')->middleware('auth');
+// Route::get('/admin/customers/{id}', function($id){
+//     return view('admin.customers-view',['id' => $id]);
+// })->name('admin.customers.view')->middleware('auth');
 Route::get('/admin/customers/{id}', function($id){
-    return view('admin.customers-view',['id' => $id]);
+    $customers = Customer::with(['invoices','currency','creator','company'])->where('company_id',1)->orderBy('id','desc')->get();
+    // $invoices = InvoiceResource::collection($invoices);
+    $Selectedcustomer = Customer::with(['invoices','currency','creator','company'])->findOrFail($id);
+    // $temp = json_encode($invoices);
+    return view('admin.customers-view', ['customers'=>$customers, 'id' => $id, 'selectedCustomer' => $Selectedcustomer]);
 })->name('admin.customers.view')->middleware('auth');
 Route::get('/admin/items', [ItemsController::class, 'index'])->name('admin.items')->middleware('auth');
 Route::get('/admin/items/new', function(){
