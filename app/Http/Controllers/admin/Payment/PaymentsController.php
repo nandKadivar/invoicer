@@ -13,7 +13,10 @@ use App\Jobs\GeneratePaymentPdfJob;
 class PaymentsController extends Controller
 {
     public function index(){
-        return view('admin.payments');
+        
+        $payments = Payment::with(['customer','company','invoice','creator','currency','paymentMethod'])->where('company_id',1)->get();
+        
+        return view('admin.payments', ['payments' => $payments]);
     }
 
     public function store(Request $request){

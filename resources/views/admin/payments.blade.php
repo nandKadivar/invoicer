@@ -126,7 +126,7 @@ Invoicer - Payments
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Date</th>
-                <th scope="col">Payment Number</th>
+                {{-- <th scope="col">Payment Number</th> --}}
                 <th scope="col">Customer</th>
                 <th scope="col">Payment Mode</th>
                 <th scope="col">Invoice Number</th>
@@ -134,7 +134,17 @@ Invoicer - Payments
               </tr>
             </thead>
             <tbody>
-              <tr>
+              @foreach($payments as $payment)
+                <tr>
+                  <th scope="row"><a href="/admin/payments/view/{{$payment->id}}" class="text-primary">#{{$payment->payment_number}}</a></th>
+                  <td>{{$payment->formattedPaymentDate}}</td>
+                  <td>{{$payment->customer->name}}</td>
+                  <td>{{$payment->paymentMethod->name}}</td>
+                  <td>{{$payment->invoice->invoice_number}}</td>
+                  <td>{{$payment->currency->symbol}} {{$payment->amount}}</td>
+                </tr>
+              @endforeach
+              {{-- <tr>
                 <th scope="row"><a href="#">#1</a></th>
                 <td>12 Feb 2022</td>
                 <td><a href="#" class="text-primary">PAY-00001</a></td>
@@ -196,7 +206,7 @@ Invoicer - Payments
                 <td>Cash</td>
                 <td>INV-00001</td>
                 <td><i class="fa fa-rupee"></i>&nbsp19999</td>
-              </tr>
+              </tr> --}}
 
             </tbody>
           </table>
