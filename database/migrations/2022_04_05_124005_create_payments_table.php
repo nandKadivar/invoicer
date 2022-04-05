@@ -30,6 +30,10 @@ class CreatePaymentsTable extends Migration
             $table->unsignedBigInteger('base_amount')->nullable();
             $table->unsignedInteger('currency_id')->nullable();
             $table->foreign('currency_id')->references('id')->on('currencies');
+		    $table->integer('payment_method_id')->unsigned()->nullable();
+            $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');
+            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->foreign('customer_id')->references('id')->on('customers');
             $table->timestamps();
         });
     }

@@ -8,6 +8,7 @@ use App\Models\Invoice;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Jobs\GeneratePaymentPdfJob;
 
 class PaymentsController extends Controller
 {
@@ -32,11 +33,12 @@ class PaymentsController extends Controller
         $payment = Payment::create($request->all());
 
         $payment->unique_hash = Hash::make($payment->id);
+        $paymentId = $payment->id;
         $payment->save();
 
         if($invoice->due_amount == $amount){
             $invoice->paid_status = 'PAID';
-        }elseif(($amount > 0) && ($invoice->due_amount < $amount)){
+        }elseif(($amount > 0) && ($invoice->due_amount > $amount)){
             $invoice->paid_status = 'PARTIALLY_PAID';
         }else{
             $invoice->paid_status = 'UNPAID';
@@ -47,9 +49,13 @@ class PaymentsController extends Controller
 
         $invoice->save();
         // print_r($request->all());
+
+        GeneratePaymentPdfJob::dispatch($payment);
+        
         return response()->json([
             'payment' => $payment,
-            'id' => $payment->id 
+            'id' => $paymentId
         ], 200);
+        
     }
 }

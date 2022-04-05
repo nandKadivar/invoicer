@@ -4,7 +4,7 @@ namespace App\Traits;
 
 trait GeneratesPdfTrait{
     
-    public function generatePDF($collection_name, $file_name, $deleteExistingFile = flase){
+    public function generatePDF($collection_name, $file_name, $deleteExistingFile = false){
         $pdf = $this->getPDFData();
 
         \Storage::disk('local')->put('temp/'.$collection_name.'/'.$this->id.'/temp.pdf', $pdf->output());

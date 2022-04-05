@@ -19,6 +19,7 @@ use App\Models\Unit;
 use App\Models\Invoice;
 use App\Models\Company;
 use App\Models\Customer;
+use App\Models\Payment;
 use App\Http\Resources\InvoiceResource;
 
 /*
@@ -1758,10 +1759,11 @@ Route::post('/admin/payments/new', [PaymentsController::class, 'store'])->name('
 //     return view('admin.payments-view');
 // })->name('admin.payments.view')->middleware('auth');
 Route::get('/admin/payments/view/{id}', function($id){
-    // $invoices = Invoice::with(['items','customer','creator','company'])->where('company_id',1)->orderBy('id','desc')->get();
+    $payments = Payment::where('company_id',1)->orderBy('id','desc')->get();
+    $Selectedpayment = Payment::findOrFail($id);
     // $Selectedinvoice = Invoice::with(['items','customer','creator','company'])->findOrFail($id);
-    // return view('admin.payments-view', ['invoices'=>$invoices, 'id' => $id, 'selectedInvoice' => $Selectedinvoice]);
-    return view('admin.payments-view');
+    return view('admin.payments-view', ['payments'=>$payments, 'id' => $id, 'selectedPayment' => $Selectedpayment]);
+    // return view('admin.payments-view');
 })->name('admin.invoices.view')->middleware('auth');
 Route::get('/admin/expenses/new', function(){
     return view('admin.expenses-create');
@@ -1774,6 +1776,15 @@ Route::get('/admin/settings', [SettingsController::class, 'index'])->name('admin
 
 Route::get('/invoices/pdf/{id}', function($id){
     $path = public_path('invoice/'.$id.'/temp.pdf');
+    if(file_exists($path)){
+        return response()->file($path);
+    }else{
+        abort(404);
+    }
+})->middleware('auth');
+
+Route::get('/payments/pdf/{id}', function($id){
+    $path = public_path('payment/'.$id.'/temp.pdf');
     if(file_exists($path)){
         return response()->file($path);
     }else{

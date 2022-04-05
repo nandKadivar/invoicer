@@ -234,6 +234,7 @@ Invoicer - Payments
     var selectedCustomerIndex=0;
     var customers = {!! json_encode($customers) !!};
     var selectedCustomer;
+    var selectedCustomerId;
     var customerSelected = false;
     var selectedInvoiceId;
     var selectedPaymentModeId = 1;
@@ -250,6 +251,7 @@ Invoicer - Payments
         amount: document.querySelector('#amount').value,
         invoice_id: selectedInvoiceId,
         company_id: 1,
+        customer_id: selectedCustomerId,
         payment_method_id: selectedPaymentModeId
       };
 
@@ -270,6 +272,7 @@ Invoicer - Payments
       document.querySelector('#customerInput').value = customers[index].name;
       selectedCustomerIndex = index;
       selectedCustomer = customers[index];
+      selectedCustomerId = customers[index].id;
       customerSelected = true;
       document.querySelector('#invoiceInput').value = '';
       document.querySelector('#amount').value = '';
