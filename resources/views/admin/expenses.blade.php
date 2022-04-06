@@ -92,7 +92,7 @@ Invoicer - Expenses
       <h1>Expenses</h1>
       <nav class="d-flex flex-row justify-content-between align-items-center">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
           <li class="breadcrumb-item active">Expenses</li>
           <!-- <li class="breadcrumb-item active">Contact</li> -->
         </ol>
@@ -133,24 +133,20 @@ Invoicer - Expenses
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row"><a href="#">#1</a></th>
-                <td>21 Feb 2022</td>
-                <td><a href="#" class="text-primary">Transport</a></td>
-                <td>Patel Steels Limited</td>
-                <td>Cash</td>
-                <td><i class="fa fa-rupee"></i>&nbsp500</td>
-              </tr>
-              <tr>
-                <th scope="row"><a href="#">#2</a></th>
-                <td>20 Feb 2022</td>
-                <td><a href="#" class="text-primary">Custom</a></td>
-                <td>ABP Securities Ltd</td>
-                <td>Cheque</td>
-                <td><i class="fa fa-rupee"></i>&nbsp2500</td>
-              </tr>
-              
-
+              @foreach($expenses as $expense)
+                <tr>
+                  <th scope="row"><a href="#">#{{$loop->iteration}}</a></th>
+                  <td>{{$expense->formattedExpenseDate}}</td>
+                  <td><a href="/admin/expenses/1/edit" class="text-primary">{{$expense->category->name}}</a></td>
+                  <td>{{$expense->customer->name}}</td>
+                  <td>
+                    @php
+                      echo $expense->notes;
+                    @endphp
+                  </td>
+                  <td><i class="fa fa-rupee"></i>{{$expense->currency->symbol}}{{$expense->amount}}</td>
+                </tr>
+              @endforeach
             </tbody>
           </table>
 

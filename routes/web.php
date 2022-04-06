@@ -11,16 +11,21 @@ use App\Http\Controllers\Admin\Invoice\InvoicesController;
 use App\Http\Controllers\Admin\RecurringInvoice\RecurringInvoicesController;
 use App\Http\Controllers\Admin\Payment\PaymentsController;
 use App\Http\Controllers\Admin\Expense\ExpensesController;
+use App\Http\Controllers\Admin\Expense\ExpenseCategoriesController;
 use App\Http\Controllers\Admin\User\UsersController;
 use App\Http\Controllers\Admin\Report\ReportsController;
 use App\Http\Controllers\Admin\Setting\SettingsController;
 use App\Http\Controllers\installation\RequirementsController;
 use App\Models\Unit;
+use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\Company;
 use App\Models\Customer;
 use App\Models\Payment;
+use App\Models\Expense;
+use App\Models\ExpenseCategory;
 use App\Http\Resources\InvoiceResource;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -1765,14 +1770,56 @@ Route::get('/admin/payments/view/{id}', function($id){
     return view('admin.payments-view', ['payments'=>$payments, 'id' => $id, 'selectedPayment' => $Selectedpayment]);
     // return view('admin.payments-view');
 })->name('admin.invoices.view')->middleware('auth');
-Route::get('/admin/expenses/new', function(){
-    return view('admin.expenses-create');
-})->name('admin.expenses.create')->middleware('auth');
 
+Route::post('/admin/expenses/new', [ExpensesController::class, 'store'])->name('admin.expenses.store')->middleware('auth');
+Route::get('/admin/expenses/new', function(){
+    $categories = ExpenseCategory::where('company_id',1)->get();
+    $currencies = Currency::get();
+    $customers = Customer::with(['invoices','currency','creator','company'])->where('company_id',1)->get();
+    $paymentModes = [
+        ['id' => 1,'name' => 'Cash'],
+        ['id' => 2,'name' => 'Check'],
+        ['id' => 3,'name' => 'Bank Transfer']
+    ];
+    return view('admin.expenses-create', ['categories' => $categories, 'currencies' => $currencies, 'customers' => $customers, 'paymentModes' => $paymentModes]);
+})->name('admin.expenses.create')->middleware('auth');
+Route::post('/admin/expenses/{id}/edit',function(Request $request, $id){
+    // $expense = Expense::find($id);
+    $currentExpense = Expense::findOrFail($id);
+    // print_r($currentExpense);
+    $amount = $request->amount;
+    $exchangeRate = $request->exchange_rate;
+
+    $request->merge([
+        'base_amount' => $amount*$exchangeRate,
+    ]);
+
+    $expense = $currentExpense->update($request->all());
+    $expenseId = $currentExpense->id;
+
+    return response()->json([
+        'expense' => $expense,
+        'id' => $expenseId
+    ], 200);
+})->name('admin.expenses.update')->middleware('auth');
+Route::get('/admin/expenses/{id}/edit', function($id){
+    $expense = Expense::with(['customer','company','paymentMethod','category','currency'])->where('id',$id)->get();
+    $categories = ExpenseCategory::where('company_id',1)->get();
+    $currencies = Currency::get();
+    $customers = Customer::with(['invoices','currency','creator','company'])->where('company_id',1)->get();
+    $paymentModes = [
+        ['id' => 1,'name' => 'Cash'],
+        ['id' => 2,'name' => 'Check'],
+        ['id' => 3,'name' => 'Bank Transfer']
+    ];
+    return view('admin.expenses-view',['expense' => $expense, 'categories' => $categories, 'currencies' => $currencies, 'customers' => $customers, 'paymentModes' => $paymentModes]);
+})->name('admin.expenses.edit')->middleware('auth');
 Route::get('/admin/expenses', [ExpensesController::class, 'index'])->name('admin.expenses')->middleware('auth');
 Route::get('/admin/users', [UsersController::class, 'index'])->name('admin.users')->middleware('auth');
 Route::get('/admin/reports', [ReportsController::class, 'index'])->name('admin.reports')->middleware('auth');
 Route::get('/admin/settings', [SettingsController::class, 'index'])->name('admin.settings')->middleware('auth');
+
+Route::post('/admin/categories/new', [ExpenseCategoriesController::class, 'store'])->name('admin.categories.store')->middleware('auth');
 
 Route::get('/invoices/pdf/{id}', function($id){
     $path = public_path('invoice/'.$id.'/temp.pdf');

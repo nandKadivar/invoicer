@@ -1432,7 +1432,7 @@ div.active-view {
     transition: display 2s ease-in-out;
 }
 
-.item-box, .select-customer-box, .select-invoice-box, .select-payment-mode-box {
+.item-box, .select-customer-box, .select-invoice-box, .select-payment-mode-box, .select-category-box, .select-currency-box {
     display: none;
     padding: 0px;
     flex-direction: column;
@@ -1474,9 +1474,11 @@ ul.filed-ul li {
 .tax-box ul,
 .customer-box ul,
 ul.item-ul, 
-ul.customer-ul, 
+ul.customer-ul,
 ul.invoice-ul,
-ul.payment-mode-ul {
+ul.payment-mode-ul,
+ul.category-ul,
+ul.currency-ul {
     width: 100%;
     list-style: none;
     padding: 0px;
@@ -1487,7 +1489,9 @@ ul.payment-mode-ul {
 ul.item-ul li, 
 ul.customer-ul li
 ul.invoice-ul li,
-ul.payment-mode-ul li {
+ul.payment-mode-ul li,
+ul.category-ul li,
+ul.currency-ul li {
     padding: 10px;
     cursor: pointer;
 }
@@ -1497,7 +1501,9 @@ ul.payment-mode-ul li {
 ul.item-ul li:hover,
 ul.customer-ul li:hover,
 ul.invoice-ul li:hover,
-ul.payment-mode-ul li:hover {
+ul.payment-mode-ul li:hover,
+ul.category-ul li:hover,
+ul.currency-ul li:hover {
     width: 100%;
     background-color: #e2e8f0;
 }

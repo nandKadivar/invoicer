@@ -89,12 +89,12 @@ Invoicer - Expenses
 <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>New Expense</h1>
+      <h1>Edit Expense</h1>
       <nav class="d-flex flex-row justify-content-between align-items-center">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
           <li class="breadcrumb-item active"><a href="{{route('admin.expenses')}}">Expenses</a></li>
-          <li class="breadcrumb-item active">New Expense</li>
+          <li class="breadcrumb-item active">Edit Expense</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -102,7 +102,7 @@ Invoicer - Expenses
       <div class="card recent-sales overflow-auto">
           <div class="card" style="margin-bottom: 0px;">
             <div class="card-body">
-              <h5 class="card-title">New Expense</h5>
+              <h5 class="card-title">Edit Expense</h5>
 
               <!-- Multi Columns Form -->
               <form class="row g-3 expenseForm">
@@ -137,7 +137,7 @@ Invoicer - Expenses
                 <div class="col-md-6">
                   <label for="inputEmail5" class="form-label">Date</label>
                   @php
-                    echo '<input type="date" class="form-control" id="expense_date" name="payment_date" value="'.date("Y-m-d").'">';
+                    echo '<input type="date" class="form-control" id="expense_date" name="payment_date">';
                   @endphp
                   {{-- <input type="date" class="form-control" id="inputEmail5"> --}}
                 </div>
@@ -242,7 +242,7 @@ Invoicer - Expenses
                 <div class="col-md-12">
                 <span style="font-weight: 600;">Notes</span>
                     <div id="editor" style="background-color: #fff; border-radius: 5px; border: 1px solid #ececec;">
-                        <!-- <p>This is some sample content.</p> -->
+                        {{-- <p class='notes-content'></p> --}}
                     </div>
                 </div>
 
@@ -293,18 +293,51 @@ Invoicer - Expenses
   </main><!-- End #main -->
 
   <script>
-    var selectedCustomerIndex=0;
+    var expense = {!! json_encode($expense[0]); !!}
+    var origin_id = expense.id;
+    console.log(expense);
+    var initialCategoryName = expense.category.name;
+    var initialExpenseDate = expense.expense_date;
+    var initialAmount = expense.amount;
+    var initialCurrency = expense.currency.name;
+    var initialCustomer = expense.customer.name;
+    var initialPaymentMode = expense.payment_method.name;
+    var initialExchangeRate = expense.exchange_rate;
+    document.querySelector('#expense_date').value = initialExpenseDate;
+    document.querySelector('#amount').value = initialAmount;
+    document.querySelector('#categoryInput').value = initialCategoryName;
+    document.querySelector('#currencyInput').value = initialCurrency;
+    document.querySelector('#customerInput').value = initialCustomer;
+    document.querySelector('#paymentModeInput').value = initialPaymentMode;
+    // var editorElement = document.querySelector('.notes-content')
+    // var editorContent = editorElement.getElementsByTagName('p')[0];
+    // editorContent.innerHTML = expense.notes;
+    // console.log(expense.notes);
     var customers = {!! json_encode($customers) !!};
     var categories = {!! json_encode($categories) !!};
-    var selectedCustomer;
-    var selectedCustomerId;
-    var customerSelected = false;
-    var selectedPaymentModeId = 1;
-    var selectedCategoryId = 1;
-    var selectedCurrencyId;
-    var exchangeRate = 1;
+    var selectedCustomerIndex=0;
+    customers.forEach((element,index) => {
+        if(element.name == initialCustomer){
+            selectedCustomerIndex = index;
+        }
+    });
+    var selectedCustomer = expense.customer;
+    var selectedCustomerId = expense.customer.id;
+    var customerSelected = true;
+    var selectedPaymentModeId = expense.payment_method.id;
+    var selectedCategoryId = expense.category.id;
+    var selectedCurrencyId = expense.currency.id;
+    var exchangeRate = expense.exchange_rate;
 
-    $('.exchange-rate-input').hide();
+    if(initialExchangeRate > 1){
+        $('.exchange-rate-input').show();
+        document.getElementById('exchangeRate').value = parseFloat(initialExchangeRate).toFixed(2);
+        document.querySelector('.exchange-currency-indicator').innerHTML = '1'+expense.currency.code+' =';
+    }else{
+        $('.exchange-rate-input').hide();
+    }
+
+    // $('.exchange-rate-input').hide();
 
     $('#exchangeRate').change(function () { 
         // console.log(this.value);
@@ -329,7 +362,7 @@ Invoicer - Expenses
       };
 
       // console.log(data);
-      axios.post('http://127.0.0.1:8000/admin/expenses/new', data, {
+      axios.post('http://127.0.0.1:8000/admin/expenses/'+origin_id+'/edit', data, {
         headers: { 
         'Content-Type': 'application/json',
         // 'X-CSRF-TOKEN': token.content,
@@ -388,6 +421,7 @@ Invoicer - Expenses
         document.querySelector('.exchange-currency-indicator').innerHTML = '1'+currencies[index].code+' =';
       }else{
         $('.exchange-rate-input').hide();
+        exchangeRate = 1;
       }
     }
 
