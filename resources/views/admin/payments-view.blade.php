@@ -281,7 +281,8 @@ Invoicer - View Invoice
       // var from = document.querySelector('#from').value;
       var to = document.querySelector('#to').value;
       var subject = document.querySelector('#subject').value;
-      var body = document.querySelector('.ck-content').innerHTML;
+      var body = document.querySelector('.ck-content');
+      body = body.getElementsByTagName('p')[0].innerHTML;
 
       const data = {
         // from: from,
