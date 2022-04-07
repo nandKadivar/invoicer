@@ -110,130 +110,6 @@ Invoicer - View Customer
               </div>
             </div>
           @endforeach
-          {{-- <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between active-view customer-view" style="padding-left: 20px !important;">
-            <div class="d-flex flex-column">
-              <p class="mb-1" style="font-size: 14px; color: #040405">Patel Steels Limited</p>
-              <span class="text-gray-600" style="font-size: 12px; font-weight: 600; color: #475569;">Meet Kadivar</span>
-            </div>
-            <div>
-              <span style="font-weight: 650;">₹ 15,074.20</span>
-            </div>
-          </div>
-
-          <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between customer-view" style="padding-left: 20px !important;">
-            <div class="d-flex flex-column">
-              <p class="mb-1" style="font-size: 14px; color: #040405">Patel Steels Limited</p>
-              <span class="text-gray-600" style="font-size: 12px; font-weight: 600; color: #475569;">Meet Kadivar</span>
-            </div>
-            <div>
-              <span style="font-weight: 650;">₹ 15,074.20</span>
-            </div>
-          </div>
-
-          <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between customer-view" style="padding-left: 20px !important;">
-            <div class="d-flex flex-column">
-              <p class="mb-1" style="font-size: 14px; color: #040405">Patel Steels Limited</p>
-              <span class="text-gray-600" style="font-size: 12px; font-weight: 600; color: #475569;">Meet Kadivar</span>
-            </div>
-            <div>
-              <span style="font-weight: 650;">₹ 15,074.20</span>
-            </div>
-          </div>
-
-          <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between customer-view" style="padding-left: 20px !important;">
-            <div class="d-flex flex-column">
-              <p class="mb-1" style="font-size: 14px; color: #040405">Patel Steels Limited</p>
-              <span class="text-gray-600" style="font-size: 12px; font-weight: 600; color: #475569;">Meet Kadivar</span>
-            </div>
-            <div>
-              <span style="font-weight: 650;">₹ 15,074.20</span>
-            </div>
-          </div>
-
-          <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between customer-view" style="padding-left: 20px !important;">
-            <div class="d-flex flex-column">
-              <p class="mb-1" style="font-size: 14px; color: #040405">Patel Steels Limited</p>
-              <span class="text-gray-600" style="font-size: 12px; font-weight: 600; color: #475569;">Meet Kadivar</span>
-            </div>
-            <div>
-              <span style="font-weight: 650;">₹ 15,074.20</span>
-            </div>
-          </div>
-
-          <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between customer-view" style="padding-left: 20px !important;">
-            <div class="d-flex flex-column">
-              <p class="mb-1" style="font-size: 14px; color: #040405">Patel Steels Limited</p>
-              <span class="text-gray-600" style="font-size: 12px; font-weight: 600; color: #475569;">Meet Kadivar</span>
-            </div>
-            <div>
-              <span style="font-weight: 650;">₹ 15,074.20</span>
-            </div>
-          </div>
-
-          <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between customer-view" style="padding-left: 20px !important;">
-            <div class="d-flex flex-column">
-              <p class="mb-1" style="font-size: 14px; color: #040405">Patel Steels Limited</p>
-              <span class="text-gray-600" style="font-size: 12px; font-weight: 600; color: #475569;">Meet Kadivar</span>
-            </div>
-            <div>
-              <span style="font-weight: 650;">₹ 15,074.20</span>
-            </div>
-          </div>
-
-          <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between customer-view" style="padding-left: 20px !important;">
-            <div class="d-flex flex-column">
-              <p class="mb-1" style="font-size: 14px; color: #040405">Patel Steels Limited</p>
-              <span class="text-gray-600" style="font-size: 12px; font-weight: 600; color: #475569;">Meet Kadivar</span>
-            </div>
-            <div>
-              <span style="font-weight: 650;">₹ 15,074.20</span>
-            </div>
-          </div>
-
-          <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between customer-view" style="padding-left: 20px !important;">
-            <div class="d-flex flex-column">
-              <p class="mb-1" style="font-size: 14px; color: #040405">Patel Steels Limited</p>
-              <span class="text-gray-600" style="font-size: 12px; font-weight: 600; color: #475569;">Meet Kadivar</span>
-            </div>
-            <div>
-              <span style="font-weight: 650;">₹ 15,074.20</span>
-            </div>
-          </div>
-
-          <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between customer-view" style="padding-left: 20px !important;">
-            <div class="d-flex flex-column">
-              <p class="mb-1" style="font-size: 14px; color: #040405">Patel Steels Limited</p>
-              <span class="text-gray-600" style="font-size: 12px; font-weight: 600; color: #475569;">Meet Kadivar</span>
-            </div>
-            <div>
-              <span style="font-weight: 650;">₹ 15,074.20</span>
-            </div>
-          </div>
-
-          <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between customer-view" style="padding-left: 20px !important;">
-            <div class="d-flex flex-column">
-              <p class="mb-1" style="font-size: 14px; color: #040405">Patel Steels Limited</p>
-              <span class="text-gray-600" style="font-size: 12px; font-weight: 600; color: #475569;">Meet Kadivar</span>
-            </div>
-            <div>
-              <span style="font-weight: 650;">₹ 15,074.20</span>
-            </div>
-          </div>
-
-          <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between customer-view" style="padding-left: 20px !important;">
-            <div class="d-flex flex-column">
-              <p class="mb-1" style="font-size: 14px; color: #040405">Patel Steels Limited</p>
-              <span class="text-gray-600" style="font-size: 12px; font-weight: 600; color: #475569;">Meet Kadivar</span>
-            </div>
-            <div>
-              <span style="font-weight: 650;">₹ 15,074.20</span>
-            </div>
-          </div> --}}
-          <!-- </a> -->
-
-
-          <!-- <a aria-current="page" href="/admin/customers/1/view" class="active router-link-exact-active flex justify-between p-4 items-center cursor-pointer hover:bg-gray-100 border-l-4 border-transparent bg-gray-100 border-primary-500 border-solid shake" id="customer-1" style="border-top: 1px solid rgba(185, 193, 209, 0.41);"><div><div title="Patel Steels Limited" class="pr-2 text-sm not-italic font-normal leading-5 text-black capitalize truncate">Patel Steels Limited</div><div title="Meet Kadivar" class="mt-1 text-xs not-italic font-medium leading-5 text-gray-600">Meet Kadivar</div></div><div class="flex-1 font-bold text-right whitespace-nowrap"><span style="font-family: sans-serif;">₹ 15,074.20</span></div></a> -->
-
         </div>
 
         <div class="col-xl-9 customer-panel card p-4" style="overflow-y: auto;height: 92vh; background-color: transparent; box-shadow: none;">
@@ -255,31 +131,67 @@ Invoicer - View Customer
 
           @php
             $sales = 0.00;
+            $receipts = 0.0;
+            $expenses = 0.00;
             $temp_sales = 0.0;
             $temp_receipts = 0.0;
+            $temp_expenses = 0.0;
             $sales_array = [];
             $receipts_array = [];
-            $receipts = 0.0;
-            $expenses = 0.0;
+            $expenses_array = [];
             $incomes = 0.0;
             $duration = '';
             $i = 0;
+            
             foreach($selectedCustomer->invoices as $invoice){
               $month = date("M", strtotime($invoice->invoice_date));
               $year = date("Y", strtotime($invoice->invoice_date));
-              // $duration = $month."-".$year;
-              // echo $duration;
+
               if($duration != $month."-".$year && $i!=0){
                 $sales_array[$month."-".$year] = $temp_sales;
-                $receipts_array[$month."-".$year] = $temp_receipts;
                 $temp_sales = 0;
+              }
+              
+              $sales =  $sales + (float)($invoice->total);
+              
+              $temp_sales =  $temp_sales + (float)($invoice->total);
+            
+              $duration = $month."-".$year;
+              $i++;
+            }
+
+            foreach($selectedCustomer->expenses as $customer_expense){
+              $month = date("M", strtotime($customer_expense->expense_date));
+              $year = date("Y", strtotime($customer_expense->expense_date));
+
+              if($duration != $month."-".$year && $i!=0){
+                $expenses_array[$month."-".$year] = $temp_expenses;
+                $temp_expenses = 0;
+              }
+              
+              $expenses =  $expenses + (float)($customer_expense->amount);
+              // $receipts =  $receipts + (float)($invoice->due_amount);
+              
+              
+              $temp_expenses =  $temp_expenses + (float)($customer_expense->amount);
+
+              $duration = $month."-".$year;
+              $i++;
+            }
+
+            foreach($selectedCustomer->payments as $payment){
+              $month = date("M", strtotime($customer_expense->expense_date));
+              $year = date("Y", strtotime($customer_expense->expense_date));
+
+              if($duration != $month."-".$year && $i!=0){
+                $receipts_array[$month."-".$year] = $temp_receipts;
                 $temp_receipts = 0;
               }
-              // echo $invoice->total;
-              $sales =  $sales + (float)($invoice->total);
-              $temp_sales =  $temp_sales + (float)($invoice->total);
-              $receipts =  $receipts + (float)($invoice->due_amount);
-              $temp_receipts =  $temp_receipts + (float)($invoice->due_amount);
+              
+              $receipts =  $receipts + (float)($payment->amount);
+              // $receipts =  $receipts + (float)($invoice->due_amount);
+              
+              $temp_receipts =  $temp_receipts + (float)($payment->amount);
 
               $duration = $month."-".$year;
               $i++;
@@ -287,6 +199,7 @@ Invoicer - View Customer
 
             $sales_array[$month."-".$year] = $temp_sales;
             $receipts_array[$month."-".$year] = $temp_receipts;
+            $expenses_array[$month."-".$year] = $temp_expenses;
 
             // print_r($sales_array);
           @endphp
@@ -318,6 +231,7 @@ Invoicer - View Customer
                                 document.addEventListener("DOMContentLoaded", () => {
                                   var sales = {!! json_encode($sales_array) !!};
                                   var receipts = {!! json_encode($receipts_array) !!};
+                                  var expenses = {!! json_encode($expenses_array) !!};
                                   console.log(sales);
                                   console.log(receipts);
                                     
@@ -339,11 +253,8 @@ Invoicer - View Customer
                                               sales['Dec-2022'] ? sales['Des-2022'].toFixed(2) : 0.0
                                             ],
                                             // data: [sales['Jan-2022'],sales['Feb-2022'], sales['March-2022'], sales['April-2022'], sales['May-2022'], sales['Jun-2022'], sales['July-2022']],
-                                        }, {
-                                            name: 'Revenue',
-                                            data: [11, 32, 45, 32, 34, 52, 41]
-                                        }, {
-                                            name: 'Customers',
+                                        },{
+                                            name: 'Receipts',
                                             // data: [15, 11, 32, 18, 9, 24, 11]
                                             data: [
                                               receipts['Jan-2022'] ? receipts['Jan-2022'].toFixed(2) : 0.0,
@@ -359,6 +270,38 @@ Invoicer - View Customer
                                               receipts['Nov-2022'] ? receipts['Nov-2022'].toFixed(2) : 0.0,
                                               receipts['Dec-2022'] ? receipts['Des-2022'].toFixed(2) : 0.0
                                             ],
+                                        },{
+                                            name: 'Expense',
+                                            data: [
+                                              expenses['Jan-2022']  ? expenses['Jan-2022'].toFixed(2) : 0.0,
+                                              expenses['Feb-2022']  ? expenses['Feb-2022'].toFixed(2) : 0.0,
+                                              expenses['Mar-2022']  ? expenses['Mar-2022'].toFixed(2) : 0.0,
+                                              expenses['Apr-2022']  ? expenses['Apr-2022'].toFixed(2) : 0.0,
+                                              expenses['May-2022']  ? expenses['May-2022'].toFixed(2) : 0.0,
+                                              expenses['Jun-2022']  ? expenses['Jun-2022'].toFixed(2) : 0.0,
+                                              expenses['Jul-2022']  ? expenses['Jul-2022'].toFixed(2) : 0.0, 
+                                              expenses['Aug-2022']  ? expenses['Aug-2022'].toFixed(2) : 0.0,
+                                              expenses['Sep-2022']  ? expenses['Sep-2022'].toFixed(2) : 0.0,
+                                              expenses['Oct-2022']  ? expenses['Oct-2022'].toFixed(2) : 0.0,
+                                              expenses['Nov-2022']  ? expenses['Nov-2022'].toFixed(2) : 0.0,
+                                              expenses['Dec-2022']  ? expenses['Dec-2022'].toFixed(2) : 0.0
+                                            ],
+                                        },{
+                                            name: 'Income',
+                                            data: [
+                                              (receipts['Jan-2022'] && expenses['Jan-2022'])  ? (receipts['Jan-2022'] - expenses['Jan-2022']).toFixed(2) : 0.0,
+                                              (receipts['Feb-2022'] && expenses['Feb-2022'])  ? (receipts['Feb-2022'] - expenses['Feb-2022']).toFixed(2) : 0.0,
+                                              (receipts['Mar-2022'] && expenses['Mar-2022'])  ? (receipts['Mar-2022'] - expenses['Mar-2022']).toFixed(2) : 0.0,
+                                              (receipts['Apr-2022'] && expenses['Apr-2022'])  ? (receipts['Apr-2022'] - expenses['Apr-2022']).toFixed(2) : 0.0,
+                                              (receipts['May-2022'] && expenses['May-2022'])  ? (receipts['May-2022'] - expenses['May-2022']).toFixed(2) : 0.0,
+                                              (receipts['Jun-2022'] && expenses['Jun-2022'])  ? (receipts['Jun-2022'] - expenses['Jun-2022']).toFixed(2) : 0.0,
+                                              (receipts['Jul-2022'] && expenses['Jul-2022'])  ? (receipts['Jul-2022'] - expenses['Jul-2022']).toFixed(2) : 0.0, 
+                                              (receipts['Aug-2022'] && expenses['Aug-2022'])  ? (receipts['Aug-2022'] - expenses['Aug-2022']).toFixed(2) : 0.0,
+                                              (receipts['Sep-2022'] && expenses['Sep-2022'])  ? (receipts['Sep-2022'] - expenses['Sep-2022']).toFixed(2) : 0.0,
+                                              (receipts['Oct-2022'] && expenses['Oct-2022'])  ? (receipts['Oct-2022'] - expenses['Oct-2022']).toFixed(2) : 0.0,
+                                              (receipts['Nov-2022'] && expenses['Nov-2022'])  ? (receipts['Nov-2022'] - expenses['Nov-2022']).toFixed(2) : 0.0,
+                                              (receipts['Dec-2022'] && expenses['Dec-2022'])  ? (receipts['Dec-2022'] - expenses['Dec-2022']).toFixed(2) : 0.0
+                                            ],
                                         }],
                                         chart: {
                                             height: 350,
@@ -370,7 +313,7 @@ Invoicer - View Customer
                                         markers: {
                                             size: 4
                                         },
-                                        colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                                        colors: ['#4154f1', '#ff771d', '#dc3545', '#2eca6a'],
                                         fill: {
                                             type: "gradient",
                                             gradient: {
@@ -429,11 +372,20 @@ Invoicer - View Customer
                         </div>
                         <div class="d-flex flex-column align-items-end">
                             <span style="color: #64748b;font-size: 14px;font-weight: 400;">Expenses</span>
-                            <h5 class="card-title text-danger expense">$ 700.00</h5>
+                            <h5 class="card-title text-danger expense">
+                              @php
+                                echo $selectedCustomer->currency->symbol." ".$expenses;
+                              @endphp
+                            </h5>
                         </div>
                         <div class="d-flex flex-column align-items-end">
                             <span style="color: #64748b;font-size: 14px;font-weight: 400;">Net Income</span>
-                            <h5 class="card-title text-success income">$ 14,374.20 </h5>
+                            <h5 class="card-title text-success income">
+                              @php
+                                $income = $receipts - $expenses;
+                                echo $selectedCustomer->currency->symbol." ".$income;
+                              @endphp
+                            </h5>
                         </div>
                     </div>
                   </div>

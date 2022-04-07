@@ -90,7 +90,7 @@ Invoicer - View Invoice
 
     <section class="section profile" style="margin-top: -24px; over-flow: hidden;">
       <div class="d-flex flex-row justify-content-between">
-        <div class="col-xl-3 mt-0 customer-panel card p-0" style="overflow-y: auto; height: 92vh; border-radius: 0px;">
+        <div class="col-lg-3 col-md-4 col-sm-0 col-0 mt-0 customer-panel card p-0" style="overflow-y: auto; height: 92vh; border-radius: 0px;">
           @foreach($invoices as $invoice)
             {{-- @if($invoice->id == $id) --}}
               <div class="col-xl-12 p-3 d-flex flex-row align-items-center justify-content-between customer-view" id="customer-view-{{$invoice->id}}" style="padding-left: 20px !important; cursor: pointer;" onclick="invoiceSelect('{{$invoice->id}}')">
@@ -263,7 +263,7 @@ Invoicer - View Invoice
 
         </div>
 
-        <div class="col-xl-9 customer-panel card p-4" style="overflow-y: auto;height: 92vh; background-color: transparent; box-shadow: none;">
+        <div class="col-lg-9 col-md-8 col-sm-12 col-12 customer-panel card p-4" style="overflow-y: auto;height: 92vh; background-color: transparent; box-shadow: none;">
           <div class="col-xl-12 d-flex flex-row align-items-center justify-content-end">
             <button class="btn btn-outline-primary type-1" style="margin-right: 10px; font-size:" onclick="markSend()">
               Mark as sent
@@ -452,7 +452,7 @@ Invoicer - View Invoice
         var subject = document.querySelector('#subject').value;
         var body = document.querySelector('.ck-content');
         body = body.getElementsByTagName('p')[0].innerHTML;
-        
+
         const data = {
           // from: from,
           to: to,

@@ -50,6 +50,16 @@ class Customer extends Model
         return $this->hasMany(Invoice::class);
     }
 
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     public function billingAddress()
     {
         return $this->hasOne(Address::class)->where('type', Address::BILLING_TYPE);

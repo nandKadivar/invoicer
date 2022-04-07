@@ -81,6 +81,11 @@ class Invoice extends Model
         return $this->belongsTo(User::class, 'creator_id');
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     public function getCompanyAddress()
     {
         if ($this->company && (! $this->company->address()->exists())) {
