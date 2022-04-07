@@ -9,6 +9,8 @@ class Unit extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+    
     protected $fillable = ['name', 'company_id'];
 
     public function items()

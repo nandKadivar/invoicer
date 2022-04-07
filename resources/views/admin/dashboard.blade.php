@@ -503,14 +503,50 @@ Invoicer - Dashboard
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">Due On</th>
+                                            <th scope="col">Invoice Number</th>
+                                            <th scope="col">Date</th>
                                             <th scope="col">Customer</th>
-                                            <th scope="col">Amount</th>
                                             <th scope="col">Status</th>
+                                            <th scope="col">Amount Due</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        @php
+                                            $i = 1;    
+                                        @endphp
+                                        @foreach($invoices as $invoice) 
+                                            @if(strtotime($invoice->due_date) < strtotime(date('Y-m-d')))
+                                                <tr>
+                                                    <th scope="row">#{{$i++}}</th>
+                                                    <td><a href="/admin/invoices/view/{{$invoice->id}}" class="text-primary">{{$invoice->invoice_number}}</a></td>
+                                                    <td>{{$invoice->formatted_invoice_date}}</td>
+                                                    <td>{{$invoice->customer->name}}</td>
+                                                    <td>
+                                                        @if($invoice->status == 'DRAFT')
+                                                            <span class="badge bg-warning">DRAFT</span> 
+                                                        @endif
+                                                        @if($invoice->status == 'SENT')
+                                                            <span class="badge bg-success">SENT</span> 
+                                                        @endif
+                                                        @if($invoice->paid_status == 'UNPAID')
+                                                            <span class="badge bg-warning">UNPAID</span> 
+                                                        @endif
+                                                        @if($invoice->paid_status == 'PARTIALLY_PAID')
+                                                            <span class="badge bg-primary">UNPAID</span> 
+                                                        @endif
+                                                        @if($invoice->paid_status == 'PAID')
+                                                            <span class="badge bg-success">PAID</span> 
+                                                        @endif
+                                                    <td>{{$invoice->customer->currency->symbol}} {{$invoice->due_amount}}</td>
+                                                    {{-- <td><span class="badge bg-warning">Unpaid</span></td> --}}
+                                                    <td>{{$invoice->customer->currency->symbol}} {{$invoice->total}}</td>
+                                                    <td>-</td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                        {{-- <tr>
                                             <th scope="row"><a href="#">#INV-000002</a></th>
                                             <td>13 Feb 2022</td>
                                             <td><a href="#" class="text-primary">At praesentium minu</a></td>
@@ -544,7 +580,7 @@ Invoicer - Dashboard
                                             <td><a href="#" class="text-primary">Sunt similique distinctio</a></td>
                                             <td>$165</td>
                                             <td><span class="badge bg-success">Sent</span></td>
-                                        </tr>
+                                        </tr> --}}
                                     </tbody>
                                 </table>
 

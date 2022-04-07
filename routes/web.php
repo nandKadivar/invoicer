@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\Report\ReportsController;
 use App\Http\Controllers\Admin\Setting\SettingsController;
 use App\Http\Controllers\installation\RequirementsController;
 use App\Models\Unit;
+use App\Models\Item;
 use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\Company;
@@ -1726,9 +1727,35 @@ Route::get('/admin/items/new', function(){
     return view('admin.items-create',['units'=>$units]);
 })->name('admin.items.create')->middleware('auth');
 Route::post('/admin/items/new', [ItemsController::class, 'store'])->name('admin.items.store')->middleware('auth');
-Route::get('/admin/items/view', function(){
-    return view('admin.items-view');
-})->name('admin.items.view')->middleware('auth');
+Route::get('/admin/items/{id}/edit', function($id){
+    $item = Item::findOrFail($id);
+    $unit = Unit::findOrFail($item->unit_id);
+    $units = Unit::where('company_id', '1')->get();
+    
+    $itemId = $item->id;
+    return view('admin.items-view',['item' => $item, 'units' => $units, 'unit' => $unit, 'itemId' => $itemId]);
+})->name('admin.items.edit')->middleware('auth');
+Route::post('/admin/items/{id}/edit',function(Request $request, $id){
+    
+    $currentItem = Item::findOrFail($id);
+    // print_r($request->name);
+    
+    $currentItem->name = $request->name;
+    $currentItem->price = $request->price;
+    $currentItem->gst = $request->gst;
+    $currentItem->unit_id = $request->unit_id;
+    $currentItem->description = $request->description;
+
+    $currentItem->save();
+    
+    return response()->json([
+        'success' => true,
+        'id' => $id
+    ], 200);
+})->name('admin.items.update')->middleware('auth');
+// Route::get('/admin/items/view', function(){
+//     return view('admin.items-view');
+// })->name('admin.items.view')->middleware('auth');
 Route::get('/admin/invoices', [InvoicesController::class, 'index'])->name('admin.invoices')->middleware('auth');
 // Route::get('/admin/invoices/new', function(){
 //     return view('admin.invoices-create');

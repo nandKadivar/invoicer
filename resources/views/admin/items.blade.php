@@ -152,7 +152,7 @@ Invoicer - Items
                   <tbody>
                       <tr>
                           <th scope="row"><a href="#">#1</a></th>
-                          <td><a href="{{route('admin.items.view')}}" class="text-primary">Stones</a></td>
+                          <td><a href="" class="text-primary">Stones</a></td>
                           <td>Kg</td>
                           <td>13.00</td>
                           <td>18%</td>
@@ -161,7 +161,7 @@ Invoicer - Items
                       @foreach($data as $i)
                         <tr>
                             <th scope="row"><a href="#">#1</a></th>
-                            <td><a href="{{route('admin.items.view')}}" class="text-primary">{{$i->name}}</a></td>
+                            <td><a href="/admin/items/{{$i->id}}/edit" class="text-primary">{{$i->name}}</a></td>
                             <td>Kg</td>
                             <td>{{$i->price}}</td>
                             <td>{{$i->gst}} %</td>
