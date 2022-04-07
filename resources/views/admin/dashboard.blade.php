@@ -92,13 +92,95 @@ Invoicer - Dashboard
         <h1>Dashboard</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a>Home</a></li>
                 <li class="breadcrumb-item active">Dashboard</li>
             </ol>
         </nav>
     </div>
     <!-- End Page Title -->
+    @php
+        $total_due_amount=0.0;
+        // $total_total_amount=0.0;
+        // $total_sales=0.0;
+        // $total_receipts=0.0;
+        // $total_expenses=0.0;
+        // $net_income=0.0;
 
+
+        $sales = 0.00;
+        $receipts = 0.0;
+        $expenses = 0.00;
+        $temp_sales = 0.0;
+        $temp_receipts = 0.0;
+        $temp_expenses = 0.0;
+        $sales_array = [];
+        $receipts_array = [];
+        $expenses_array = [];
+        $incomes = 0.0;
+        $duration = '';
+        $i = 0;
+        $month='';
+        $year='';
+
+        foreach ($invoices as $invoice) {
+            $month = date("M", strtotime($invoice->invoice_date));
+            $year = date("Y", strtotime($invoice->invoice_date));
+
+            if($duration != $month."-".$year && $i!=0){
+                $sales_array[$month."-".$year] = $temp_sales;
+                $temp_sales = 0;
+            }
+            
+            $sales =  $sales + (float)($invoice->base_total);
+            $temp_sales =  $temp_sales + (float)($invoice->base_total);
+            $total_due_amount = $total_due_amount + (float)($invoice->base_due_amount);
+
+            $duration = $month."-".$year;
+            $i++;
+        }
+
+        foreach ($payments as $payment) {
+            $month = date("M", strtotime($payment->expense_date));
+            $year = date("Y", strtotime($payment->expense_date));
+
+            if($duration != $month."-".$year && $i!=0){
+            $receipts_array[$month."-".$year] = $temp_receipts;
+            $temp_receipts = 0;
+            }
+            
+            $receipts =  $receipts + (float)($payment->base_amount);
+            
+            $temp_receipts =  $temp_receipts + (float)($payment->base_amount);
+
+            $duration = $month."-".$year;
+            $i++;
+
+        }
+
+        foreach ($all_expenses as $expense) {
+            $month = date("M", strtotime($expense->expense_date));
+            $year = date("Y", strtotime($expense->expense_date));
+
+            if($duration != $month."-".$year && $i!=0){
+            $expenses_array[$month."-".$year] = $temp_expenses;
+            $temp_expenses = 0;
+            }
+            
+            $expenses =  $expenses + (float)($expense->base_amount);
+            
+            $temp_expenses =  $temp_expenses + (float)($expense->base_amount);
+
+            $duration = $month."-".$year;
+            $i++;
+        }
+
+        $sales_array[$month."-".$year] = $temp_sales;
+        $receipts_array[$month."-".$year] = $temp_receipts;
+        $expenses_array[$month."-".$year] = $temp_expenses;
+        
+        $incomes = $receipts - $expenses;
+
+    @endphp
     <section class="section dashboard">
         <div class="row">
 
@@ -127,10 +209,15 @@ Invoicer - Dashboard
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-currency-dollar"></i>
+                                        {{-- <i class="bi bi-currency-dollar"></i> --}}
+                                        ₹
                                     </div>
                                     <div class="ps-3">
-                                        <h6>145</h6>
+                                        <h6>
+                                            @php
+                                                echo $total_due_amount;
+                                            @endphp
+                                        </h6>
                                         <!-- <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
 
                                     </div>
@@ -166,7 +253,11 @@ Invoicer - Dashboard
                                         <i class="bi bi-receipt-cutoff"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>3,264</h6>
+                                        <h6>
+                                            @php
+                                                echo $invoices->count();
+                                            @endphp
+                                        </h6>
                                         <!-- <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> -->
 
                                     </div>
@@ -203,7 +294,11 @@ Invoicer - Dashboard
                                         <i class="bi bi-people"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>1244</h6>
+                                        <h6>
+                                            @php
+                                                echo $customers->count();
+                                            @endphp
+                                        </h6>
                                         <!-- <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span> -->
 
                                     </div>
@@ -214,88 +309,6 @@ Invoicer - Dashboard
                     </div>
                     <!-- End Customers Card -->
 
-                    <!-- <div class="col-12"> -->
-                    <!-- Reports -->
-                    {{-- <div class="col-8">
-                        <div class="card">
-
-                            <div class="filter">
-                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                    <li class="dropdown-header text-start">
-                                        <h6>Filter</h6>
-                                    </li>
-
-                                    <li><a class="dropdown-item" href="#">Today</a></li>
-                                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                                </ul>
-                            </div>
-
-                            <div class="card-body">
-                                <h5 class="card-title">Reports <span>/Today</span></h5>
-
-                                <!-- Line Chart -->
-                                <div id="reportsChart"></div>
-
-                                <script>
-                                    document.addEventListener("DOMContentLoaded", () => {
-                                        new ApexCharts(document.querySelector("#reportsChart"), {
-                                            series: [{
-                                                name: 'Sales',
-                                                data: [31, 40, 28, 51, 42, 82, 56],
-                                            }, {
-                                                name: 'Revenue',
-                                                data: [11, 32, 45, 32, 34, 52, 41]
-                                            }, {
-                                                name: 'Customers',
-                                                data: [15, 11, 32, 18, 9, 24, 11]
-                                            }],
-                                            chart: {
-                                                height: 350,
-                                                type: 'area',
-                                                toolbar: {
-                                                    show: false
-                                                },
-                                            },
-                                            markers: {
-                                                size: 4
-                                            },
-                                            colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                                            fill: {
-                                                type: "gradient",
-                                                gradient: {
-                                                    shadeIntensity: 1,
-                                                    opacityFrom: 0.3,
-                                                    opacityTo: 0.4,
-                                                    stops: [0, 90, 100]
-                                                }
-                                            },
-                                            dataLabels: {
-                                                enabled: false
-                                            },
-                                            stroke: {
-                                                curve: 'smooth',
-                                                width: 2
-                                            },
-                                            xaxis: {
-                                                type: 'datetime',
-                                                categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-                                            },
-                                            tooltip: {
-                                                x: {
-                                                    format: 'dd/MM/yy HH:mm'
-                                                },
-                                            }
-                                        }).render();
-                                    });
-                                </script>
-                                <!-- End Line Chart -->
-
-                            </div>
-
-                        </div>
-                    </div> --}}
                     <div class="col-12">
                         <div class="card d-flex flex-row align-items-center justify-content-between">
                             <div class="col-10">
@@ -321,16 +334,80 @@ Invoicer - Dashboard
 
                                     <script>
                                         document.addEventListener("DOMContentLoaded", () => {
+                                            var sales = {!! json_encode($sales_array) !!};
+                                            var receipts = {!! json_encode($receipts_array) !!};
+                                            var expenses = {!! json_encode($expenses_array) !!};
+                                            console.log(sales);
+                                            console.log(receipts);
+                                            console.log(expenses);
+
                                             new ApexCharts(document.querySelector("#reportsChart"), {
                                                 series: [{
                                                     name: 'Sales',
-                                                    data: [31, 40, 28, 51, 42, 82, 56],
-                                                }, {
-                                                    name: 'Revenue',
-                                                    data: [11, 32, 45, 32, 34, 52, 41]
-                                                }, {
-                                                    name: 'Customers',
-                                                    data: [15, 11, 32, 18, 9, 24, 11]
+                                                    data: [
+                                                    sales['Jan-2022'] ? sales['Jan-2022'].toFixed(2) : 0.0,
+                                                    sales['Feb-2022'] ? sales['Feb-2022'].toFixed(2) : 0.0,
+                                                    sales['Mar-2022'] ? sales['Mar-2022'].toFixed(2) : 0.0,
+                                                    sales['Apr-2022'] ? sales['Apr-2022'].toFixed(2) : 0.0,
+                                                    sales['May-2022'] ? sales['May-2022'].toFixed(2) : 0.0,
+                                                    sales['Jun-2022'] ? sales['Jun-2022'].toFixed(2) : 0.0,
+                                                    sales['Jul-2022'] ? sales['Jul-2022'].toFixed(2) : 0.0, 
+                                                    sales['Aug-2022'] ? sales['Aug-2022'].toFixed(2) : 0.0,
+                                                    sales['Sep-2022'] ? sales['Sep-2022'].toFixed(2) : 0.0,
+                                                    sales['Oct-2022'] ? sales['Oct-2022'].toFixed(2) : 0.0,
+                                                    sales['Nov-2022'] ? sales['Nov-2022'].toFixed(2) : 0.0,
+                                                    sales['Dec-2022'] ? sales['Des-2022'].toFixed(2) : 0.0
+                                                    ],
+                                                    // data: [sales['Jan-2022'],sales['Feb-2022'], sales['March-2022'], sales['April-2022'], sales['May-2022'], sales['Jun-2022'], sales['July-2022']],
+                                                },{
+                                                    name: 'Receipts',
+                                                    // data: [15, 11, 32, 18, 9, 24, 11]
+                                                    data: [
+                                                    receipts['Jan-2022'] ? receipts['Jan-2022'].toFixed(2) : 0.0,
+                                                    receipts['Feb-2022'] ? receipts['Feb-2022'].toFixed(2) : 0.0,
+                                                    receipts['Mar-2022'] ? receipts['Mar-2022'].toFixed(2) : 0.0,
+                                                    receipts['Apr-2022'] ? receipts['Apr-2022'].toFixed(2) : 0.0,
+                                                    receipts['May-2022'] ? receipts['May-2022'].toFixed(2) : 0.0,
+                                                    receipts['Jun-2022'] ? receipts['Jun-2022'].toFixed(2) : 0.0,
+                                                    receipts['Jul-2022'] ? receipts['Jul-2022'].toFixed(2) : 0.0, 
+                                                    receipts['Aug-2022'] ? receipts['Aug-2022'].toFixed(2) : 0.0,
+                                                    receipts['Sep-2022'] ? receipts['Sep-2022'].toFixed(2) : 0.0,
+                                                    receipts['Oct-2022'] ? receipts['Oct-2022'].toFixed(2) : 0.0,
+                                                    receipts['Nov-2022'] ? receipts['Nov-2022'].toFixed(2) : 0.0,
+                                                    receipts['Dec-2022'] ? receipts['Des-2022'].toFixed(2) : 0.0
+                                                    ],
+                                                },{
+                                                    name: 'Expense',
+                                                    data: [
+                                                    expenses['Jan-2022']  ? expenses['Jan-2022'].toFixed(2) : 0.0,
+                                                    expenses['Feb-2022']  ? expenses['Feb-2022'].toFixed(2) : 0.0,
+                                                    expenses['Mar-2022']  ? expenses['Mar-2022'].toFixed(2) : 0.0,
+                                                    expenses['Apr-2022']  ? expenses['Apr-2022'].toFixed(2) : 0.0,
+                                                    expenses['May-2022']  ? expenses['May-2022'].toFixed(2) : 0.0,
+                                                    expenses['Jun-2022']  ? expenses['Jun-2022'].toFixed(2) : 0.0,
+                                                    expenses['Jul-2022']  ? expenses['Jul-2022'].toFixed(2) : 0.0, 
+                                                    expenses['Aug-2022']  ? expenses['Aug-2022'].toFixed(2) : 0.0,
+                                                    expenses['Sep-2022']  ? expenses['Sep-2022'].toFixed(2) : 0.0,
+                                                    expenses['Oct-2022']  ? expenses['Oct-2022'].toFixed(2) : 0.0,
+                                                    expenses['Nov-2022']  ? expenses['Nov-2022'].toFixed(2) : 0.0,
+                                                    expenses['Dec-2022']  ? expenses['Dec-2022'].toFixed(2) : 0.0
+                                                    ],
+                                                },{
+                                                    name: 'Income',
+                                                    data: [
+                                                    (receipts['Jan-2022'] && expenses['Jan-2022'])  ? (receipts['Jan-2022'] - expenses['Jan-2022']).toFixed(2) : 0.0,
+                                                    (receipts['Feb-2022'] && expenses['Feb-2022'])  ? (receipts['Feb-2022'] - expenses['Feb-2022']).toFixed(2) : 0.0,
+                                                    (receipts['Mar-2022'] && expenses['Mar-2022'])  ? (receipts['Mar-2022'] - expenses['Mar-2022']).toFixed(2) : 0.0,
+                                                    (receipts['Apr-2022'] && expenses['Apr-2022'])  ? (receipts['Apr-2022'] - expenses['Apr-2022']).toFixed(2) : 0.0,
+                                                    (receipts['May-2022'] && expenses['May-2022'])  ? (receipts['May-2022'] - expenses['May-2022']).toFixed(2) : 0.0,
+                                                    (receipts['Jun-2022'] && expenses['Jun-2022'])  ? (receipts['Jun-2022'] - expenses['Jun-2022']).toFixed(2) : 0.0,
+                                                    (receipts['Jul-2022'] && expenses['Jul-2022'])  ? (receipts['Jul-2022'] - expenses['Jul-2022']).toFixed(2) : 0.0, 
+                                                    (receipts['Aug-2022'] && expenses['Aug-2022'])  ? (receipts['Aug-2022'] - expenses['Aug-2022']).toFixed(2) : 0.0,
+                                                    (receipts['Sep-2022'] && expenses['Sep-2022'])  ? (receipts['Sep-2022'] - expenses['Sep-2022']).toFixed(2) : 0.0,
+                                                    (receipts['Oct-2022'] && expenses['Oct-2022'])  ? (receipts['Oct-2022'] - expenses['Oct-2022']).toFixed(2) : 0.0,
+                                                    (receipts['Nov-2022'] && expenses['Nov-2022'])  ? (receipts['Nov-2022'] - expenses['Nov-2022']).toFixed(2) : 0.0,
+                                                    (receipts['Dec-2022'] && expenses['Dec-2022'])  ? (receipts['Dec-2022'] - expenses['Dec-2022']).toFixed(2) : 0.0
+                                                    ],
                                                 }],
                                                 chart: {
                                                     height: 350,
@@ -342,7 +419,7 @@ Invoicer - Dashboard
                                                 markers: {
                                                     size: 4
                                                 },
-                                                colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                                                colors: ['#4154f1', '#ff771d', '#dc3545', '#2eca6a'],
                                                 fill: {
                                                     type: "gradient",
                                                     gradient: {
@@ -360,12 +437,14 @@ Invoicer - Dashboard
                                                     width: 2
                                                 },
                                                 xaxis: {
-                                                    type: 'datetime',
-                                                    categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+                                                    type: 'date',
+                                                    // type: 'datetime',
+                                                    // categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+                                                    categories: ["Jan-2022", "Feb-2022", "Mar-2022", "Apr-2022", "May-2022", "Jun-2022", "Jul-2022", "Aug-2022", "Sept-2022", "Oct-2022", "Nov-2022", "Dec-2022"]
                                                 },
                                                 tooltip: {
                                                     x: {
-                                                        format: 'dd/MM/yy HH:mm'
+                                                        format: 'M-yyyy'
                                                     },
                                                 }
                                             }).render();

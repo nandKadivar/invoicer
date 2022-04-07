@@ -97,7 +97,8 @@ class Customer extends Model
             }
         }
         
-        $customer = Customer::where('id', $customer->id)->get();
+        // $customer = Customer::where('id', $customer->id)->get();
+        $customer = Customer::findOrFail($customer->id);
         // $customer = Customer::with('billingAddress', 'shippingAddress')->find($customer->id);
 
         return $customer;

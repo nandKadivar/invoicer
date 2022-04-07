@@ -142,6 +142,8 @@ Invoicer - View Customer
             $incomes = 0.0;
             $duration = '';
             $i = 0;
+            $month='';
+            $year='';
             
             foreach($selectedCustomer->invoices as $invoice){
               $month = date("M", strtotime($invoice->invoice_date));

@@ -320,15 +320,20 @@ Invoicer - New Customer
 
             // console.log(data);
 
-            let res = axios.post('http://127.0.0.1:8000/admin/customers/new', data, {
+            axios.post('http://127.0.0.1:8000/admin/customers/new', data, {
               headers: { 
                 'Content-Type': 'application/json',
                 // 'X-CSRF-TOKEN': token.content,
                 'X-Requested-With': 'XMLHttpRequest',
               }
+            }).then(function(res){
+                const { success, id } = res.data;
+                // console.log(invoice);
+                if(success){
+                  window.location.href = "http://127.0.0.1:8000/admin/customers/"+id;
+                }
             });
 
-            console.log(res);
         });
     });
 

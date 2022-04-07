@@ -49,7 +49,11 @@ class CustomersController extends Controller
         // echo "Store method";
         // print_r($request->all());
         // return new CustomerResource($customer);
-        return redirect()->route('admin.customers.view')->with('customer', new CustomerResource($customer));
+        // return redirect()->route('admin.customers.view')->with('customer', new CustomerResource($customer));
+        return response()->json([
+            'success' => true,
+            'id' => $customer->id
+        ], 200);
     }
 
     public function createCustomer(){
