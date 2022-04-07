@@ -61,4 +61,14 @@ class PaymentsController extends Controller
         ], 200);
         
     }
+
+    public function sendInvoice(Request $request){
+        $payment = Payment::findOrFail($request->payment_id);
+
+        $payment->send($request->all());
+
+        return response()->json([
+            'success' => true,
+        ], 200);
+    }
 }

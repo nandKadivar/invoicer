@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    {{-- <title>Invoice</title> --}}
 </head>
 <body>
-    <h1>New Invoice</h1>
+    {{-- <h3>New Invoice</h1> --}}
+    <br>
+    {{$data['body']}}
 </body>
 </html>

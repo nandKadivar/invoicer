@@ -76,6 +76,14 @@ class InvoicesController extends Controller
         // print_r($request->all());
         $invoice->send($request->all());
 
+        $invoice->sent = 1;
+        $invoice->status = 'SENT';
+
+        $invoice->save();
+
+        return response()->json([
+            'success' => true,
+        ], 200);
     }
 
     public function markSend(Request $request){

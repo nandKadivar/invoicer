@@ -29,7 +29,15 @@ class SendInvoiceMail extends Mailable
      */
     public function build()
     {
-        return $this->subject($this->data['subject'])->view('emails.invoice');
-        // print_r($this->data['from']);
+        // $pdfPath = asset('/invoice/30/temp.pdf');
+        // $file = [public_path('invoice/30/temp.pdf')];
+        // $path = public_path('/invoice/30/');
+        // if(file_exists($path)){
+        //     // return response()->file($path);
+        // }
+        return $this->subject($this->data['subject'])->view('emails.invoice')->attach(public_path('/invoice/'.$this->data['invoice_id'].'/temp.pdf',[
+            'as' => 'invoice.pdf',
+        ]));
+        // print_r($this->data['subject']);
     }
 }

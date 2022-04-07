@@ -148,10 +148,10 @@ Invoicer - View Invoice
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body d-flex flex-column align-items-center">
-            <div class="col-12 py-2 d-flex flex-column">
+            {{-- <div class="col-12 py-2 d-flex flex-column">
               <Span style="font-weight: 600;">From</Span>
               <input class="col-8 form-control" type="email" class="form-control" id="from">
-            </div>
+            </div> --}}
             <div class="col-12 py-2 d-flex flex-column">
               <Span style="font-weight: 600;">To</Span>
               <input class="col-8 form-control" type="email" class="form-control" id="to">
@@ -278,17 +278,17 @@ Invoicer - View Invoice
     }
 
     const sendInvoice = () => {
-      var from = document.querySelector('#from').value;
+      // var from = document.querySelector('#from').value;
       var to = document.querySelector('#to').value;
       var subject = document.querySelector('#subject').value;
       var body = document.querySelector('.ck-content').innerHTML;
 
       const data = {
-        from: from,
+        // from: from,
         to: to,
         subject: subject,
         body: body,
-        invoice_id: id 
+        payment_id: id 
       };
 
       axios.post('http://127.0.0.1:8000/admin/payments/send', data,{
@@ -298,8 +298,11 @@ Invoicer - View Invoice
         'X-Requested-With': 'XMLHttpRequest',
         }
       }).then(function(res){
-        // const {success, msg} = res.data;
-        // window.location.href = "http://127.0.0.1:8000/admin/invoices";
+        const {success} = res.data;
+          if(success){
+            // $('#categoryModel').modal('hide');
+            window.location.href = "http://127.0.0.1:8000/admin/payments/view/"+id;
+          }
       });
     }
   

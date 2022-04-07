@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use App\Traits\GeneratesPdfTrait;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendPaymentMail;
 
 class Payment extends Model
 {
@@ -127,5 +129,16 @@ class Payment extends Model
         ]);
 
         return PDF::loadView('pdf.payment.payment');
+    }
+
+    public function send($data){
+        Mail::to($data['to'])->send(new SendPaymentMail($data));
+        // print_r($data['to']);
+        return response()->json([
+                'success' => true, 
+                'message' => "Mail sent"
+            ], 
+            200
+        );
     }
 }

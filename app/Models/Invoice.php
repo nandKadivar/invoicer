@@ -214,6 +214,12 @@ class Invoice extends Model
     public function send($data){
         Mail::to($data['to'])->send(new SendInvoiceMail($data));
         // print_r($data['to']);
+        return response()->json([
+                'success' => true, 
+                'message' => "Mail sent"
+            ], 
+            200
+        );
     }
 
     public static function deleteInvoice($id)

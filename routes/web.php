@@ -1763,6 +1763,7 @@ Route::post('/admin/payments/new', [PaymentsController::class, 'store'])->name('
 // Route::get('/admin/payments/view', function(){
 //     return view('admin.payments-view');
 // })->name('admin.payments.view')->middleware('auth');
+Route::post('/admin/payments/send', [PaymentsController::class, 'sendInvoice'])->name('admin.payments.send')->middleware('auth');
 Route::get('/admin/payments/view/{id}', function($id){
     $payments = Payment::where('company_id',1)->orderBy('id','desc')->get();
     $Selectedpayment = Payment::findOrFail($id);
