@@ -459,19 +459,36 @@ Invoicer - Dashboard
                             <div class="col-2 d-flex flex-column align-items-end justify-content-center card-body mt-3">
                                 <div class="d-flex flex-column align-items-end">
                                     <span style="color: #899bbd;font-size: 14px;font-weight: 400;">Sales</span>
-                                    <h5 class="card-title text-primary">$ 30,148.40 </h5>
+                                    <h5 class="card-title text-primary">
+                                        @php
+                                            echo "₹ ".$sales;
+                                        @endphp
+                                    </h5>
                                 </div>
                                 <div class="d-flex flex-column align-items-end">
                                     <span style="color: #899bbd;font-size: 14px;font-weight: 400;">Receipts</span>
-                                    <h5 class="card-title text-warning">$ 15,074.20 </h5>
+                                    <h5 class="card-title text-warning">
+                                        @php
+                                            echo "₹ ".$receipts;
+                                        @endphp
+                                    </h5>
                                 </div>
                                 <div class="d-flex flex-column align-items-end">
                                     <span style="color: #899bbd;font-size: 14px;font-weight: 400;">Expenses</span>
-                                    <h5 class="card-title text-danger">$ 700.00</h5>
+                                    <h5 class="card-title text-danger">
+                                        @php
+                                            echo "₹ ".$expenses;
+                                        @endphp
+                                    </h5>
                                 </div>
                                 <div class="d-flex flex-column align-items-end">
                                     <span style="color: #899bbd;font-size: 14px;font-weight: 400;">Net Income</span>
-                                    <h5 class="card-title text-success">$ 14,374.20 </h5>
+                                    <h5 class="card-title text-success">
+                                        @php
+                                            $income = $receipts - $expenses;
+                                            echo "₹ ".$income;
+                                        @endphp
+                                    </h5>
                                 </div>
                             </div>
                         </div>
